@@ -1,4 +1,25 @@
 <resources>
     <string name="app_name">AceDrops</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="phone_number_or_email">Phone number or Email</string>
+    <string name="password">Password</string>
+    <string name="terms_and_conditions">By continuing you agree to the AceDrop’s\n<font color="#1983FF">Terms and Conditions</font></string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="full_name">Full Name</string>
+    <string name="new_here_sign_up">New here? <font color="#1983FF">Sign up</font></string>
+    <string name="password_assistance">Password Assistance</string>
+    <string name="enter_acedrop_account">Enter your phone number or email account associated with you AceDrop account</string>
+    <string name="next">Next</string>
+    <string name="create_your_account">Create your account</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="email">Email</string>
+    <string name="already_have_an_account_log_in">Already have an account? <font color="#1983FF">Log In</font></string>
+    <string name="to_continue_">To continue, complete the verification step. Enter the OTP sent to your mail.</string>
+    <string name="verification_required">Verification Required</string>
+    <string name="create_new_password">Create new password</string>
+    <string name="old_password">Old Password</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="new_password">New Password</string>
 </resources>
