@@ -55,6 +55,8 @@
                     android:textColorHint="#4D000000"
                     android:text="@={viewmodel.emailOrPhone}"
                     android:inputType="textEmailAddress"
+                    android:autofillHints="emailAddress"
+                    android:importantForAutofill="yes"
                     android:paddingStart="30dp"
                     android:paddingEnd="30dp"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -82,6 +84,8 @@
                     android:text="@={viewmodel.pass}"
                     android:textColorHint="#4D000000"
                     android:inputType="textPassword"
+                    android:autofillHints="password"
+                    android:importantForAutofill="yes"
                     android:paddingStart="30dp"
                     android:paddingEnd="30dp"/>
             </com.google.android.material.textfield.TextInputLayout>

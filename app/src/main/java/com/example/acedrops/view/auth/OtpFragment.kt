@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
-import com.example.acedrops.databinding.FragmentForgotBinding
 import com.example.acedrops.databinding.FragmentOtpBinding
 import com.example.acedrops.viewmodel.AuthViewModel
 

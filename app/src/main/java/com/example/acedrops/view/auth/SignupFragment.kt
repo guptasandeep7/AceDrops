@@ -36,9 +36,7 @@ class SignupFragment : Fragment(), View.OnClickListener {
     override fun onClick(view: View?) {
         val navController = findNavController()
         when (view?.id) {
-            R.id.signup_to_signin -> {
-                navController.navigateUp()
-            }
+            R.id.signup_to_signin -> navController.navigateUp()
             R.id.signup_btn -> navController.navigate(R.id.action_signupFragment_to_otpFragment)
         }
     }
