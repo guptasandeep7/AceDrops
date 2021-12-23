@@ -21,8 +21,10 @@ class LoginFragment : Fragment(), View.OnClickListener {
     ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         val view = binding.root
+
         binding.signinToSignup.setOnClickListener(this)
         binding.forgotTxt.setOnClickListener(this)
+        binding.signinBtn.setOnClickListener(this)
         return view
     }
 
@@ -31,6 +33,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
         when (view?.id) {
             R.id.signin_to_signup -> navController.navigate(R.id.action_loginFragment_to_signupFragment)
             R.id.forgot_txt -> navController.navigate(R.id.action_loginFragment_to_forgotFragment)
+            R.id.signin_btn -> navController.navigate(R.id.action_loginFragment_to_dashboardActivity)
         }
     }
 

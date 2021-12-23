@@ -15,14 +15,14 @@
                 android:id="@+id/animationView"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
-                app:lottie_rawRes="@raw/login_success"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.07999998" />
+                app:layout_constraintVertical_bias="0.07999998"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/login_success" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout2"
@@ -44,9 +44,8 @@
                     android:id="@+id/phone_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/phone_number_or_email"
+                    android:hint="@string/email"
                     android:textColorHint="#4D000000"
-                    android:text="@={viewmodel.emailOrPhone}"
                     android:inputType="textEmailAddress"
                     android:autofillHints="emailAddress"
                     android:importantForAutofill="yes"
@@ -74,7 +73,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/password"
-                    android:text="@={viewmodel.pass}"
                     android:textColorHint="#4D000000"
                     android:inputType="textPassword"
                     android:autofillHints="password"

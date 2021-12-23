@@ -33,7 +33,6 @@
                     android:layout_height="wrap_content"
                     android:hint="Confirmation Code"
                     android:inputType="number"
-                    android:text="@={viewmodel.otp}"
                     android:paddingStart="30dp"
                     android:paddingEnd="30dp"
                     android:textColorHint="#4D000000" />

@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-            <variable
-                name="viewmodel"
-                type="com.example.acedrops.viewmodel.AuthViewModel" />
-    </data>
-
     <ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -19,13 +12,14 @@
             tools:context=".view.auth.SignupFragment">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout2"
+                android:id="@+id/name_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="22dp"
+                app:helperTextTextColor="#FD0320"
                 app:boxCornerRadiusBottomEnd="30dp"
                 app:boxCornerRadiusBottomStart="30dp"
                 app:boxCornerRadiusTopEnd="30dp"
@@ -39,60 +33,87 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/full_name"
-                    android:text="@={viewmodel.newName}"
-                    android:textColorHint="#4D000000"
                     android:inputType="textPersonName"
                     android:paddingStart="30dp"
-                    android:paddingEnd="30dp" />
+                    android:paddingEnd="30dp"
+                    android:textColorHint="#4D000000" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout1"
+                android:id="@+id/email_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:helperTextTextColor="#FD0320"
                 android:layout_marginTop="16dp"
                 app:boxCornerRadiusBottomEnd="30dp"
                 app:boxCornerRadiusBottomStart="30dp"
                 app:boxCornerRadiusTopEnd="30dp"
                 app:boxCornerRadiusTopStart="30dp"
-                app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
-                app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
+                app:layout_constraintEnd_toEndOf="@+id/name_layout"
+                app:layout_constraintStart_toStartOf="@+id/name_layout"
+                app:layout_constraintTop_toBottomOf="@+id/name_layout">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/email"
-                    android:text="@={viewmodel.newEmail}"
-                    android:textColorHint="#4D000000"
                     android:inputType="textEmailAddress"
                     android:paddingStart="30dp"
-                    android:paddingEnd="30dp"/>
+                    android:paddingEnd="30dp"
+                    android:textColorHint="#4D000000" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout3"
+                android:id="@+id/pass_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:helperTextTextColor="#FD0320"
                 android:layout_marginTop="16dp"
                 app:boxCornerRadiusBottomEnd="30dp"
                 app:boxCornerRadiusBottomStart="30dp"
                 app:boxCornerRadiusTopEnd="30dp"
                 app:boxCornerRadiusTopStart="30dp"
-                app:layout_constraintEnd_toEndOf="@+id/textInputLayout1"
-                app:layout_constraintStart_toStartOf="@+id/textInputLayout1"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout1">
+                app:layout_constraintEnd_toEndOf="@+id/name_layout"
+                app:layout_constraintStart_toStartOf="@+id/name_layout"
+                app:layout_constraintTop_toBottomOf="@+id/email_layout"
+                app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/phone"
+                    android:id="@+id/pass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/phone_number"
-                    android:text="@={viewmodel.newPhnNo}"
-                    android:inputType="phone"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
+                    android:textColorHint="#4D000000" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/conf_pass_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:helperTextTextColor="#FD0320"
+                android:layout_marginTop="16dp"
+                app:boxCornerRadiusBottomEnd="30dp"
+                app:boxCornerRadiusBottomStart="30dp"
+                app:boxCornerRadiusTopEnd="30dp"
+                app:boxCornerRadiusTopStart="30dp"
+                app:layout_constraintEnd_toEndOf="@+id/name_layout"
+                app:layout_constraintStart_toStartOf="@+id/name_layout"
+                app:layout_constraintTop_toBottomOf="@+id/pass_layout"
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/confirm_pass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/confirm_password"
+                    android:inputType="textPassword"
                     android:paddingStart="30dp"
                     android:paddingEnd="30dp"
                     android:textColorHint="#4D000000" />
@@ -117,9 +138,9 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/sign_up"
                 app:cornerRadius="30dp"
-                app:layout_constraintEnd_toEndOf="@+id/textInputLayout1"
-                app:layout_constraintStart_toStartOf="@+id/textInputLayout1"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
+                app:layout_constraintEnd_toEndOf="@+id/name_layout"
+                app:layout_constraintStart_toStartOf="@+id/name_layout"
+                app:layout_constraintTop_toBottomOf="@+id/conf_pass_layout" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -161,4 +182,3 @@
                 app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-</layout>

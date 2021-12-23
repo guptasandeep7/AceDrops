@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<!--    <item android:id="@+id/id_home_fragment"-->
+<!--        android:title="Home"-->
+<!--        android:icon="@drawable/home_icon"-->
+<!--        app:showAsAction="ifRoom"-->
+<!--        />-->
+<!--    <item android:id="@+id/id_search_fragment"-->
+<!--        android:title="Category"-->
+<!--        android:icon="@drawable/search_icon"-->
+<!--        app:showAsAction="ifRoom" />-->
+<!--    <item android:id="@+id/id_randomise_fragment"-->
+<!--        android:title="Cart"-->
+<!--        android:icon="@drawable/randomise_icon"-->
+<!--        app:showAsAction="ifRoom"/>-->
+<!--    <item android:id="@+id/id_profile_fragment"-->
+<!--        android:title="Profile"-->
+<!--        android:icon="@drawable/profile_icon"-->
+<!--        app:showAsAction="ifRoom"/>-->
+
+</menu>

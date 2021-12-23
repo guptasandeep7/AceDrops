@@ -27,7 +27,7 @@ class OtpFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(p0: View?) {
         val navController = findNavController()
-        navController.navigate(R.id.action_otpFragment_to_passwordFragment)
+        navController.navigate(R.id.action_otpFragment_to_dashboardActivity)
     }
 
     override fun onDestroyView() {
