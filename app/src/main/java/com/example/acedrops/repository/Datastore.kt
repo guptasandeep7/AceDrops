@@ -11,13 +11,16 @@ import kotlinx.coroutines.flow.first
 
 const val DATASTORE_NAME = "user_details"
 val Context.datastore: DataStore<Preferences> by preferencesDataStore(DATASTORE_NAME)
+
 class Datastore(context: Context) {
     private val appContext = context.applicationContext
-    val LOGIN_KEY = "login_key"
-    val NAME_KEY = "name_key"
-    val EMAIL_KEY = "email_key"
-    val ACCESS_TOKEN_KEY = "token_key"
-    val REF_TOKEN_KEY = "ref_token_key"
+    companion object{
+        const val LOGIN_KEY = "login_key"
+        const val NAME_KEY = "name_key"
+        const val EMAIL_KEY = "email_key"
+        const val ACCESS_TOKEN_KEY = "token_key"
+        const val REF_TOKEN_KEY = "ref_token_key"
+    }
 
     suspend fun saveUserDetails(key: String, value: String) {
         val key1 = stringPreferencesKey(key)

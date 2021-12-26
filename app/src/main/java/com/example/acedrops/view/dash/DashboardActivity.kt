@@ -1,5 +1,6 @@
 package com.example.acedrops.view.dash
 
+import android.app.AlertDialog.Builder
 import android.os.Bundle
 
 import androidx.appcompat.app.AppCompatActivity
@@ -13,12 +14,21 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
     }
 
-//    override fun onBackPressed() {
-//        when(findNavController(R.id.container2).currentDestination?.id){
-//            R.id.HomeFragment -> {
-//                finish()
-//            }
-//        }
-//        super.onBackPressed()
-//    }
+    override fun onBackPressed() =
+        when (findNavController(R.id.container2).currentDestination?.id) {
+            R.id.homeFragment -> alertBox()
+            else -> super.onBackPressed()
+        }
+
+    private fun alertBox() {
+        val builder = Builder(this)
+        builder.setTitle("Exit")
+            .setMessage("Are you sure you want to Exit?")
+            .setPositiveButton("Exit") { dialog, id ->
+                finish()
+            }
+            .setNeutralButton("Cancel") { dialog, id -> }
+        val exit = builder.create()
+        exit.show()
+    }
 }

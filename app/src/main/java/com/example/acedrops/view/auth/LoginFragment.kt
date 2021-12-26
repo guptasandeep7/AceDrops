@@ -14,9 +14,12 @@ import com.example.acedrops.R
 import com.example.acedrops.databinding.FragmentLoginBinding
 import com.example.acedrops.model.UserData
 import com.example.acedrops.repository.Datastore
+import com.example.acedrops.repository.Datastore.Companion.ACCESS_TOKEN_KEY
+import com.example.acedrops.repository.Datastore.Companion.EMAIL_KEY
+import com.example.acedrops.repository.Datastore.Companion.NAME_KEY
+import com.example.acedrops.repository.Datastore.Companion.REF_TOKEN_KEY
 import com.example.acedrops.repository.LoginRepository
 import com.example.acedrops.utill.validPass
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -24,8 +27,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private lateinit var loginRepository:LoginRepository
-    lateinit var datastore:Datastore
+    private lateinit var loginRepository: LoginRepository
+    lateinit var datastore: Datastore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -97,17 +100,17 @@ class LoginFragment : Fragment(), View.OnClickListener {
                 progressBar.visibility = View.GONE
                 binding.signinBtn.isEnabled = true
             })
-        }
-        else binding.signinBtn.isEnabled = true
+        } else binding.signinBtn.isEnabled = true
     }
 
-    suspend fun saveToDatastore(it:UserData){
+    suspend fun saveToDatastore(it: UserData) {
         datastore.changeLoginState(true)
-        datastore.saveUserDetails(datastore.EMAIL_KEY,it.email!!)
-        datastore.saveUserDetails(datastore.NAME_KEY,it.name!!)
-        datastore.saveUserDetails(datastore.ACCESS_TOKEN_KEY,it.access_token!!)
-        datastore.saveUserDetails(datastore.REF_TOKEN_KEY,it.refresh_token!!)
+        datastore.saveUserDetails(EMAIL_KEY, it.email!!)
+        datastore.saveUserDetails(NAME_KEY, it.name!!)
+        datastore.saveUserDetails(ACCESS_TOKEN_KEY, it.access_token!!)
+        datastore.saveUserDetails(REF_TOKEN_KEY, it.refresh_token!!)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

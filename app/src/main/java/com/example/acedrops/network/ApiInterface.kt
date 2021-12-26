@@ -1,8 +1,7 @@
 package com.example.acedrops.network
 
-import com.example.acedrops.model.UserData
 import com.example.acedrops.model.Message
-import okhttp3.ResponseBody
+import com.example.acedrops.model.UserData
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST

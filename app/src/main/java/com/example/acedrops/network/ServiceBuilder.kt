@@ -11,7 +11,8 @@ object ServiceBuilder {
         .baseUrl(BASEURL)
         .addConverterFactory(GsonConverterFactory.create())
         .client(OkHttpClient.Builder().addInterceptor { chain ->
-            val request = chain.request().newBuilder().header("Content-Type", "application/json").build()
+            val request =
+                chain.request().newBuilder().header("Content-Type", "application/json").build()
             chain.proceed(request)
         }.build())
         .build()

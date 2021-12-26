@@ -1,14 +1,15 @@
 package com.example.acedrops.view.dash
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.acedrops.R
 import com.example.acedrops.repository.Datastore
+import com.example.acedrops.repository.Datastore.Companion.NAME_KEY
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -24,7 +25,7 @@ class HomeFragment : Fragment() {
 
         lifecycleScope.launch {
             if (datastore != null) {
-                name.text = datastore.getUserDetails(datastore.NAME_KEY)
+                name.text = datastore.getUserDetails(NAME_KEY)
             }
         }
         return view

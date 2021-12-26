@@ -15,11 +15,12 @@ import com.example.acedrops.repository.SignupRepository
 import com.example.acedrops.utill.validPass
 
 class SignupFragment : Fragment(), View.OnClickListener {
-    companion object{
+    companion object {
         lateinit var Email: String
         lateinit var Pass: String
         lateinit var Name: String
     }
+
     private var _binding: FragmentSignupBinding? = null
     private val binding get() = _binding!!
     private val signupRepository = SignupRepository()

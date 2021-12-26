@@ -46,8 +46,7 @@ class ForgotFragment : Fragment(), View.OnClickListener {
     override fun onClick(view: View?) {
         val navController = findNavController()
         binding.emailLayout.helperText = ""
-        if (isValid(binding.email.text.toString().trim()))
-        {
+        if (isValid(binding.email.text.toString().trim())) {
             binding.progressBar.visibility = View.VISIBLE
             navController.navigate(R.id.action_forgotFragment_to_otpFragment)
         }
