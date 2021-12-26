@@ -5,14 +5,25 @@ import android.util.Patterns.EMAIL_ADDRESS
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.databinding.FragmentSignupBinding
+import com.example.acedrops.repository.Datastore
+import com.example.acedrops.repository.SignupRepository
+import com.example.acedrops.utill.validPass
 
 class SignupFragment : Fragment(), View.OnClickListener {
+    companion object{
+        lateinit var Email: String
+        lateinit var Pass: String
+        lateinit var Name: String
+    }
     private var _binding: FragmentSignupBinding? = null
     private val binding get() = _binding!!
+    private val signupRepository = SignupRepository()
+    lateinit var datastore: Datastore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -20,6 +31,7 @@ class SignupFragment : Fragment(), View.OnClickListener {
     ): View? {
         _binding = FragmentSignupBinding.inflate(inflater, container, false)
         val view = binding.root
+        datastore = Datastore(requireContext())
         binding.signupBtn.setOnClickListener(this)
         binding.signupToSignin.setOnClickListener(this)
         return view
@@ -39,8 +51,8 @@ class SignupFragment : Fragment(), View.OnClickListener {
                 binding.emailLayout.helperText = "Enter valid Email Id"
                 false
             }
-            validPass() != null -> {
-                binding.passLayout.helperText = validPass()
+            validPass(pass) != null -> {
+                binding.passLayout.helperText = validPass(pass)
                 false
             }
             confirmPass.isBlank() -> {
@@ -55,43 +67,39 @@ class SignupFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun validPass(): String? {
-        val password = binding.pass.text.toString().trim()
-        if (password.length < 8) {
-            return "Password must contains 8 Characters"
-        }
-        if (!password.matches(".*[A-Z].*".toRegex()) && (!password.matches(".*[\$#%@&*/+_=?^!].*".toRegex()))) {
-            return "Must contain 1 Special character and 1 upper case character (\$#%@&*/+_=?^!)"
-        } else if (!password.matches(".*[a-z].*".toRegex())) {
-            return "Must contain 1 Lower case character"
-        } else if (!password.matches(".*[\$#%@&*/+_=?^!].*".toRegex())) {
-            return "Must contain 1 Special character (\$#%@&*/+_=?^!)"
-        } else if (!password.matches(".*[A-Z].*".toRegex())) {
-            return "Must contain 1 upper case character"
-        }
-        return null
+    private fun helper() = with(binding) {
+        emailLayout.helperText = ""
+        nameLayout.helperText = ""
+        passLayout.helperText = ""
+        confPassLayout.helperText = ""
     }
-
 
     override fun onClick(view: View?) {
         val navController = findNavController()
         when (view?.id) {
             R.id.signup_to_signin -> navController.navigateUp()
             R.id.signup_btn -> {
-                with(binding){
-                    emailLayout.helperText = ""
-                    nameLayout.helperText = ""
-                    passLayout.helperText = ""
-                    confPassLayout.helperText = ""
+                val progressBar = binding.progressBar
+                val email = binding.email.text.toString().trim()
+                val name = binding.name.text.toString().trim()
+                val pass = binding.pass.text.toString().trim()
+                val confirmPass = binding.confirmPass.text.toString().trim()
+                helper()
+                if (isValid(email, name, pass, confirmPass)) {
+                    progressBar.visibility = View.VISIBLE
+                    signupRepository.signUp(email = email, name = name)
+                    signupRepository.message.observe(this, {
+                        progressBar.visibility = View.GONE
+                        Email = email
+                        Name = name
+                        Pass = pass
+                        navController.navigate(R.id.action_signupFragment_to_otpFragment)
+                    })
+                    signupRepository.errorMessage.observe(this, {
+                        Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+                        progressBar.visibility = View.GONE
+                    })
                 }
-                if (isValid(
-                        binding.email.text.toString().trim(),
-                        binding.name.text.toString().trim(),
-                        binding.pass.text.toString().trim(),
-                        binding.confirmPass.text.toString().trim()
-                    )
-                )
-                    navController.navigate(R.id.action_signupFragment_to_otpFragment)
             }
         }
     }

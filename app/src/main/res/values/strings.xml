@@ -23,4 +23,7 @@
     <string name="new_password">New Password</string>
     <string name="create_password">Create Password</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="confirmation_code">Confirmation Code</string>
+    <string name="didn_t_recieve_the_code_resend_now">Didn’t recieve the code? <font color="#1983FF">Resend Now</font></string>
+    <string name="_00_30">00:30</string>
 </resources>

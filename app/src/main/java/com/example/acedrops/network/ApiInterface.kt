@@ -1,23 +1,30 @@
 package com.example.acedrops.network
 
+import com.example.acedrops.model.UserData
+import com.example.acedrops.model.Message
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.http.Body
+import retrofit2.http.POST
+
 interface ApiInterface {
 
-//    @POST("signup")
-//    fun signup(@Body data: MyDataItem): Call<ResponseBody>
-//
-//    @POST("login")
-//    fun login(@Body value: MyDataItem): Call<MyDataItem>
-//
-//    @POST("forgot")
-//    fun verify(@Body email: MyDataItem): Call<ResponseBody>
-//
-//    @POST("otp")
-//    fun otp(@Body data: MyDataItem): Call<ResponseBody>
-//
-//    @PUT("password")
-//    fun password(@Body data: MyDataItem): Call<MyDataItem>
-//
-//    @PUT("resetpass")
-//    fun resetPassword(@Body data: MyDataItem): Call<MyDataItem>
+    @POST("auth/signup")
+    fun signup(@Body data: UserData): Call<Message>
+
+    @POST("auth/login")
+    fun login(@Body data: UserData): Call<UserData>
+
+    @POST("auth/signup/verify")
+    fun signUpVerify(@Body data: UserData): Call<Message>
+
+    @POST("auth/forgotPass")
+    fun forgotPass(@Body email: UserData): Call<UserData>
+
+    @POST("auth/forgotPassVerify")
+    fun verifyPass(@Body data: UserData): Call<UserData>
+
+    @POST("auth/newpass")
+    fun newPass(@Body data: UserData): Call<UserData>
 
 }

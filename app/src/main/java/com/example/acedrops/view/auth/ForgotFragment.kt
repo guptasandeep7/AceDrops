@@ -1,6 +1,7 @@
 package com.example.acedrops.view.auth
 
 import android.os.Bundle
+import android.util.Patterns.EMAIL_ADDRESS
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,9 +29,28 @@ class ForgotFragment : Fragment(), View.OnClickListener {
         return view
     }
 
+    private fun isValid(email: String): Boolean {
+        return when {
+            email.isBlank() -> {
+                binding.emailLayout.helperText = "Enter Email Address"
+                false
+            }
+            !EMAIL_ADDRESS.matcher(email).matches() -> {
+                binding.emailLayout.helperText = "Enter valid Email Address"
+                false
+            }
+            else -> true
+        }
+    }
+
     override fun onClick(view: View?) {
         val navController = findNavController()
-        navController.navigate(R.id.action_forgotFragment_to_otpFragment)
+        binding.emailLayout.helperText = ""
+        if (isValid(binding.email.text.toString().trim()))
+        {
+            binding.progressBar.visibility = View.VISIBLE
+            navController.navigate(R.id.action_forgotFragment_to_otpFragment)
+        }
     }
 
     override fun onDestroyView() {

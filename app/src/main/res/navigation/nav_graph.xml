@@ -17,7 +17,8 @@
             app:destination="@id/forgotFragment" />
         <action
             android:id="@+id/action_loginFragment_to_dashboardActivity"
-            app:destination="@id/dashboardActivity" />
+            app:destination="@id/dashboardActivity"
+            />
     </fragment>
     <fragment
         android:id="@+id/signupFragment"

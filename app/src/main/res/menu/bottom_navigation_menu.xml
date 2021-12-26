@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<!--    <item android:id="@+id/id_home_fragment"-->
-<!--        android:title="Home"-->
-<!--        android:icon="@drawable/home_icon"-->
-<!--        app:showAsAction="ifRoom"-->
-<!--        />-->
-<!--    <item android:id="@+id/id_search_fragment"-->
-<!--        android:title="Category"-->
-<!--        android:icon="@drawable/search_icon"-->
-<!--        app:showAsAction="ifRoom" />-->
-<!--    <item android:id="@+id/id_randomise_fragment"-->
-<!--        android:title="Cart"-->
-<!--        android:icon="@drawable/randomise_icon"-->
-<!--        app:showAsAction="ifRoom"/>-->
-<!--    <item android:id="@+id/id_profile_fragment"-->
-<!--        android:title="Profile"-->
-<!--        android:icon="@drawable/profile_icon"-->
-<!--        app:showAsAction="ifRoom"/>-->
+    <item android:id="@+id/id_home_fragment"
+        android:title="Home"
+        android:icon="@drawable/ic_home"
+        app:showAsAction="ifRoom"
+        />
+    <item android:id="@+id/id_category_fragment"
+        android:title="Category"
+        android:icon="@drawable/ic_grid"
+        app:showAsAction="ifRoom" />
+    <item android:id="@+id/id_cart_fragment"
+        android:title="Cart"
+        android:icon="@drawable/ic_shopping_cart"
+        app:showAsAction="ifRoom"/>
+    <item android:id="@+id/id_profile_fragment"
+        android:title="Profile"
+        android:icon="@drawable/ic_user"
+        app:showAsAction="ifRoom"/>
 
 </menu>
