@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
@@ -21,7 +22,7 @@ class ForgotFragment : Fragment() {
 
     private var _binding: FragmentForgotBinding? = null
     private val binding get() = _binding!!
-    private lateinit var forgotRepository:ForgotRepository
+    private lateinit var forgotRepository: ForgotRepository
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,6 +70,23 @@ class ForgotFragment : Fragment() {
             }
             else -> true
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val builder = android.app.AlertDialog.Builder(activity)
+                builder.setTitle("Exit")
+                    .setMessage("Are you sure you want to Exit?")
+                    .setPositiveButton("Exit") { dialog, id ->
+                        activity?.finish()
+                    }
+                    .setNeutralButton("Cancel") { dialog, id -> }
+                val exit = builder.create()
+                exit.show()
+            }
+        })
     }
 
     override fun onDestroyView() {

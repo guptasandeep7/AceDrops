@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -77,14 +78,13 @@ class SignupFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(view: View?) {
-        val navController = findNavController()
         when (view?.id) {
-            R.id.signup_to_signin -> navController.navigateUp()
-            R.id.signup_btn -> signUp(navController)
+            R.id.signup_to_signin -> findNavController().navigateUp()
+            R.id.signup_btn -> signUp()
         }
     }
 
-    private fun signUp(navController: NavController) {
+    private fun signUp() {
         val btn = binding.signupBtn
         val progressBar = binding.progressBar
         val email = binding.email.text.toString().trim()
@@ -101,7 +101,7 @@ class SignupFragment : Fragment(), View.OnClickListener {
                 Email = email
                 Name = name
                 Pass = pass
-                navController.navigate(R.id.action_signupFragment_to_otpFragment)
+                findNavController().navigate(R.id.action_signupFragment_to_otpFragment)
             })
             signupRepository.errorMessage.observe(this, {
                 Toast.makeText(this.context, it, Toast.LENGTH_SHORT).show()
@@ -109,6 +109,23 @@ class SignupFragment : Fragment(), View.OnClickListener {
                 btn.isEnabled = true
             })
         } else btn.isEnabled = true
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val builder = android.app.AlertDialog.Builder(activity)
+                builder.setTitle("Exit")
+                    .setMessage("Are you sure you want to Exit?")
+                    .setPositiveButton("Exit") { dialog, id ->
+                        activity?.finish()
+                    }
+                    .setNeutralButton("Cancel") { dialog, id -> }
+                val exit = builder.create()
+                exit.show()
+            }
+        })
     }
 
     override fun onDestroyView() {
