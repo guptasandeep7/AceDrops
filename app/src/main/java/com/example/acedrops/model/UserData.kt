@@ -8,5 +8,6 @@ data class UserData(
     val otp: String? = null,
     val name: String? = null,
     val isShop: Boolean? = null,
-    val message: String? = null
+    val message: String? = null,
+    val newpass:String?= null,
 )

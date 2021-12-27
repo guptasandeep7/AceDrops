@@ -24,7 +24,7 @@
         android:id="@+id/signupFragment"
         android:name="com.example.acedrops.view.auth.SignupFragment"
         android:label="fragment_signup"
-        tools:layout="@layout/fragment_signup" >
+        tools:layout="@layout/fragment_signup">
         <action
             android:id="@+id/action_signupFragment_to_otpFragment"
             app:destination="@id/otpFragment" />
@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_otpFragment_to_dashboardActivity"
             app:destination="@id/dashboardActivity" />
+        <action
+            android:id="@+id/action_otpFragment_to_passwordFragment"
+            app:destination="@id/passwordFragment" />
     </fragment>
     <fragment
         android:id="@+id/forgotFragment"
@@ -52,4 +55,13 @@
         android:name="com.example.acedrops.view.dash.DashboardActivity"
         android:label="activity_dashboard"
         tools:layout="@layout/activity_dashboard" />
+    <fragment
+        android:id="@+id/passwordFragment"
+        android:name="com.example.acedrops.view.auth.PasswordFragment"
+        android:label="PasswordFragment"
+        tools:layout="@layout/fragment_password">
+        <action
+            android:id="@+id/action_passwordFragment_to_dashboardActivity"
+            app:destination="@id/dashboardActivity" />
+    </fragment>
 </navigation>

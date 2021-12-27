@@ -25,7 +25,7 @@ class DashboardActivity : AppCompatActivity() {
         builder.setTitle("Exit")
             .setMessage("Are you sure you want to Exit?")
             .setPositiveButton("Exit") { dialog, id ->
-                finish()
+                super.onBackPressed()
             }
             .setNeutralButton("Cancel") { dialog, id -> }
         val exit = builder.create()

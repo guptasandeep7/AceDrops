@@ -1,4 +1,4 @@
-package com.example.acedrops.repository
+package com.example.acedrops.repository.auth
 
 import androidx.lifecycle.MutableLiveData
 import com.example.acedrops.model.Message
@@ -18,8 +18,8 @@ class SignupRepository {
         val call = request.signup(UserData(email = email, name = name))
         call.enqueue(object : Callback<Message?> {
             override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
-                if (response.isSuccessful) message.value = response.body()?.message
-                else errorMessage.value = response.body()?.message
+                if (response.isSuccessful) message.postValue(response.body()?.message)
+                else errorMessage.postValue(response.body()?.message?:"Something went wrong! Try again")
             }
 
             override fun onFailure(call: Call<Message?>, t: Throwable) {

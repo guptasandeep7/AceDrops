@@ -7,11 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.databinding.FragmentSignupBinding
 import com.example.acedrops.repository.Datastore
-import com.example.acedrops.repository.SignupRepository
+import com.example.acedrops.repository.auth.SignupRepository
 import com.example.acedrops.utill.validPass
 
 class SignupFragment : Fragment(), View.OnClickListener {
@@ -79,30 +80,35 @@ class SignupFragment : Fragment(), View.OnClickListener {
         val navController = findNavController()
         when (view?.id) {
             R.id.signup_to_signin -> navController.navigateUp()
-            R.id.signup_btn -> {
-                val progressBar = binding.progressBar
-                val email = binding.email.text.toString().trim()
-                val name = binding.name.text.toString().trim()
-                val pass = binding.pass.text.toString().trim()
-                val confirmPass = binding.confirmPass.text.toString().trim()
-                helper()
-                if (isValid(email, name, pass, confirmPass)) {
-                    progressBar.visibility = View.VISIBLE
-                    signupRepository.signUp(email = email, name = name)
-                    signupRepository.message.observe(this, {
-                        progressBar.visibility = View.GONE
-                        Email = email
-                        Name = name
-                        Pass = pass
-                        navController.navigate(R.id.action_signupFragment_to_otpFragment)
-                    })
-                    signupRepository.errorMessage.observe(this, {
-                        Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
-                        progressBar.visibility = View.GONE
-                    })
-                }
-            }
+            R.id.signup_btn -> signUp(navController)
         }
+    }
+
+    private fun signUp(navController: NavController) {
+        val btn = binding.signupBtn
+        val progressBar = binding.progressBar
+        val email = binding.email.text.toString().trim()
+        val name = binding.name.text.toString().trim()
+        val pass = binding.pass.text.toString().trim()
+        val confirmPass = binding.confirmPass.text.toString().trim()
+        btn.isEnabled = false
+        helper()
+        if (isValid(email, name, pass, confirmPass)) {
+            progressBar.visibility = View.VISIBLE
+            signupRepository.signUp(email = email, name = name)
+            signupRepository.message.observe(this, {
+                progressBar.visibility = View.GONE
+                Email = email
+                Name = name
+                Pass = pass
+                navController.navigate(R.id.action_signupFragment_to_otpFragment)
+            })
+            signupRepository.errorMessage.observe(this, {
+                Toast.makeText(this.context, it, Toast.LENGTH_SHORT).show()
+                progressBar.visibility = View.GONE
+                btn.isEnabled = true
+            })
+        } else btn.isEnabled = true
     }
 
     override fun onDestroyView() {

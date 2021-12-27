@@ -7,13 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.databinding.FragmentOtpBinding
-import com.example.acedrops.repository.OtpRepository
+import com.example.acedrops.model.UserData
+import com.example.acedrops.repository.auth.OtpRepository
+import com.example.acedrops.view.auth.ForgotFragment.Companion.forgot
 import com.example.acedrops.view.auth.SignupFragment.Companion.Email
 import com.example.acedrops.view.auth.SignupFragment.Companion.Name
 import com.example.acedrops.view.auth.SignupFragment.Companion.Pass
+import kotlinx.coroutines.launch
 
 class OtpFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentOtpBinding? = null
@@ -49,28 +53,57 @@ class OtpFragment : Fragment(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.next_btn -> {
-                val navController = findNavController()
-                if (!binding.otp.text.toString().trim().isBlank()) {
-                    timerCountDown.cancel()
-                    val progressBar = binding.progressBar
-                    val otp = binding.otp.text.toString().trim()
-                    progressBar.visibility = View.VISIBLE
-                    otpRepository.otp(email = Email, pass = Pass, name = Name, otp = otp)
-                    otpRepository.errorMessage.observe(this, {
-                        Toast.makeText(this.context, it, Toast.LENGTH_SHORT).show()
-                        progressBar.visibility = View.GONE
-                    })
-                    otpRepository.message.observe(this, {
-                        navController.navigate(R.id.action_otpFragment_to_dashboardActivity)
-                    })
-                } else
-                    binding.otpLayout.helperText = "Enter OTP"
+                next()
             }
             R.id.resend_otp -> {
                 Toast.makeText(requireContext(), "OTP resend successfully", Toast.LENGTH_SHORT)
                     .show()
                 timerCountDown.start()
             }
+        }
+    }
+
+    private fun next() {
+        val progressBar = binding.progressBar
+        val otp = binding.otp.text.toString().trim()
+        val btn = binding.nextBtn
+        val navController = findNavController()
+        btn.isEnabled = false
+        if (otp.isNotBlank()) {
+            timerCountDown.cancel()
+            progressBar.visibility = View.VISIBLE
+            if (forgot) otpRepository.forgotOtp(email = Email, otp)
+            else otpRepository.otp(email = Email, pass = Pass, name = Name, otp = otp)
+
+            otpRepository.errorMessage.observe(this, {
+                Toast.makeText(this.context, it, Toast.LENGTH_SHORT).show()
+                progressBar.visibility = View.GONE
+                btn.isEnabled = true
+            })
+
+            progressBar.visibility = View.GONE
+            if (forgot) {
+                otpRepository.message.observe(this, {
+                    navController.navigate(R.id.action_otpFragment_to_passwordFragment)
+                })
+            } else {
+                otpRepository.userData.observe(this, {
+                    lifecycleScope.launch {
+                        LoginFragment().saveToDatastore(
+                            UserData(
+                                email = Email,
+                                name = Name,
+                                access_token = it.access_token,
+                                refresh_token = it.refresh_token
+                            )
+                        )
+                        navController.navigate(R.id.action_otpFragment_to_dashboardActivity)
+                    }
+                })
+            }
+        } else {
+            btn.isEnabled = true
+            binding.otpLayout.helperText = "Enter OTP"
         }
     }
 

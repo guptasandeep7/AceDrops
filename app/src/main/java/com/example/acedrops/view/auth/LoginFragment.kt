@@ -18,7 +18,7 @@ import com.example.acedrops.repository.Datastore.Companion.ACCESS_TOKEN_KEY
 import com.example.acedrops.repository.Datastore.Companion.EMAIL_KEY
 import com.example.acedrops.repository.Datastore.Companion.NAME_KEY
 import com.example.acedrops.repository.Datastore.Companion.REF_TOKEN_KEY
-import com.example.acedrops.repository.LoginRepository
+import com.example.acedrops.repository.auth.LoginRepository
 import com.example.acedrops.utill.validPass
 import kotlinx.coroutines.launch
 
@@ -91,14 +91,15 @@ class LoginFragment : Fragment(), View.OnClickListener {
                 progressBar.visibility = View.GONE
                 lifecycleScope.launch {
                     saveToDatastore(it)
-                    navController.navigate(R.id.action_loginFragment_to_dashboardActivity)
+                    activity?.finish()
+                    findNavController().navigate(R.id.action_loginFragment_to_dashboardActivity)
                 }
             })
 
             loginRepository.errorMessage.observe(this, {
-                Toast.makeText(this.context, it, Toast.LENGTH_SHORT).show()
                 progressBar.visibility = View.GONE
                 binding.signinBtn.isEnabled = true
+                Toast.makeText(this.context, it, Toast.LENGTH_SHORT).show()
             })
         } else binding.signinBtn.isEnabled = true
     }
