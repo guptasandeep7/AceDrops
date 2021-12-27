@@ -14,12 +14,13 @@ import com.example.acedrops.repository.auth.LoginRepository
 import com.example.acedrops.repository.auth.PasswordRepository
 import com.example.acedrops.utill.validPass
 import com.example.acedrops.view.auth.SignupFragment.Companion.Email
+import com.example.acedrops.view.auth.SignupFragment.Companion.Pass
 import kotlinx.coroutines.launch
 
 class PasswordFragment : Fragment() {
     private var _binding: FragmentPasswordBinding? = null
     private val binding get() = _binding!!
-    private val passwordRepository = PasswordRepository()
+    private lateinit var passwordRepository:PasswordRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +54,7 @@ class PasswordFragment : Fragment() {
     }
 
     private fun signIn(pass: String) {
+        passwordRepository = PasswordRepository()
         binding.progressBar.visibility = View.VISIBLE
         passwordRepository.newPass(Email, pass = pass)
 
@@ -72,6 +74,7 @@ class PasswordFragment : Fragment() {
         LoginRepository().userDetails.observe(viewLifecycleOwner, {
             lifecycleScope.launch {
                 LoginFragment().saveToDatastore(it)
+                activity?.finish()
                 findNavController().navigate(R.id.action_passwordFragment_to_dashboardActivity)
             }
         })

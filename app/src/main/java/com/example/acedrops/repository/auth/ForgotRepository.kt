@@ -18,8 +18,12 @@ class ForgotRepository {
         val call = request.forgotPass(UserData(email = email))
         call.enqueue(object : Callback<Message?> {
             override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
-                if (response.isSuccessful) message.postValue(response.body()?.message)
-                else errorMessage.postValue(response.body()?.message?:"Incorrect Email Id")
+                when {
+                    response.isSuccessful -> message.postValue(response.body()?.message)
+                    response.code() == 422 -> errorMessage.postValue("Enter correct email id")
+                    response.code() == 404 -> errorMessage.postValue("Email id is not registered")
+                    else -> errorMessage.postValue("Incorrect Email Id")
+                }
             }
 
             override fun onFailure(call: Call<Message?>, t: Throwable) {

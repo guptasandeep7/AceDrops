@@ -2,21 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/id_home_fragment"
-        android:title="Home"
+    <item android:id="@+id/homeFragment"
+        android:title="@string/home"
         android:icon="@drawable/ic_home"
-        app:showAsAction="ifRoom"
-        />
-    <item android:id="@+id/id_category_fragment"
-        android:title="Category"
+        app:showAsAction="ifRoom" />
+    <item android:id="@+id/categoryFragment"
+        android:title="@string/category"
         android:icon="@drawable/ic_grid"
         app:showAsAction="ifRoom" />
-    <item android:id="@+id/id_cart_fragment"
-        android:title="Cart"
+    <item android:id="@+id/cartFragment"
+        android:title="@string/cart"
         android:icon="@drawable/ic_shopping_cart"
         app:showAsAction="ifRoom"/>
-    <item android:id="@+id/id_profile_fragment"
-        android:title="Profile"
+    <item android:id="@+id/profileFragment"
+        android:title="@string/profile"
         android:icon="@drawable/ic_user"
         app:showAsAction="ifRoom"/>
 

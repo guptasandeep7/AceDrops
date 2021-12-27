@@ -26,4 +26,8 @@
     <string name="confirmation_code">Confirmation Code</string>
     <string name="didn_t_recieve_the_code_resend_now">Didn’t recieve the code? <font color="#1983FF">Resend Now</font></string>
     <string name="_00_30">00:30</string>
+    <string name="home">Home</string>
+    <string name="category">Category</string>
+    <string name="cart">Cart</string>
+    <string name="profile">Profile</string>
 </resources>

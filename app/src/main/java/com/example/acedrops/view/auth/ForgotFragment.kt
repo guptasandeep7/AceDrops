@@ -15,12 +15,13 @@ import com.example.acedrops.repository.auth.ForgotRepository
 
 class ForgotFragment : Fragment() {
 
-    companion object{
+    companion object {
         var forgot = false
     }
+
     private var _binding: FragmentForgotBinding? = null
     private val binding get() = _binding!!
-    private val forgotRepository = ForgotRepository()
+    private lateinit var forgotRepository:ForgotRepository
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,6 +36,7 @@ class ForgotFragment : Fragment() {
             val email = binding.email.text.toString().trim()
             binding.emailLayout.helperText = ""
             if (isValid(email)) {
+                forgotRepository = ForgotRepository()
                 binding.progressBar.visibility = View.VISIBLE
                 forgotRepository.forgot(email)
 

@@ -18,8 +18,14 @@ class SignupRepository {
         val call = request.signup(UserData(email = email, name = name))
         call.enqueue(object : Callback<Message?> {
             override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
-                if (response.isSuccessful) message.postValue(response.body()?.message)
-                else errorMessage.postValue(response.body()?.message?:"Something went wrong! Try again")
+                when {
+                    response.isSuccessful -> message.postValue(response.body()?.message)
+                    response.code() == 422 -> errorMessage.postValue("Enter Correct details")
+                    response.code() == 400 -> errorMessage.postValue("This Email is already registered")
+                    else -> errorMessage.postValue(
+                        response.body()?.message ?: "Something went wrong! Try again"
+                    )
+                }
             }
 
             override fun onFailure(call: Call<Message?>, t: Throwable) {

@@ -9,5 +9,5 @@ data class UserData(
     val name: String? = null,
     val isShop: Boolean? = null,
     val message: String? = null,
-    val newpass:String?= null,
+    val newpass: String? = null,
 )

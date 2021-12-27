@@ -36,7 +36,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
     ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         val view = binding.root
-        loginRepository = LoginRepository()
         datastore = Datastore(requireContext())
         binding.signinToSignup.setOnClickListener(this)
         binding.forgotTxt.setOnClickListener(this)
@@ -84,6 +83,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
         helper()
 
         if (isValid(email, pass)) {
+            loginRepository = LoginRepository()
             progressBar.visibility = View.VISIBLE
             loginRepository.login(email = email, pass = pass)
 

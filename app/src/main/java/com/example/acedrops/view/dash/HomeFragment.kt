@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.acedrops.R
 import com.example.acedrops.repository.Datastore
+import com.example.acedrops.repository.Datastore.Companion.EMAIL_KEY
 import com.example.acedrops.repository.Datastore.Companion.NAME_KEY
 import kotlinx.coroutines.launch
 
@@ -26,6 +27,7 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             if (datastore != null) {
                 name.text = datastore.getUserDetails(NAME_KEY)
+                name.append("\n${datastore.getUserDetails(EMAIL_KEY)}")
             }
         }
         return view

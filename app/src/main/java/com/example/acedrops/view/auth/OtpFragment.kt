@@ -23,7 +23,7 @@ class OtpFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentOtpBinding? = null
     private val binding get() = _binding!!
     private lateinit var timerCountDown: CountDownTimer
-    private val otpRepository = OtpRepository()
+    private lateinit var otpRepository:OtpRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,9 +67,9 @@ class OtpFragment : Fragment(), View.OnClickListener {
         val progressBar = binding.progressBar
         val otp = binding.otp.text.toString().trim()
         val btn = binding.nextBtn
-        val navController = findNavController()
         btn.isEnabled = false
         if (otp.isNotBlank()) {
+            otpRepository = OtpRepository()
             timerCountDown.cancel()
             progressBar.visibility = View.VISIBLE
             if (forgot) otpRepository.forgotOtp(email = Email, otp)
@@ -84,7 +84,7 @@ class OtpFragment : Fragment(), View.OnClickListener {
             progressBar.visibility = View.GONE
             if (forgot) {
                 otpRepository.message.observe(this, {
-                    navController.navigate(R.id.action_otpFragment_to_passwordFragment)
+                    findNavController().navigate(R.id.action_otpFragment_to_passwordFragment)
                 })
             } else {
                 otpRepository.userData.observe(this, {
@@ -97,7 +97,8 @@ class OtpFragment : Fragment(), View.OnClickListener {
                                 refresh_token = it.refresh_token
                             )
                         )
-                        navController.navigate(R.id.action_otpFragment_to_dashboardActivity)
+                        activity?.finish()
+                        findNavController().navigate(R.id.action_otpFragment_to_dashboardActivity)
                     }
                 })
             }

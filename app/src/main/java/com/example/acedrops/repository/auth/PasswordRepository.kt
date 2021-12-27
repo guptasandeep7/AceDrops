@@ -13,13 +13,17 @@ class PasswordRepository {
     var message = MutableLiveData<String>()
     var errorMessage = MutableLiveData<String>()
 
-    fun newPass(email: String,pass:String) {
+    fun newPass(email: String, pass: String) {
         val request = ServiceBuilder.buildService()
         val call = request.newPass(UserData(email = email, newpass = pass))
         call.enqueue(object : Callback<Message?> {
             override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
-                if (response.isSuccessful) message.postValue(response.body()?.message)
-                else errorMessage.postValue(response.body()?.message?:"Something went wrong! Try again")
+                when {
+                    response.isSuccessful -> message.postValue(response.body()?.message)
+                    response.code() == 422 -> errorMessage.postValue("Enter valid password")
+                    response.code() == 401 -> errorMessage.postValue("Session expired")
+                    else -> errorMessage.postValue("Something went wrong! Try again")
+                }
             }
 
             override fun onFailure(call: Call<Message?>, t: Throwable) {

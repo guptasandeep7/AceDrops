@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.acedrops.model.UserData
 import com.example.acedrops.network.ServiceBuilder
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,12 +23,10 @@ class LoginRepository {
                         Log.d("RESPONSE BODY", response.body().toString())
                         userDetails.value = response.body()
                     }
-                    response.code()==401 -> {
-                        errorMessage.postValue("Wrong password")
-                    }
-                    else -> {
-                        errorMessage.postValue("User not registered")
-                    }
+                    response.code() == 401 -> errorMessage.postValue("Wrong password")
+                    response.code() == 422 -> errorMessage.postValue("Enter correct email and password")
+                    response.code() == 404 -> errorMessage.postValue("User does not exists please signup")
+                    else -> errorMessage.postValue("User not registered")
                 }
             }
 

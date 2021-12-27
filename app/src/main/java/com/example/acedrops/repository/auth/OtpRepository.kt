@@ -27,8 +27,14 @@ class OtpRepository {
         )
         call.enqueue(object : Callback<UserData?> {
             override fun onResponse(call: Call<UserData?>, response: Response<UserData?>) {
-                if (response.isSuccessful) userData.postValue(response.body())
-                else errorMessage.postValue(response.body()?.message?: "Incorrect OTP")
+                when {
+                    response.isSuccessful -> userData.postValue(response.body())
+                    response.code() == 422 -> errorMessage.postValue("OTP is incorrect")
+                    response.code() == 400 -> errorMessage.postValue("This email is already registered")
+                    response.code() == 404 -> errorMessage.postValue("Wrong OTP")
+                    response.code() == 401 -> errorMessage.postValue("Wrong otp")
+                    else -> errorMessage.postValue("Something went wrong! Try again")
+                }
             }
 
             override fun onFailure(call: Call<UserData?>, t: Throwable) {
@@ -37,13 +43,17 @@ class OtpRepository {
         })
     }
 
-    fun forgotOtp(email: String,otp: String){
+    fun forgotOtp(email: String, otp: String) {
         val request = ServiceBuilder.buildService()
         val call = request.forgotVerify(UserData(email = email, otp = otp))
         call.enqueue(object : Callback<Message?> {
             override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
-                if(response.isSuccessful) message.postValue(response.body()?.message)
-                else errorMessage.postValue(response.body()?.message?:"Incorrect OTP")
+                when {
+                    response.isSuccessful -> message.postValue(response.body()?.message)
+                    response.code() == 422 -> errorMessage.postValue("validation error")
+                    response.code() == 401 -> errorMessage.postValue("Wrong OTP")
+                    else -> errorMessage.postValue(response.body()?.message ?: "try again")
+                }
             }
 
             override fun onFailure(call: Call<Message?>, t: Throwable) {
