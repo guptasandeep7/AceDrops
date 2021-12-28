@@ -6,9 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.databinding.FragmentSignupBinding
@@ -79,7 +77,7 @@ class SignupFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(view: View?) {
         when (view?.id) {
-            R.id.signup_to_signin -> findNavController().navigateUp()
+            R.id.signup_to_signin -> findNavController().navigate(R.id.action_signupFragment_to_loginFragment)
             R.id.signup_btn -> signUp()
         }
     }
@@ -101,6 +99,7 @@ class SignupFragment : Fragment(), View.OnClickListener {
                 Email = email
                 Name = name
                 Pass = pass
+                ForgotFragment.forgot = false
                 findNavController().navigate(R.id.action_signupFragment_to_otpFragment)
             })
             signupRepository.errorMessage.observe(this, {
@@ -109,23 +108,6 @@ class SignupFragment : Fragment(), View.OnClickListener {
                 btn.isEnabled = true
             })
         } else btn.isEnabled = true
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                val builder = android.app.AlertDialog.Builder(activity)
-                builder.setTitle("Exit")
-                    .setMessage("Are you sure you want to Exit?")
-                    .setPositiveButton("Exit") { dialog, id ->
-                        activity?.finish()
-                    }
-                    .setNeutralButton("Cancel") { dialog, id -> }
-                val exit = builder.create()
-                exit.show()
-            }
-        })
     }
 
     override fun onDestroyView() {

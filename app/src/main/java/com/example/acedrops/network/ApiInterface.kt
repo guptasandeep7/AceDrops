@@ -4,6 +4,8 @@ import com.example.acedrops.model.Message
 import com.example.acedrops.model.UserData
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 interface ApiInterface {
@@ -25,5 +27,9 @@ interface ApiInterface {
 
     @POST("/auth/newpass")
     fun newPass(@Body data: UserData): Call<Message>
+
+    @FormUrlEncoded
+    @POST("/auth/logout")
+    fun logOut(@Field("refreshToken") refreshToken:String): Call<Message>
 
 }

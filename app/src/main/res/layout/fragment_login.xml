@@ -104,17 +104,18 @@
                 android:layout_height="65dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/sign_in"
+                android:textAllCaps="false"
                 app:cornerRadius="30dp"
                 app:layout_constraintEnd_toEndOf="@+id/pass_layout"
                 app:layout_constraintStart_toStartOf="@+id/pass_layout"
                 app:layout_constraintTop_toBottomOf="@+id/pass_layout" />
 
             <TextView
+                style="@style/TextColor"
                 android:id="@+id/textView2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:fontFamily="@font/mulish_semi_bold"
                 android:gravity="center"
                 android:maxLines="2"
                 android:text="@string/terms_and_conditions"
@@ -124,12 +125,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/signin_btn" />
 
             <TextView
+                style="@style/TextColor"
                 android:id="@+id/signin_to_signup"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="48dp"
                 android:layout_marginBottom="24dp"
-                android:fontFamily="@font/mulish_semi_bold"
                 android:gravity="center"
                 android:paddingVertical="5dp"
                 android:text="@string/new_here_sign_up"

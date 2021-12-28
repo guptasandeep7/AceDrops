@@ -30,4 +30,7 @@
     <string name="category">Category</string>
     <string name="cart">Cart</string>
     <string name="profile">Profile</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="acedrop">Acedrop</string>
 </resources>

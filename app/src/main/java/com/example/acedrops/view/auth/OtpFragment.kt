@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -71,10 +70,10 @@ class OtpFragment : Fragment(), View.OnClickListener {
         btn.isEnabled = false
         if (otp.isNotBlank()) {
             otpRepository = OtpRepository()
-            timerCountDown.cancel()
             progressBar.visibility = View.VISIBLE
-            if (forgot) otpRepository.forgotOtp(email = Email, otp)
-            else otpRepository.otp(email = Email, pass = Pass, name = Name, otp = otp)
+            if (forgot) {
+                otpRepository.forgotOtp(email = Email, otp)
+            } else otpRepository.otp(email = Email, pass = Pass, name = Name, otp = otp)
 
             otpRepository.errorMessage.observe(this, {
                 Toast.makeText(this.context, it, Toast.LENGTH_SHORT).show()
@@ -85,10 +84,12 @@ class OtpFragment : Fragment(), View.OnClickListener {
             progressBar.visibility = View.GONE
             if (forgot) {
                 otpRepository.message.observe(this, {
+                    timerCountDown.cancel()
                     findNavController().navigate(R.id.action_otpFragment_to_passwordFragment)
                 })
             } else {
                 otpRepository.userData.observe(this, {
+                    timerCountDown.cancel()
                     lifecycleScope.launch {
                         LoginFragment().saveToDatastore(
                             UserData(
@@ -96,7 +97,8 @@ class OtpFragment : Fragment(), View.OnClickListener {
                                 name = Name,
                                 access_token = it.access_token,
                                 refresh_token = it.refresh_token
-                            )
+                            ),
+                            requireContext()
                         )
                         activity?.finish()
                         findNavController().navigate(R.id.action_otpFragment_to_dashboardActivity)
@@ -107,23 +109,6 @@ class OtpFragment : Fragment(), View.OnClickListener {
             btn.isEnabled = true
             binding.otpLayout.helperText = "Enter OTP"
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                val builder = android.app.AlertDialog.Builder(activity)
-                builder.setTitle("Exit")
-                    .setMessage("Are you sure you want to Exit?")
-                    .setPositiveButton("Exit") { dialog, id ->
-                        activity?.finish()
-                    }
-                    .setNeutralButton("Cancel") { dialog, id -> }
-                val exit = builder.create()
-                exit.show()
-            }
-        })
     }
 
     override fun onDestroyView() {

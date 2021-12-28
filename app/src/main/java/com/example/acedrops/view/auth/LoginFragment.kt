@@ -1,5 +1,6 @@
 package com.example.acedrops.view.auth
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -20,7 +21,6 @@ import com.example.acedrops.repository.Datastore.Companion.EMAIL_KEY
 import com.example.acedrops.repository.Datastore.Companion.NAME_KEY
 import com.example.acedrops.repository.Datastore.Companion.REF_TOKEN_KEY
 import com.example.acedrops.repository.auth.LoginRepository
-import com.example.acedrops.utill.validPass
 import kotlinx.coroutines.launch
 
 
@@ -37,7 +37,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
     ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         val view = binding.root
-        datastore = Datastore(requireContext())
         binding.signinToSignup.setOnClickListener(this)
         binding.forgotTxt.setOnClickListener(this)
         binding.signinBtn.setOnClickListener(this)
@@ -52,10 +51,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
             }
             !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
                 binding.emailLayout.helperText = "Enter valid Email Id"
-                false
-            }
-            validPass(pass) != null -> {
-                binding.passLayout.helperText = "Incorrect password"
                 false
             }
             else -> true
@@ -91,7 +86,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
             loginRepository.userDetails.observe(this, {
                 progressBar.visibility = View.GONE
                 lifecycleScope.launch {
-                    saveToDatastore(it)
+                    saveToDatastore(it, requireContext())
                     activity?.finish()
                     findNavController().navigate(R.id.action_loginFragment_to_dashboardActivity)
                 }
@@ -105,29 +100,13 @@ class LoginFragment : Fragment(), View.OnClickListener {
         } else binding.signinBtn.isEnabled = true
     }
 
-    suspend fun saveToDatastore(it: UserData) {
+    suspend fun saveToDatastore(it: UserData, context: Context) {
+        datastore = Datastore(context)
         datastore.changeLoginState(true)
         datastore.saveUserDetails(EMAIL_KEY, it.email!!)
         datastore.saveUserDetails(NAME_KEY, it.name!!)
         datastore.saveUserDetails(ACCESS_TOKEN_KEY, it.access_token!!)
         datastore.saveUserDetails(REF_TOKEN_KEY, it.refresh_token!!)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                val builder = android.app.AlertDialog.Builder(activity)
-                builder.setTitle("Exit")
-                    .setMessage("Are you sure you want to Exit?")
-                    .setPositiveButton("Exit") { dialog, id ->
-                        activity?.finish()
-                    }
-                    .setNeutralButton("Cancel") { dialog, id -> }
-                val exit = builder.create()
-                exit.show()
-            }
-        })
     }
 
     override fun onDestroyView() {

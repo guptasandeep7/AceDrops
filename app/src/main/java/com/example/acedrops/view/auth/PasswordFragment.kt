@@ -5,23 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.databinding.FragmentPasswordBinding
-import com.example.acedrops.repository.auth.LoginRepository
 import com.example.acedrops.repository.auth.PasswordRepository
 import com.example.acedrops.utill.validPass
 import com.example.acedrops.view.auth.SignupFragment.Companion.Email
-import com.example.acedrops.view.auth.SignupFragment.Companion.Pass
-import kotlinx.coroutines.launch
 
 class PasswordFragment : Fragment() {
     private var _binding: FragmentPasswordBinding? = null
     private val binding get() = _binding!!
-    private lateinit var passwordRepository:PasswordRepository
+    private lateinit var passwordRepository: PasswordRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,41 +55,13 @@ class PasswordFragment : Fragment() {
         passwordRepository.newPass(Email, pass = pass)
 
         passwordRepository.message.observe(viewLifecycleOwner, {
-            navToDash(pass)
+            findNavController().navigate(R.id.action_passwordFragment_to_loginFragment)
         })
 
         passwordRepository.errorMessage.observe(viewLifecycleOwner, {
             binding.progressBar.visibility = View.GONE
             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             binding.signBtn.isEnabled = true
-        })
-    }
-
-    private fun navToDash(pass: String) {
-        LoginRepository().login(Email, pass = pass)
-        LoginRepository().userDetails.observe(viewLifecycleOwner, {
-            lifecycleScope.launch {
-                LoginFragment().saveToDatastore(it)
-                activity?.finish()
-                findNavController().navigate(R.id.action_passwordFragment_to_dashboardActivity)
-            }
-        })
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                val builder = android.app.AlertDialog.Builder(activity)
-                builder.setTitle("Exit")
-                    .setMessage("Are you sure you want to Exit?")
-                    .setPositiveButton("Exit") { dialog, id ->
-                        activity?.finish()
-                    }
-                    .setNeutralButton("Cancel") { dialog, id -> }
-                val exit = builder.create()
-                exit.show()
-            }
         })
     }
 

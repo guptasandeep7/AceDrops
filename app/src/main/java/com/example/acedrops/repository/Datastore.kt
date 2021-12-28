@@ -42,8 +42,8 @@ class Datastore(context: Context) {
         return appContext.datastore.data.first()[key1]
     }
 
-    suspend fun isLogin(): Boolean? {
+    suspend fun isLogin(): Boolean {
         val key1 = booleanPreferencesKey(LOGIN_KEY)
-        return appContext.datastore.data.first()[key1]
+        return appContext.datastore.data.first()[key1]?:false
     }
 }

@@ -5,32 +5,68 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
+import com.example.acedrops.databinding.FragmentHomeBinding
+import com.example.acedrops.databinding.FragmentLoginBinding
 import com.example.acedrops.repository.Datastore
 import com.example.acedrops.repository.Datastore.Companion.EMAIL_KEY
 import com.example.acedrops.repository.Datastore.Companion.NAME_KEY
+import com.example.acedrops.repository.Datastore.Companion.REF_TOKEN_KEY
+import com.example.acedrops.repository.auth.SignOutRepository
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
-
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+    lateinit var signOutRepository: SignOutRepository
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        val view = binding.root
 
         val datastore = activity?.let { Datastore(it) }
-        val name = view.findViewById<TextView>(R.id.textview_name)
 
         lifecycleScope.launch {
-            if (datastore != null) {
-                name.text = datastore.getUserDetails(NAME_KEY)
-                name.append("\n${datastore.getUserDetails(EMAIL_KEY)}")
+                binding.textviewName.let{
+                    it.text = datastore?.getUserDetails(NAME_KEY)
+                    it.append("\n${datastore?.getUserDetails(EMAIL_KEY)}")
+                }
+        }
+
+        binding.signOutBtn.setOnClickListener{
+            binding.progressBar.visibility = View.VISIBLE
+            signOutRepository = SignOutRepository()
+            signOutRepository.let{ it ->
+                lifecycleScope.launch {
+                    it.signOut(datastore?.getUserDetails(REF_TOKEN_KEY)!!)
+                }
+                it.message.observe(viewLifecycleOwner,{
+                    lifecycleScope.launch {
+                        datastore?.changeLoginState(false)
+                        activity?.finish()
+                        findNavController().navigate(R.id.action_homeFragment_to_authActivity)
+                    }
+
+                })
+
+                it.errorMessage.observe(viewLifecycleOwner, {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                })
             }
         }
+
         return view
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

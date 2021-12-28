@@ -120,12 +120,12 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
+                style="@style/TextColor"
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="48dp"
-                android:fontFamily="@font/mulish_semi_bold"
                 android:text="@string/create_your_account"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -136,6 +136,7 @@
                 android:layout_width="0dp"
                 android:layout_height="65dp"
                 android:layout_marginTop="16dp"
+                android:textAllCaps="false"
                 android:text="@string/sign_up"
                 app:cornerRadius="30dp"
                 app:layout_constraintEnd_toEndOf="@+id/name_layout"
@@ -143,11 +144,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/conf_pass_layout" />
 
             <TextView
+                style="@style/TextColor"
                 android:id="@+id/textView2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:fontFamily="@font/mulish_semi_bold"
                 android:gravity="center"
                 android:maxLines="2"
                 android:text="@string/terms_and_conditions"
@@ -169,6 +170,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
             <TextView
+                style="@style/TextColor"
                 android:id="@+id/signup_to_signin"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

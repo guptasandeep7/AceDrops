@@ -3,21 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/landingFragment">
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.acedrops.view.auth.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_signupFragment"
-            app:destination="@id/signupFragment" />
+            app:destination="@id/signupFragment"
+            app:popUpTo="@id/landingFragment"
+            app:popUpToInclusive="false"/>
         <action
             android:id="@+id/action_loginFragment_to_forgotFragment"
             app:destination="@id/forgotFragment" />
         <action
             android:id="@+id/action_loginFragment_to_dashboardActivity"
             app:destination="@id/dashboardActivity"
+            app:popUpTo="@id/landingFragment"
+            app:popUpToInclusive="true"
             />
     </fragment>
     <fragment
@@ -27,9 +31,12 @@
         tools:layout="@layout/fragment_signup">
         <action
             android:id="@+id/action_signupFragment_to_otpFragment"
-            app:destination="@id/otpFragment"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true"/>
+            app:destination="@id/otpFragment" />
+        <action
+            android:id="@+id/action_signupFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/landingFragment"
+            app:popUpToInclusive="false"/>
     </fragment>
     <fragment
         android:id="@+id/otpFragment"
@@ -38,11 +45,13 @@
         tools:layout="@layout/fragment_otp" >
         <action
             android:id="@+id/action_otpFragment_to_dashboardActivity"
-            app:destination="@id/dashboardActivity" />
+            app:destination="@id/dashboardActivity"
+            app:popUpTo="@id/landingFragment"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_otpFragment_to_passwordFragment"
             app:destination="@id/passwordFragment"
-            app:popUpTo="@id/loginFragment"
+            app:popUpTo="@id/forgotFragment"
             app:popUpToInclusive="false"/>
     </fragment>
     <fragment
@@ -65,7 +74,27 @@
         android:label="PasswordFragment"
         tools:layout="@layout/fragment_password">
         <action
-            android:id="@+id/action_passwordFragment_to_dashboardActivity"
-            app:destination="@id/dashboardActivity" />
+            android:id="@+id/action_passwordFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/landingFragment"
+            app:popUpToInclusive="false"/>
     </fragment>
+    <fragment
+        android:id="@+id/landingFragment"
+        android:name="com.example.acedrops.view.auth.LandingFragment"
+        android:label="fragment_landing"
+        tools:layout="@layout/fragment_landing" >
+        <action
+            android:id="@+id/action_landingFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_landingFragment_to_dashboardActivity"
+            app:destination="@id/dashboardActivity"
+            app:popUpTo="@id/landingFragment"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_landingFragment_to_signupFragment"
+            app:destination="@id/signupFragment" />
+    </fragment>
+
 </navigation>
