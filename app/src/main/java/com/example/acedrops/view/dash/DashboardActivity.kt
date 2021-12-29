@@ -3,20 +3,27 @@ package com.example.acedrops.view.dash
 import android.app.AlertDialog.Builder
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.example.acedrops.R
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.acedrops.databinding.ActivityDashboardBinding
 
 class DashboardActivity : AppCompatActivity() {
 
-    private lateinit var bottomNav: BottomNavigationView
+    private lateinit var binding: ActivityDashboardBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dashboard)
+        binding = ActivityDashboardBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-//        bottomNav = findViewById(R.id.bottomNavigationView)
-//        bottomNav.setupWithNavController(findNavController(R.id.container2))
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.container2) as NavHostFragment
+        val navController: NavController = navHostFragment.navController
+        binding.bottomNavigationView.setupWithNavController(navController)
     }
 
     override fun onBackPressed() =
