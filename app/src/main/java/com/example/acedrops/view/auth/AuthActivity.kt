@@ -1,17 +1,14 @@
 package com.example.acedrops.view.auth
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import com.example.acedrops.R
+import androidx.appcompat.app.AppCompatActivity
+
 
 class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_auth)
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, LoginFragment.newInstance())
-                .commitNow()
-        }
+        setContentView(com.example.acedrops.R.layout.activity_auth)
+        supportActionBar?.hide()
     }
 }
