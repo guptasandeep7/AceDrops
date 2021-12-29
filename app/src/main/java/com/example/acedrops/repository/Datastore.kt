@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.acedrops.model.UserData
 import kotlinx.coroutines.flow.first
 
 const val DATASTORE_NAME = "user_details"
@@ -46,4 +47,15 @@ class Datastore(context: Context) {
         val key1 = booleanPreferencesKey(LOGIN_KEY)
         return appContext.datastore.data.first()[key1]?:false
     }
+
+//Login true and save all data to Datastore
+    suspend fun saveToDatastore(it: UserData, context: Context) {
+        val datastore = Datastore(context)
+        datastore.changeLoginState(true)
+        datastore.saveUserDetails(EMAIL_KEY, it.email!!)
+        datastore.saveUserDetails(NAME_KEY, it.name!!)
+        datastore.saveUserDetails(ACCESS_TOKEN_KEY, it.access_token!!)
+        datastore.saveUserDetails(REF_TOKEN_KEY, it.refresh_token!!)
+    }
 }
+

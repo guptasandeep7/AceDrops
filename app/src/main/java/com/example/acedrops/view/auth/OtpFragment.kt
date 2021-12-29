@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.databinding.FragmentOtpBinding
 import com.example.acedrops.model.UserData
+import com.example.acedrops.repository.Datastore
 import com.example.acedrops.repository.auth.OtpRepository
 import com.example.acedrops.view.auth.ForgotFragment.Companion.forgot
 import com.example.acedrops.view.auth.SignupFragment.Companion.Email
@@ -24,6 +25,7 @@ class OtpFragment : Fragment(), View.OnClickListener {
     private val binding get() = _binding!!
     private lateinit var timerCountDown: CountDownTimer
     private lateinit var otpRepository: OtpRepository
+    lateinit var datastore: Datastore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,8 +39,13 @@ class OtpFragment : Fragment(), View.OnClickListener {
 
         timerCountDown = object : CountDownTimer(31000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
+                binding.timer.visibility = View.VISIBLE
                 binding.resendOtp.isEnabled = false
-                binding.timer.text = "00:${(millisUntilFinished / 1000)}"
+                binding.timer.text = when {
+                    millisUntilFinished/1000>9 -> "00:${(millisUntilFinished / 1000)}"
+                    else -> "00:0${(millisUntilFinished / 1000)}"
+                }
+
             }
 
             override fun onFinish() {
@@ -76,7 +83,7 @@ class OtpFragment : Fragment(), View.OnClickListener {
             } else otpRepository.otp(email = Email, pass = Pass, name = Name, otp = otp)
 
             otpRepository.errorMessage.observe(this, {
-                Toast.makeText(this.context, it, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.activity, it, Toast.LENGTH_SHORT).show()
                 progressBar.visibility = View.GONE
                 btn.isEnabled = true
             })
@@ -90,8 +97,9 @@ class OtpFragment : Fragment(), View.OnClickListener {
             } else {
                 otpRepository.userData.observe(this, {
                     timerCountDown.cancel()
+                    datastore = Datastore(requireContext())
                     lifecycleScope.launch {
-                        LoginFragment().saveToDatastore(
+                        datastore.saveToDatastore(
                             UserData(
                                 email = Email,
                                 name = Name,

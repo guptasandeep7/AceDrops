@@ -17,12 +17,19 @@ import com.example.acedrops.repository.Datastore.Companion.EMAIL_KEY
 import com.example.acedrops.repository.Datastore.Companion.NAME_KEY
 import com.example.acedrops.repository.Datastore.Companion.REF_TOKEN_KEY
 import com.example.acedrops.repository.auth.SignOutRepository
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.tasks.OnCompleteListener
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     lateinit var signOutRepository: SignOutRepository
+    lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var gso:GoogleSignInOptions
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,6 +56,7 @@ class HomeFragment : Fragment() {
                 it.message.observe(viewLifecycleOwner,{
                     lifecycleScope.launch {
                         datastore?.changeLoginState(false)
+                        signout()
                         activity?.finish()
                         findNavController().navigate(R.id.action_homeFragment_to_authActivity)
                     }
@@ -65,6 +73,25 @@ class HomeFragment : Fragment() {
         return view
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.server_client_id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+    }
+
+    private fun signout():Boolean {
+        var result:Boolean = false
+       googleSignInClient.signOut().addOnCompleteListener{
+           result = true
+        }.addOnCanceledListener {
+           result = false
+        }
+        return result
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -1,6 +1,7 @@
 package com.example.acedrops.network
 
 import com.example.acedrops.model.Message
+import com.example.acedrops.model.Token
 import com.example.acedrops.model.UserData
 import retrofit2.Call
 import retrofit2.http.Body
@@ -31,5 +32,8 @@ interface ApiInterface {
     @FormUrlEncoded
     @POST("/auth/logout")
     fun logOut(@Field("refreshToken") refreshToken:String): Call<Message>
+
+    @POST("/auth/signupGoogle")
+    fun gSignUp(@Body token:Token): Call<UserData>
 
 }
