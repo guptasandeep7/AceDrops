@@ -6,6 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".view.dash.DashboardActivity">
 
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/search_text"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/border_curve"
+        android:clipToOutline="true"
+        android:drawableRight="@drawable/ic_search"
+        android:drawablePadding="5dp"
+        android:fontFamily="@font/mulish_semi_bold"
+        android:hint="Search for products or shops"
+        android:inputType="text"
+        android:paddingHorizontal="16dp"
+        app:circularflow_radiusInDP="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/container2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container2"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -15,7 +37,7 @@
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_text"
         app:navGraph="@navigation/dash_nav_graph" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

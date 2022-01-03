@@ -34,5 +34,6 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="acedrop">Acedrop</string>
     <string name="server_client_id">268564059113-4tes04r0sej5c1e1ukpmgv3o8em0n805.apps.googleusercontent.com</string>
+    <string name="continue_shopping_to_add_items_to_cart"><font color="#1983FF">Continue shopping</font> to add items to cart</string>
 
 </resources>

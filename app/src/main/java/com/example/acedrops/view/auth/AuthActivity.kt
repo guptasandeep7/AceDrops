@@ -1,6 +1,5 @@
 package com.example.acedrops.view.auth
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 

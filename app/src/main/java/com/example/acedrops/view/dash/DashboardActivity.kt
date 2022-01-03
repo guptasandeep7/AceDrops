@@ -2,6 +2,8 @@ package com.example.acedrops.view.dash
 
 import android.app.AlertDialog.Builder
 import android.os.Bundle
+import android.view.Menu
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -19,7 +21,6 @@ class DashboardActivity : AppCompatActivity() {
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.container2) as NavHostFragment
         val navController: NavController = navHostFragment.navController
@@ -42,5 +43,13 @@ class DashboardActivity : AppCompatActivity() {
             .setNeutralButton("Cancel") { dialog, id -> }
         val exit = builder.create()
         exit.show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.search_menu,menu)
+        val menuItem = menu?.findItem(R.id.search_bar)
+        val searchView = menuItem?.actionView
+
+        return super.onCreateOptionsMenu(menu)
     }
 }

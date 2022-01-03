@@ -3,21 +3,28 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/border_curve.xml" value="0.2484375" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/home_icon.xml" value="0.2484375" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/ic_like.xml" value="0.2484375" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/ic_pass_eye_icon.xml" value="0.2484375" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/progress.xml" value="0.2484375" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/activity_auth.xml" value="0.23229166666666667" />
-        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/activity_dashboard.xml" value="0.275" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/activity_dashboard.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/activity_main.xml" value="0.21822916666666667" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_cart.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_forgot.xml" value="0.21666666666666667" />
-        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_home.xml" value="0.23229166666666667" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_home.xml" value="0.1" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_landing.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_login.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_otp.xml" value="0.536" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_password.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_profile.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_signup.xml" value="0.264" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/one_category_layout.xml" value="0.23229166666666667" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/products_layout.xml" value="0.23229166666666667" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/shop_layout.xml" value="0.4064748201438849" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.275" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/menu/search_menu.xml" value="0.21666666666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2484375" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2484375" />
       </map>
@@ -28,5 +35,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.264" />
+      </ProjectState>
+    </option>
   </component>
 </project>
