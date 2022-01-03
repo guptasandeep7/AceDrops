@@ -1,13 +1,11 @@
 package com.example.acedrops.network
 
+import com.example.acedrops.model.home.HomeFragmentData
 import com.example.acedrops.model.Message
 import com.example.acedrops.model.Token
 import com.example.acedrops.model.UserData
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface ApiInterface {
 
@@ -35,5 +33,8 @@ interface ApiInterface {
 
     @POST("/auth/signupGoogle")
     fun gSignUp(@Body token:Token): Call<UserData>
+
+    @GET("/prod/home")
+    fun getHome(): Call<HomeFragmentData>
 
 }

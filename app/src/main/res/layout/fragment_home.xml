@@ -19,13 +19,13 @@
             android:id="@+id/imageSlider"
             android:layout_width="match_parent"
             android:layout_height="210dp"
-            app:iss_auto_cycle="true"
             android:layout_margin="16dp"
+            app:iss_auto_cycle="true"
             app:iss_corner_radius="30"
             app:iss_delay="0"
             app:iss_error_image="@android:color/darker_gray"
             app:iss_period="1000"
-            app:iss_placeholder="@android:color/darker_gray"
+            app:iss_placeholder="@drawable/placeholder"
             app:iss_selected_dot="@drawable/default_selected_dot"
             app:iss_text_align="center"
             app:iss_unselected_dot="@drawable/default_unselected_dot"
@@ -43,6 +43,17 @@
             android:text="Shops"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageSlider" />
+
+        <ImageButton
+            android:id="@+id/all_shop_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="25dp"
+            android:background="@color/white"
+            android:src="@drawable/ic_vector__9_"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageSlider" />
 
         <androidx.recyclerview.widget.RecyclerView
