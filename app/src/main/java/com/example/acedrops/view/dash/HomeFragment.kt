@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.acedrops.R
+import com.example.acedrops.adapter.CategoryAdapter
 import com.example.acedrops.adapter.ShopAdapter
 import com.example.acedrops.databinding.FragmentHomeBinding
 import com.example.acedrops.model.home.Category
@@ -30,6 +31,7 @@ class HomeFragment : Fragment() {
     lateinit var shops: List<Shop>
     lateinit var category: List<Category>
     private val shopAdapter = ShopAdapter()
+    private val categoryAdapter = CategoryAdapter()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,6 +43,7 @@ class HomeFragment : Fragment() {
         binding.progressBar.visibility = View.VISIBLE
         homeViewModel.homeData
         binding.shopRecyclerView.adapter = shopAdapter
+        binding.categoryRecyclerView.adapter = categoryAdapter
 
         homeViewModel.homeData?.observe(viewLifecycleOwner, { it ->
             if (it?.data != null) {
@@ -51,6 +54,7 @@ class HomeFragment : Fragment() {
                     category = it.category
                     showNewArrivals(newArrivals)
                     shopAdapter.setShopList(shops)
+                    categoryAdapter.updateCategoryList(category)
                 }
             }
             if(it.errorMessage!=null){

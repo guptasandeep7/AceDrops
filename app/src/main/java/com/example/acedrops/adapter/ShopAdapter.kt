@@ -20,6 +20,7 @@ class ShopAdapter(
     class ViewHolder(val binding: ShopLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(shop:Shop){
             binding.shop = shop
+
         }
     }
 
