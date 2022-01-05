@@ -11,7 +11,7 @@ import com.example.acedrops.model.home.Product
 class ProductAdapter(
 ) : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
-    private var productList = mutableListOf<Product>()
+    var productList = mutableListOf<Product>()
     fun updateProductList(product: List<Product>) {
         this.productList = product.toMutableList()
         notifyDataSetChanged()

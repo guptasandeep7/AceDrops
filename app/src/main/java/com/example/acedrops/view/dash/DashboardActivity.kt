@@ -45,11 +45,4 @@ class DashboardActivity : AppCompatActivity() {
         exit.show()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.search_menu,menu)
-        val menuItem = menu?.findItem(R.id.search_bar)
-        val searchView = menuItem?.actionView
-
-        return super.onCreateOptionsMenu(menu)
-    }
 }

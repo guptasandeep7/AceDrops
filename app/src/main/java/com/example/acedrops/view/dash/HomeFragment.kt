@@ -6,14 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.acedrops.R
-import com.example.acedrops.adapter.CategoryAdapter
+import com.example.acedrops.adapter.CategoryHomeAdapter
 import com.example.acedrops.adapter.ShopAdapter
 import com.example.acedrops.databinding.FragmentHomeBinding
 import com.example.acedrops.model.home.Category
@@ -31,7 +30,7 @@ class HomeFragment : Fragment() {
     lateinit var shops: List<Shop>
     lateinit var category: List<Category>
     private val shopAdapter = ShopAdapter()
-    private val categoryAdapter = CategoryAdapter()
+    private val categoryAdapter = CategoryHomeAdapter()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,6 +63,18 @@ class HomeFragment : Fragment() {
             }
         })
 
+        shopAdapter.setOnItemClickListener(object : ShopAdapter.onItemClickListener {
+            override fun onItemClick(position: Int) {
+                Toast.makeText(requireContext(), "shop id ${shopAdapter.shopsList[position].id}", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        categoryAdapter.setOnItemClickListener(object : CategoryHomeAdapter.onItemClickListener {
+            override fun onItemClick(position: Int) {
+                Toast.makeText(requireContext(), categoryAdapter.categoryList[position].category, Toast.LENGTH_SHORT).show()
+            }
+        })
+        
         return view
     }
 

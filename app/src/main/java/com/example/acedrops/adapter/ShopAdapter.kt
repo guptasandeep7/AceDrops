@@ -11,23 +11,41 @@ import com.example.acedrops.model.home.Shop
 class ShopAdapter(
 ) : RecyclerView.Adapter<ShopAdapter.ViewHolder>() {
 
+    private var mlistner: onItemClickListener? = null
+
+    interface onItemClickListener {
+        fun onItemClick(position: Int)
+    }
+
+    fun setOnItemClickListener(listener: onItemClickListener) {
+        mlistner = listener
+    }
+
     var shopsList = mutableListOf<Shop>()
     fun setShopList(shops: List<Shop>) {
         this.shopsList = shops.toMutableList()
         notifyDataSetChanged()
     }
 
-    class ViewHolder(val binding: ShopLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(shop:Shop){
+    class ViewHolder(val binding: ShopLayoutBinding, listener: onItemClickListener) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(shop: Shop) {
             binding.shop = shop
+        }
 
+        init {
+            itemView.setOnClickListener {
+                listener.onItemClick(adapterPosition)
+            }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding:ShopLayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context),
-            R.layout.shop_layout, parent, false)
-        return ViewHolder(binding)
+        val binding: ShopLayoutBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(parent.context),
+            R.layout.shop_layout, parent, false
+        )
+        return ViewHolder(binding, mlistner!!)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

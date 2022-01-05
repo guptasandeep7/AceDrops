@@ -7,14 +7,19 @@ import coil.load
 import com.example.acedrops.R
 
 @BindingAdapter("imageFromUrl")
-fun ImageView.imageFromUrl(url : String){
-    this.load(url){
+fun ImageView.imageFromUrl(url: String) {
+    this.load(url) {
         placeholder(R.drawable.placeholder)
         crossfade(true)
     }
 }
 
+@BindingAdapter("setImage")
+fun ImageView.setImage(rId: Int) {
+    this.setImageResource(rId)
+}
+
 @BindingAdapter("toStringText")
-fun TextView.toStringText(int: Int){
+fun TextView.toStringText(int: Int) {
     this.text = int.toString()
 }

@@ -5,20 +5,19 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.acedrops.R
-import com.example.acedrops.databinding.CategoryLayoutBinding
-import com.example.acedrops.model.CategoryList
+import com.example.acedrops.databinding.OneCategoryLayoutBinding
+import com.example.acedrops.model.home.Category
 
-class CategoryAdapter(
-) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+class CategoryHomeAdapter(
+) : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolder>() {
 
-    var categoryList = mutableListOf<CategoryList>()
-    fun updateCategoryList(category: List<CategoryList>) {
+    var categoryList = mutableListOf<Category>()
+    fun updateCategoryList(category: List<Category>) {
         this.categoryList = category.toMutableList()
         notifyDataSetChanged()
     }
 
     private var mlistner: onItemClickListener? = null
-
     interface onItemClickListener {
         fun onItemClick(position: Int)
     }
@@ -27,12 +26,14 @@ class CategoryAdapter(
         mlistner = listener
     }
 
-    class ViewHolder(val binding: CategoryLayoutBinding, listener: onItemClickListener) :
+    class ViewHolder(val binding: OneCategoryLayoutBinding,listener: onItemClickListener) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(category: CategoryList) {
+        fun bind(category: Category) {
             binding.category = category
+            val productAdapter = ProductAdapter()
+            binding.productsRecyclerView.adapter = productAdapter
+            productAdapter.updateProductList(category.products)
         }
-
         init {
             itemView.setOnClickListener {
                 listener.onItemClick(adapterPosition)
@@ -41,11 +42,11 @@ class CategoryAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding: CategoryLayoutBinding = DataBindingUtil.inflate(
+        val binding: OneCategoryLayoutBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.category_layout, parent, false
+            R.layout.one_category_layout, parent, false
         )
-        return ViewHolder(binding, mlistner!!)
+        return ViewHolder(binding,mlistner!!)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
