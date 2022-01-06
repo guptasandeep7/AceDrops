@@ -1,15 +1,17 @@
 package com.example.acedrops.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.acedrops.R
 import com.example.acedrops.databinding.OneCategoryLayoutBinding
 import com.example.acedrops.model.home.Category
 
 class CategoryHomeAdapter(
-) : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolder>(){
 
     var categoryList = mutableListOf<Category>()
     fun updateCategoryList(category: List<Category>) {
@@ -18,6 +20,7 @@ class CategoryHomeAdapter(
     }
 
     private var mlistner: onItemClickListener? = null
+
     interface onItemClickListener {
         fun onItemClick(position: Int)
     }
@@ -26,7 +29,7 @@ class CategoryHomeAdapter(
         mlistner = listener
     }
 
-    class ViewHolder(val binding: OneCategoryLayoutBinding,listener: onItemClickListener) :
+    class ViewHolder(val binding: OneCategoryLayoutBinding, listener: onItemClickListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(category: Category) {
             binding.category = category
@@ -34,6 +37,7 @@ class CategoryHomeAdapter(
             binding.productsRecyclerView.adapter = productAdapter
             productAdapter.updateProductList(category.products)
         }
+
         init {
             itemView.setOnClickListener {
                 listener.onItemClick(adapterPosition)
@@ -46,7 +50,7 @@ class CategoryHomeAdapter(
             LayoutInflater.from(parent.context),
             R.layout.one_category_layout, parent, false
         )
-        return ViewHolder(binding,mlistner!!)
+        return ViewHolder(binding, mlistner!!)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

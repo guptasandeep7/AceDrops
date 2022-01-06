@@ -23,7 +23,7 @@ import com.example.acedrops.repository.home.HomeRepository
 import com.example.acedrops.viewModelFactory.HomeViewModelFactory
 import com.example.acedrops.viewmodel.HomeViewModel
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(){
     private lateinit var homeViewModel: HomeViewModel
     lateinit var binding: FragmentHomeBinding
     lateinit var newArrivals: List<NewArrival>
@@ -91,10 +91,7 @@ class HomeFragment : Fragment() {
         val imageList = ArrayList<SlideModel>()
         for (item in newArrival) {
             imageList.add(SlideModel(item.imgUrls[0].imageUrl, ScaleTypes.CENTER_CROP))
-            Log.w("NEW ARRIVALS ", item.imgUrls[0].imageUrl)
         }
-
         binding.imageSlider.setImageList(imageList)
     }
-
 }
