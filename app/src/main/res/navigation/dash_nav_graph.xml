@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.acedrops.view.dash.HomeFragment"
+        android:name="com.example.acedrops.view.dash.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -18,6 +18,12 @@
         <action
             android:id="@+id/action_homeFragment_to_cartFragment"
             app:destination="@id/cartFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_allShopsFragment"
+            app:destination="@id/allShopsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_allProductsFragment"
+            app:destination="@id/allProductsFragment" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
@@ -39,4 +45,14 @@
         android:name="com.example.acedrops.view.auth.AuthActivity"
         android:label="activity_auth"
         tools:layout="@layout/activity_auth" />
+    <fragment
+        android:id="@+id/allShopsFragment"
+        android:name="com.example.acedrops.view.dash.home.AllShopsFragment"
+        android:label="fragment_all_shops"
+        tools:layout="@layout/fragment_all_shops" />
+    <fragment
+        android:id="@+id/allProductsFragment"
+        android:name="com.example.acedrops.view.dash.home.AllProductsFragment"
+        android:label="fragment_all_products"
+        tools:layout="@layout/fragment_all_products" />
 </navigation>

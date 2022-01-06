@@ -3,6 +3,7 @@ package com.example.acedrops.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -55,6 +56,10 @@ class CategoryHomeAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(categoryList[position])
+        holder.binding.showAllBtn.setOnClickListener {
+            val bundle = bundleOf("ProductList" to categoryList[position].products)
+            holder.itemView.findNavController().navigate(R.id.action_homeFragment_to_allProductsFragment,bundle)
+        }
     }
 
     override fun getItemCount(): Int {

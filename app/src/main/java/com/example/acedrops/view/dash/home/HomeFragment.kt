@@ -1,14 +1,15 @@
-package com.example.acedrops.view.dash
+package com.example.acedrops.view.dash.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.acedrops.R
@@ -62,6 +63,12 @@ class HomeFragment : Fragment(){
                 homeViewModel.homeData
             }
         })
+
+        binding.allShopBtn.setOnClickListener {
+            val bundle = bundleOf("ShopList" to shops)
+            findNavController().navigate(R.id.action_homeFragment_to_allShopsFragment,bundle)
+        }
+
 
         shopAdapter.setOnItemClickListener(object : ShopAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {

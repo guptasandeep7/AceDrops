@@ -13,7 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.dash.HomeFragment">
+        tools:context=".view.dash.home.HomeFragment">
 
         <com.denzcoskun.imageslider.ImageSlider
             android:id="@+id/imageSlider"
@@ -51,6 +51,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="25dp"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="10dp"
             android:background="@color/white"
             android:src="@drawable/ic_vector__9_"
             app:layout_constraintEnd_toEndOf="parent"
