@@ -11,11 +11,6 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_homeFragment_to_authActivity"
-            app:destination="@id/authActivity"
-            app:popUpTo="@id/authActivity"
-            app:popUpToInclusive="true"/>
-        <action
             android:id="@+id/action_homeFragment_to_cartFragment"
             app:destination="@id/cartFragment" />
         <action
@@ -29,7 +24,11 @@
         android:id="@+id/categoryFragment"
         android:name="com.example.acedrops.view.dash.CategoryFragment"
         android:label="fragment_category"
-        tools:layout="@layout/fragment_category" />
+        tools:layout="@layout/fragment_category" >
+        <action
+            android:id="@+id/action_categoryFragment_to_allProductsFragment"
+            app:destination="@id/allProductsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.example.acedrops.view.dash.CartFragment"
@@ -39,7 +38,11 @@
         android:id="@+id/profileFragment"
         android:name="com.example.acedrops.view.dash.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_authActivity"
+            app:destination="@id/authActivity" />
+    </fragment>
     <activity
         android:id="@+id/authActivity"
         android:name="com.example.acedrops.view.auth.AuthActivity"

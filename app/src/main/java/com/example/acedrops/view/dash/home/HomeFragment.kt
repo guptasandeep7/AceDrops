@@ -20,7 +20,7 @@ import com.example.acedrops.model.home.Category
 import com.example.acedrops.model.home.NewArrival
 import com.example.acedrops.model.home.Shop
 import com.example.acedrops.network.ServiceBuilder
-import com.example.acedrops.repository.home.HomeRepository
+import com.example.acedrops.repository.dashboard.home.HomeRepository
 import com.example.acedrops.viewModelFactory.HomeViewModelFactory
 import com.example.acedrops.viewmodel.HomeViewModel
 
@@ -88,7 +88,7 @@ class HomeFragment : Fragment(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val homeRepository = HomeRepository(ServiceBuilder.buildService())
+        val homeRepository = HomeRepository(ServiceBuilder.buildService(null))
         val homeViewModelFactory = HomeViewModelFactory(homeRepository)
         homeViewModel = ViewModelProvider(this, homeViewModelFactory)[HomeViewModel::class.java]
 

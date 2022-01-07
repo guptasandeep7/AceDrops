@@ -21,5 +21,5 @@ fun ImageView.setImage(rId: Int) {
 
 @BindingAdapter("toStringText")
 fun TextView.toStringText(int: Int) {
-    this.text = int.toString()
+    this.text = "${resources.getString(R.string.Rs)}${int.toString()}"
 }

@@ -52,7 +52,7 @@ class ProfileFragment : Fragment() {
                         datastore?.changeLoginState(false)
                         signout()
                         activity?.finish()
-                        findNavController().navigate(R.id.action_homeFragment_to_authActivity)
+                        findNavController().navigate(R.id.action_profileFragment_to_authActivity)
                     }
 
                 })

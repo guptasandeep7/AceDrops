@@ -1,7 +1,6 @@
 package com.example.acedrops.adapter
 
 import android.graphics.Paint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -9,56 +8,54 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.acedrops.R
-import com.example.acedrops.databinding.ProductsLayoutBinding
-import com.example.acedrops.model.home.Product
-import com.example.acedrops.network.ServiceBuilder
-import com.example.acedrops.repository.dashboard.home.ProductsRepository
+import com.example.acedrops.databinding.CartItemBinding
+import com.example.acedrops.model.cart.Cart
 import com.google.android.material.snackbar.Snackbar
 
-class ProductAdapter(
-) : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
-    var productList = mutableListOf<Product>()
-    fun updateProductList(product: List<Product>) {
-        this.productList = product.toMutableList()
+class CartAdapter(
+) : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
+
+    var cartList = mutableListOf<Cart>()
+    fun updateProductList(product: ArrayList<Cart>) {
+        this.cartList = product.toMutableList()
         notifyDataSetChanged()
     }
 
-    class ViewHolder(val binding: ProductsLayoutBinding) :
+    class ViewHolder(val binding: CartItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(product: Product) {
-            Log.w("CART PRODUCT ", product.toString(), )
+        fun bind(product: Cart) {
             binding.product = product
             binding.productBasePrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding: ProductsLayoutBinding = DataBindingUtil.inflate(
+        val binding: CartItemBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.products_layout, parent, false
+            R.layout.cart_item, parent, false
         )
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(productList[position])
-        holder.binding.addToCartBtn.setOnClickListener {
-            this.productList[position].also {
-                addToCart(it.id.toString(),it.title,holder)
-            }
-        }
+        holder.bind(cartList[position])
+//        holder.binding.addToWishlistBtn.setOnClickListener {
+//            this.cartList[position].also {
+//                addToCart(it.id.toString(),it.title,holder)
+//            }
+//        }
     }
 
-    private fun addToCart(productId: String,title:String,holder: ViewHolder){
-        val repository = ProductsRepository(ServiceBuilder.buildService(null))
-
-        val result = repository.addToCart(productId = productId)
-        if(result) snackbar(title,holder)
-        else snackbar("Failed to add to cart",holder)
-    }
+//    private fun addToCart(productId: String,title:String,holder: ViewHolder){
+//        val repository = ProductsRepository(ServiceBuilder.buildService())
+//
+//        val result = repository.addToCart(productId = productId)
+//        if(result) snackbar(title,holder)
+//        else snackbar("Failed to add to cart",holder)
+//    }
 
     override fun getItemCount(): Int {
-        return productList.size
+        return cartList.size
     }
 
     private fun snackbar(

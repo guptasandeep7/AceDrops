@@ -14,7 +14,7 @@ class PasswordRepository {
     var errorMessage = MutableLiveData<String>()
 
     fun newPass(email: String, pass: String) {
-        val request = ServiceBuilder.buildService()
+        val request = ServiceBuilder.buildService(null)
         val call = request.newPass(UserData(email = email, newpass = pass))
         call.enqueue(object : Callback<Message?> {
             override fun onResponse(call: Call<Message?>, response: Response<Message?>) {

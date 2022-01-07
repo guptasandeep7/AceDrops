@@ -1,7 +1,6 @@
 package com.example.acedrops.repository.auth
 
 import androidx.lifecycle.MutableLiveData
-import com.example.acedrops.model.Message
 import com.example.acedrops.model.Token
 import com.example.acedrops.model.UserData
 import com.example.acedrops.network.ServiceBuilder
@@ -15,7 +14,7 @@ class GoogleSignRepository {
     var errorMessage = MutableLiveData<String>()
 
     fun gSignUp(token:String) {
-        val request = ServiceBuilder.buildService()
+        val request = ServiceBuilder.buildService(null)
         val call = request.gSignUp(Token(token))
         call.enqueue(object : Callback<UserData?> {
             override fun onResponse(call: Call<UserData?>, response: Response<UserData?>) {

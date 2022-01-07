@@ -6,7 +6,7 @@
     <data>
         <variable
             name="product"
-            type="com.example.acedrops.model.home.Product" />
+            type="com.example.acedrops.model.cart.Cart" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -19,17 +19,18 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            >
+            android:padding="16dp">
 
             <ImageView
                 android:id="@+id/product_image"
                 imageFromUrl="@{product.imgUrls.get(0).imageUrl}"
-                android:layout_width="0dp"
-                android:layout_height="140dp"
+                android:layout_width="182dp"
+                android:layout_height="153dp"
                 android:layout_gravity="top"
                 android:scaleType="fitXY"
                 android:src="@drawable/placeholder"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
@@ -70,34 +71,35 @@
                 android:layout_gravity="bottom"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="4dp"
-                android:fontFamily="@font/mulish_semi_bold"
+                android:fontFamily="@font/mulish"
+                android:textStyle="bold"
+                android:textColor="@color/blue"
                 android:maxLines="1"
-                android:textSize="10sp"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="@+id/product_desc"
                 app:layout_constraintTop_toBottomOf="@+id/product_desc" />
 
             <TextView
                 android:id="@+id/product_base_price"
+                toStringText="@{product.basePrice}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
                 android:fontFamily="@font/mulish_semi_bold"
                 android:maxLines="1"
-                toStringText="@{product.basePrice}"
                 android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="@+id/product_price"
                 app:layout_constraintStart_toEndOf="@id/product_price"
-                app:layout_constraintTop_toBottomOf="@+id/product_desc" />
+                app:layout_constraintTop_toTopOf="@+id/product_price" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/add_to_cart_btn"
+                android:id="@+id/add_to_wishlist_btn"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginStart="23dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/mulish"
@@ -108,8 +110,7 @@
                 app:cornerRadius="50dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/product_desc"
-                app:layout_constraintTop_toBottomOf="@+id/product_base_price"
+                app:layout_constraintStart_toEndOf="@+id/product_image"
                 app:strokeColor="@color/blue"
                 app:strokeWidth="1dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>

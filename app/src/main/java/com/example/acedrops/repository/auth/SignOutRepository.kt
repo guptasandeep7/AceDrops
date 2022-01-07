@@ -1,9 +1,7 @@
 package com.example.acedrops.repository.auth
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.acedrops.model.Message
-import com.example.acedrops.model.UserData
 import com.example.acedrops.network.ServiceBuilder
 import retrofit2.Call
 import retrofit2.Callback
@@ -15,7 +13,7 @@ class SignOutRepository {
     var errorMessage = MutableLiveData<String>()
 
     fun signOut(refToken:String) {
-        val request = ServiceBuilder.buildService()
+        val request = ServiceBuilder.buildService(null)
         val call = request.logOut(refToken)
         call.enqueue(object : Callback<Message?> {
             override fun onResponse(call: Call<Message?>, response: Response<Message?>) {

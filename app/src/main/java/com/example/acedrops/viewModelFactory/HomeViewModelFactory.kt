@@ -2,7 +2,7 @@ package com.example.acedrops.viewModelFactory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.acedrops.repository.home.HomeRepository
+import com.example.acedrops.repository.dashboard.home.HomeRepository
 
 class HomeViewModelFactory(val homeRepository: HomeRepository) : ViewModelProvider.Factory {
 

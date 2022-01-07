@@ -1,56 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.dash.CartFragment">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/empty_cart"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        tools:context=".view.dash.CartFragment">
 
-    <TextView
-        android:id="@+id/textView3"
-        style="@style/TextColor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:fontFamily="@font/mulish"
-        android:text="Your Cart is empty"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/animationView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/empty_cart"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animationView"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.29000002"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/empty_cart" />
+            <TextView
+                android:id="@+id/textView3"
+                style="@style/TextColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:fontFamily="@font/mulish"
+                android:text="Your Cart is empty"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/animationView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        style="@style/TextColor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:text="@string/continue_shopping_to_add_items_to_cart"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/animationView" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.29000002"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/empty_cart" />
+
+            <TextView
+                style="@style/TextColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="@string/continue_shopping_to_add_items_to_cart"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/animationView" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
@@ -64,8 +69,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
-                >
+                android:layout_marginTop="16dp">
 
                 <TextView
                     android:id="@+id/textView4"
@@ -119,6 +123,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView2"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/cart_item" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
