@@ -23,3 +23,8 @@ fun ImageView.setImage(rId: Int) {
 fun TextView.toStringText(int: Int) {
     this.text = "${resources.getString(R.string.Rs)}${int.toString()}"
 }
+
+@BindingAdapter("toText")
+fun TextView.toText(int: Int) {
+    this.text = int.toString()
+}

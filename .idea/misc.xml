@@ -6,16 +6,18 @@
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/border_curve.xml" value="0.2484375" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/home_icon.xml" value="0.2484375" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/ic_like.xml" value="0.2484375" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/ic_minus_ucon.xml" value="0.2484375" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/ic_pass_eye_icon.xml" value="0.2484375" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/ic_vector__9_.xml" value="0.2484375" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/progress.xml" value="0.2484375" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/activity_auth.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/activity_dashboard.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/activity_main.xml" value="0.21822916666666667" />
-        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/cart_item.xml" value="4.8" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/cart_item.xml" value="0.3551263001485884" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/category_layout.xml" value="0.1" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_all_products.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_all_shops.xml" value="0.23229166666666667" />
-        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_cart.xml" value="0.264" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_cart.xml" value="0.2972972972972973" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_category.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_forgot.xml" value="0.21666666666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_home.xml" value="0.1" />
@@ -26,7 +28,7 @@
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_profile.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_signup.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/one_category_layout.xml" value="0.23229166666666667" />
-        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/products_layout.xml" value="0.1" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/products_layout.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/shop_layout.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.275" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/menu/search_menu.xml" value="0.21666666666666667" />
@@ -44,7 +46,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.264" />
+        <option name="scale" value="0.2" />
       </ProjectState>
     </option>
   </component>

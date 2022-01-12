@@ -16,15 +16,20 @@ import com.example.acedrops.R
 import com.example.acedrops.adapter.CategoryHomeAdapter
 import com.example.acedrops.adapter.ShopAdapter
 import com.example.acedrops.databinding.FragmentHomeBinding
+import com.example.acedrops.model.Message
 import com.example.acedrops.model.home.Category
 import com.example.acedrops.model.home.NewArrival
 import com.example.acedrops.model.home.Shop
 import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.repository.dashboard.home.HomeRepository
+import com.example.acedrops.view.dash.DashboardActivity.Companion.ACC_TOKEN
 import com.example.acedrops.viewModelFactory.HomeViewModelFactory
 import com.example.acedrops.viewmodel.HomeViewModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class HomeFragment : Fragment(){
+class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     lateinit var binding: FragmentHomeBinding
     lateinit var newArrivals: List<NewArrival>
@@ -32,6 +37,7 @@ class HomeFragment : Fragment(){
     lateinit var category: List<Category>
     private val shopAdapter = ShopAdapter()
     private val categoryAdapter = CategoryHomeAdapter()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,7 +47,6 @@ class HomeFragment : Fragment(){
         val view = binding.root
 
         binding.progressBar.visibility = View.VISIBLE
-        homeViewModel.homeData
         binding.shopRecyclerView.adapter = shopAdapter
         binding.categoryRecyclerView.adapter = categoryAdapter
 
@@ -57,31 +62,38 @@ class HomeFragment : Fragment(){
                     categoryAdapter.updateCategoryList(category)
                 }
             }
-            if(it.errorMessage!=null){
+            if (it.errorMessage != null) {
                 Toast.makeText(requireContext(), it?.errorMessage, Toast.LENGTH_SHORT)
                     .show()
-                homeViewModel.homeData
             }
         })
 
         binding.allShopBtn.setOnClickListener {
             val bundle = bundleOf("ShopList" to shops)
-            findNavController().navigate(R.id.action_homeFragment_to_allShopsFragment,bundle)
+            findNavController().navigate(R.id.action_homeFragment_to_allShopsFragment, bundle)
         }
 
 
         shopAdapter.setOnItemClickListener(object : ShopAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                Toast.makeText(requireContext(), "shop id ${shopAdapter.shopsList[position].id}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "shop id ${shopAdapter.shopsList[position].id}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
 
         categoryAdapter.setOnItemClickListener(object : CategoryHomeAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                Toast.makeText(requireContext(), categoryAdapter.categoryList[position].category, Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    categoryAdapter.categoryList[position].category,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
-        
+
         return view
     }
 
@@ -100,5 +112,22 @@ class HomeFragment : Fragment(){
             imageList.add(SlideModel(item.imgUrls[0].imageUrl, ScaleTypes.CENTER_CROP))
         }
         binding.imageSlider.setImageList(imageList)
+    }
+
+    companion object {
+        fun addToCartProduct(productId: String): Boolean {
+            var result = false
+            ServiceBuilder.buildService(token = ACC_TOKEN).addToCart(productId)
+                .enqueue(object : Callback<Message?> {
+                    override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
+                        result = response.isSuccessful
+                    }
+
+                    override fun onFailure(call: Call<Message?>, t: Throwable) {
+                        result = false
+                    }
+                })
+            return result
+        }
     }
 }

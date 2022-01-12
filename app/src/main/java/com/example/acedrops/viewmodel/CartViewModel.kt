@@ -11,11 +11,14 @@ import kotlinx.coroutines.launch
 
 class CartViewModel(private val respository: CartRepository) : ViewModel() {
 
-    private val _cartData: MutableLiveData<ApiResponse<ArrayList<Cart>>> = MutableLiveData()
-    val cartData:LiveData<ApiResponse<ArrayList<Cart>>>
-    get() = _cartData
+    private var _cartData: MutableLiveData<ApiResponse<ArrayList<Cart>>> = MutableLiveData()
+    val cartData: LiveData<ApiResponse<ArrayList<Cart>>>
+        get() = _cartData
 
     fun getCartData() = viewModelScope.launch {
-            _cartData.value = respository.getCartList()
-        }
+        _cartData = respository.getCartList()
+    }
+    init {
+        getCartData()
+    }
 }

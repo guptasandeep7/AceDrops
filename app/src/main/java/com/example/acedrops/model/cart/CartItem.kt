@@ -5,6 +5,6 @@ data class CartItem(
     val createdAt: String,
     val id: Int,
     val productId: Int,
-    val quantity: Int,
+    var quantity: Int,
     val updatedAt: String
 )

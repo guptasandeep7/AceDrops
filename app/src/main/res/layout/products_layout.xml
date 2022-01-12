@@ -34,7 +34,7 @@
                 tools:srcCompat="@tools:sample/avatars" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/imageButton"
+                android:id="@+id/add_to_wishlist_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -48,6 +48,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    android:id="@+id/wishlist_icon"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/ic_like"

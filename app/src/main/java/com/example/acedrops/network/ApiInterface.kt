@@ -40,10 +40,14 @@ interface ApiInterface {
     fun getHome(): Call<HomeFragmentData>
 
     @FormUrlEncoded
-    @POST("prod/addToCart")
+    @POST("/prod/addToCart")
     fun addToCart(@Field("prodId") productId: String): Call<Message>
 
-    @GET("prod/viewCart")
+    @FormUrlEncoded
+    @POST("/prod/addAndRemFav")
+    fun addToWishlist(@Field("prodId") productId: String): Call<Message>
+
+    @GET("/prod/viewCart")
     fun viewCart(): Call<ArrayList<Cart>>
 
     @FormUrlEncoded
