@@ -12,8 +12,7 @@ import com.example.acedrops.databinding.ProductsLayoutBinding
 import com.example.acedrops.model.Message
 import com.example.acedrops.model.home.Product
 import com.example.acedrops.network.ServiceBuilder
-import com.example.acedrops.view.dash.DashboardActivity
-import com.example.acedrops.view.dash.DashboardActivity.Companion.ACC_TOKEN
+import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
@@ -55,20 +54,21 @@ class ProductAdapter(
         holder: ViewHolder
     ) {
         this.productList[position].also {
-            ServiceBuilder.buildService(token = DashboardActivity.ACC_TOKEN)
+            ServiceBuilder.buildService(token = ACC_TOKEN)
                 .addToCart(it.id.toString())
                 .enqueue(object : Callback<Message?> {
                     override fun onResponse(
                         call: Call<Message?>,
                         response: Response<Message?>
                     ) {
-                        if (response.isSuccessful){
+                        if (response.isSuccessful) {
                             snackbar(
                                 it.title,
                                 holder
                             )
-                        }
-                        else snackbar(response.message()?:"Failed to add to cart ${response.code()}", holder)
+                        } else snackbar(
+                            response.message() ?: "Failed to add to cart ${response.code()}", holder
+                        )
                     }
 
                     override fun onFailure(call: Call<Message?>, t: Throwable) {

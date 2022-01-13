@@ -17,18 +17,14 @@ import com.example.acedrops.R
 import com.example.acedrops.adapter.CategoryHomeAdapter
 import com.example.acedrops.adapter.ShopAdapter
 import com.example.acedrops.databinding.FragmentHomeBinding
-import com.example.acedrops.model.Message
 import com.example.acedrops.model.home.Category
 import com.example.acedrops.model.home.NewArrival
 import com.example.acedrops.model.home.Shop
 import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.repository.dashboard.home.HomeRepository
-import com.example.acedrops.view.dash.DashboardActivity.Companion.ACC_TOKEN
+import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
 import com.example.acedrops.viewModelFactory.HomeViewModelFactory
 import com.example.acedrops.viewmodel.HomeViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
@@ -101,7 +97,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.w("HOME FRAGMENT", "onCreate: ACCESS TOKEN $ACC_TOKEN", )
+        Log.w("HOME FRAGMENT", "onCreate: ACCESS TOKEN $ACC_TOKEN")
         val homeRepository = HomeRepository(ServiceBuilder.buildService(token = ACC_TOKEN))
         val homeViewModelFactory = HomeViewModelFactory(homeRepository)
         homeViewModel = ViewModelProvider(this, homeViewModelFactory)[HomeViewModel::class.java]

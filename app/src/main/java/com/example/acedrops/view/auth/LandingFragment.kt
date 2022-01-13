@@ -12,6 +12,7 @@ import com.example.acedrops.R
 import com.example.acedrops.databinding.FragmentLandingBinding
 import com.example.acedrops.databinding.FragmentLoginBinding
 import com.example.acedrops.repository.Datastore
+import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
 import kotlinx.coroutines.launch
 
 class LandingFragment : Fragment() {
@@ -30,6 +31,7 @@ class LandingFragment : Fragment() {
 
         lifecycleScope.launch {
             if (datastore.isLogin()) {
+                ACC_TOKEN = datastore.getUserDetails(Datastore.ACCESS_TOKEN_KEY)
                 activity?.finish()
                 findNavController().navigate(R.id.action_landingFragment_to_dashboardActivity)
             }

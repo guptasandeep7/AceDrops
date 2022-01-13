@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.acedrops.model.AccessTkn
 import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.repository.Datastore
-import com.example.acedrops.view.dash.DashboardActivity.Companion.ACC_TOKEN
+import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

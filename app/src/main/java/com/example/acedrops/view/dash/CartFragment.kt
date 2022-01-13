@@ -20,7 +20,7 @@ import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.repository.dashboard.CartRepository
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.utill.generateToken
-import com.example.acedrops.view.dash.DashboardActivity.Companion.ACC_TOKEN
+import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
 import com.example.acedrops.viewModelFactory.CartViewModelFactory
 import com.example.acedrops.viewmodel.CartViewModel
 import kotlinx.coroutines.launch
