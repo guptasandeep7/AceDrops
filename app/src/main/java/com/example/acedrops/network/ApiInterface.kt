@@ -5,7 +5,8 @@ import com.example.acedrops.model.home.HomeFragmentData
 import com.example.acedrops.model.Message
 import com.example.acedrops.model.Token
 import com.example.acedrops.model.UserData
-import com.example.acedrops.model.cart.Cart
+import com.example.acedrops.model.cart.CartData
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -44,11 +45,15 @@ interface ApiInterface {
     fun addToCart(@Field("prodId") productId: String): Call<Message>
 
     @FormUrlEncoded
+    @POST("/prod/removeFromCart")
+    fun removeFromCart(@Field("prodId") productId: String): Call<Message>
+
+    @FormUrlEncoded
     @POST("/prod/addAndRemFav")
-    fun addToWishlist(@Field("prodId") productId: String): Call<Message>
+    fun addToWishlist(@Field("prodId") productId: String): Call<ResponseBody>
 
     @GET("/prod/viewCart")
-    fun viewCart(): Call<ArrayList<Cart>>
+    fun viewCart(): Call<CartData>
 
     @FormUrlEncoded
     @POST("/auth/generateToken")

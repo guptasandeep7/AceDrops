@@ -7,7 +7,8 @@ import coil.load
 import com.example.acedrops.R
 
 @BindingAdapter("imageFromUrl")
-fun ImageView.imageFromUrl(url: String) {
+fun ImageView.imageFromUrl(url: String?) {
+    if(url!=null)
     this.load(url) {
         placeholder(R.drawable.placeholder)
         crossfade(true)
@@ -20,8 +21,14 @@ fun ImageView.setImage(rId: Int) {
 }
 
 @BindingAdapter("toStringText")
-fun TextView.toStringText(int: Int) {
-    this.text = "${resources.getString(R.string.Rs)}${int.toString()}"
+fun TextView.toStringText(long:Long) {
+    this.text = "${resources.getString(R.string.Rs)}$long"
+}
+
+@BindingAdapter("setBackground")
+fun TextView.setBackground(int:Int) {
+    if(int < 2 ) this.setBackgroundResource(R.drawable.ic_delete)
+    else this.setBackgroundResource(R.drawable.ic_minus)
 }
 
 @BindingAdapter("toText")

@@ -1,6 +1,7 @@
 package com.example.acedrops.view.dash.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,7 +51,7 @@ class HomeFragment : Fragment() {
         binding.shopRecyclerView.adapter = shopAdapter
         binding.categoryRecyclerView.adapter = categoryAdapter
 
-        homeViewModel.homeData?.observe(viewLifecycleOwner, { it ->
+        homeViewModel.homeData.observe(viewLifecycleOwner, { it ->
             if (it?.data != null) {
                 it.data.also {
                     binding.progressBar.visibility = View.GONE
@@ -100,7 +101,8 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val homeRepository = HomeRepository(ServiceBuilder.buildService(null))
+        Log.w("HOME FRAGMENT", "onCreate: ACCESS TOKEN $ACC_TOKEN", )
+        val homeRepository = HomeRepository(ServiceBuilder.buildService(token = ACC_TOKEN))
         val homeViewModelFactory = HomeViewModelFactory(homeRepository)
         homeViewModel = ViewModelProvider(this, homeViewModelFactory)[HomeViewModel::class.java]
 
@@ -114,20 +116,4 @@ class HomeFragment : Fragment() {
         binding.imageSlider.setImageList(imageList)
     }
 
-    companion object {
-        fun addToCartProduct(productId: String): Boolean {
-            var result = false
-            ServiceBuilder.buildService(token = ACC_TOKEN).addToCart(productId)
-                .enqueue(object : Callback<Message?> {
-                    override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
-                        result = response.isSuccessful
-                    }
-
-                    override fun onFailure(call: Call<Message?>, t: Throwable) {
-                        result = false
-                    }
-                })
-            return result
-        }
-    }
 }

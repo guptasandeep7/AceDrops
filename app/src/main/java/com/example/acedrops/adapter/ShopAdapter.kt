@@ -23,7 +23,10 @@ class ShopAdapter(
 
     var shopsList = mutableListOf<Shop>()
     fun setShopList(shops: List<Shop>) {
-        this.shopsList = shops.toMutableList()
+        for(item in shops){
+            if(item.imgUrls.isNotEmpty())
+            this.shopsList.add(item)
+        }
         notifyDataSetChanged()
     }
 
@@ -49,7 +52,7 @@ class ShopAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(shopsList[position])
+            holder.bind(shopsList[position])
     }
 
     override fun getItemCount(): Int {

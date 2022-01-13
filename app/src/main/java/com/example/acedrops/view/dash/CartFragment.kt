@@ -15,6 +15,7 @@ import com.example.acedrops.R
 import com.example.acedrops.adapter.CartAdapter
 import com.example.acedrops.databinding.FragmentCartBinding
 import com.example.acedrops.model.cart.Cart
+import com.example.acedrops.model.cart.CartData
 import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.repository.dashboard.CartRepository
 import com.example.acedrops.utill.ApiResponse
@@ -41,6 +42,10 @@ class CartFragment : Fragment() {
 
         binding.progressBar.visibility = View.GONE
 
+        cartViewModel.totalAmount.observe(viewLifecycleOwner, {
+            binding.viewmodel = cartViewModel
+        })
+
         cartViewModel.cartData.observe(viewLifecycleOwner, {
             when (it) {
                 is ApiResponse.Success -> {
@@ -54,16 +59,12 @@ class CartFragment : Fragment() {
                     binding.progressBar.visibility = View.VISIBLE
                 }
                 is ApiResponse.TokenExpire -> {
-                    Toast.makeText(requireContext(), "token expire", Toast.LENGTH_SHORT).show()
-                    Log.w("access token ", "ACC_TOKEN is $ACC_TOKEN")
+                    Toast.makeText(requireContext(), "generateToken expire", Toast.LENGTH_SHORT)
+                        .show()
+                    Log.w("access generateToken ", "ACC_TOKEN is $ACC_TOKEN")
                     lifecycleScope.launch {
                         generateToken(requireContext())
-                        if(ACC_TOKEN != null)
-                        onCreate(savedInstanceState)
-                        else {
-                            view.findNavController().navigate(R.id.action_cartFragment_to_authActivity)
-                            activity?.finish()
-                        }
+                        cartViewModel.getCartData()
                     }
                 }
                 is ApiResponse.Error -> Toast.makeText(
@@ -74,25 +75,121 @@ class CartFragment : Fragment() {
             }
         })
 
+
+        generateToken.observe(viewLifecycleOwner, {
+            if (it == null) {
+                view.findNavController().navigate(R.id.action_cartFragment_to_authActivity)
+                activity?.finish()
+            } else {
+                onCreate(savedInstanceState)
+            }
+        })
+
+        cartAdapter.setOnItemClickListener(object : CartAdapter.onItemClickListener {
+            override fun decreaseQuantity(position: Int) {
+                cartViewModel.decreaseQuantity(cartAdapter.cartList[position].id.toString())
+                observerRemove(position)
+            }
+
+            override fun increaseQuantity(position: Int) {
+                cartViewModel.increaseQuantity(cartAdapter.cartList[position].id.toString())
+                observerAdd(position)
+            }
+
+            override fun addWishlist(position: Int) {
+                cartViewModel.addWishlist(cartAdapter.cartList[position].id.toString())
+                cartViewModel.wishlistResult.observe(viewLifecycleOwner, {
+                    when (it) {
+                        is ApiResponse.Success -> if (it.data == true) {
+                            Toast.makeText(requireContext(), "add to wishlist", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                        is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
+                        is ApiResponse.Error -> {
+                            binding.progressBar.visibility = View.GONE
+                            Toast.makeText(
+                                requireContext(),
+                                it.errorMessage ?: "Try Again",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                })
+            }
+        })
+
         return view
     }
 
-    private fun updateUI(cartList: ArrayList<Cart>) {
+    private fun observerAdd(position: Int) = cartViewModel.atcResult.observe(viewLifecycleOwner, {
+        when (it) {
+            is ApiResponse.Success -> {
+                if (it.data == true) {
+                    cartAdapter.cartList[position].cart_item.quantity++
+                    cartViewModel.totalAmount.value =
+                        calTotalAmount(cartAdapter.cartList as ArrayList<Cart>)
+                    binding.progressBar.visibility = View.GONE
+                }
+            }
+            is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
+            is ApiResponse.Error -> {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(
+                    requireContext(),
+                    it.errorMessage ?: "Try Again",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    })
+
+    private fun observerRemove(position: Int) {
+        cartViewModel.removeFromCartResult.observe(this, {
+            when (it) {
+                is ApiResponse.Success -> {
+                    if (it.data == true) {
+                        binding.progressBar.visibility = View.GONE
+                        updateAdapter(position)
+                        cartViewModel.totalAmount.value =
+                            calTotalAmount(cartAdapter.cartList as ArrayList<Cart>)
+                    }
+                }
+                is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
+                is ApiResponse.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(
+                        requireContext(),
+                        it.errorMessage ?: "Try Again",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        })
+    }
+
+    private fun updateAdapter(position: Int) {
+        if (cartAdapter.cartList[position].cart_item.quantity > 1) {
+            cartAdapter.cartList[position].cart_item.quantity--
+        } else {
+            cartAdapter.cartList.removeAt(position)
+        }
+    }
+
+    private fun updateUI(cartList: CartData) {
         with(binding) {
             progressBar.visibility = View.GONE
             emptyCart.visibility = View.GONE
-            totalAmount.text =
-                "${resources.getString(R.string.Rs)}${calTotalAmount(cartList)}"
+            cartRecyclerview.adapter = cartAdapter
+            cartViewModel.totalAmount.value = calTotalAmount(cartList.prodInCart)
         }
-        binding.cartRecyclerview.adapter = cartAdapter
-        cartAdapter.updateProductList(cartList)
+        cartAdapter.updateProductList(cartList.prodInCart,cartList.favProd)
         binding.cartRecyclerview.visibility = View.VISIBLE
         binding.cardView2.visibility = View.VISIBLE
     }
 
-    private fun calTotalAmount(cartList: ArrayList<Cart>): Long {
+    private fun calTotalAmount(cartList: List<Cart>): Long {
         var total: Long = 0
-        for (item in cartList) total += item.discountedPrice
+        for (item in cartList) total += item.discountedPrice * item.cart_item.quantity
         return total
     }
 

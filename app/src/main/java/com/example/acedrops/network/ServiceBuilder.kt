@@ -11,7 +11,7 @@ object ServiceBuilder {
             .baseUrl(BASEURL)
             .client(OkHttpClient.Builder().addInterceptor { chain ->
                 val request =
-                    chain.request().newBuilder().addHeader("Authorization", "Bearer ${token}").build()
+                    chain.request().newBuilder().addHeader("Authorization", "Bearer $token").build()
                 chain.proceed(request)
             }.build())
             .addConverterFactory(GsonConverterFactory.create())

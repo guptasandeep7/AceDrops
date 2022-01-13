@@ -1,5 +1,6 @@
 package com.example.acedrops.adapter
 
+import android.content.res.Resources
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,23 +9,42 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.acedrops.R
 import com.example.acedrops.databinding.CartItemBinding
 import com.example.acedrops.model.cart.Cart
+import com.example.acedrops.model.home.productId
 
 class CartAdapter(
 ) : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
 
     var cartList = mutableListOf<Cart>()
-    fun updateProductList(product: ArrayList<Cart>) {
+    var favList = mutableListOf<productId>()
+    fun updateProductList(product: List<Cart>, favProd: List<productId>) {
         this.cartList = product.toMutableList()
+        this.favList = favProd.toMutableList()
         notifyDataSetChanged()
     }
 
-    class ViewHolder(val binding: CartItemBinding) :
+    private var mlistner: onItemClickListener? = null
+
+    interface onItemClickListener {
+        fun decreaseQuantity(position: Int)
+        fun increaseQuantity(position: Int)
+        fun addWishlist(position: Int)
+    }
+
+    fun setOnItemClickListener(listener: onItemClickListener) {
+        mlistner = listener
+    }
+
+    class ViewHolder(val binding: CartItemBinding, listener: onItemClickListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(product: Cart) {
             binding.product = product
             binding.productBasePrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-            if (product.cart_item.quantity == 1) {
-                binding.minusBtn.setBackgroundResource(R.drawable.ic_delete)
+        }
+        init {
+            itemView.setOnClickListener {
+                listener.decreaseQuantity(adapterPosition)
+                listener.increaseQuantity(adapterPosition)
+                listener.addWishlist(adapterPosition)
             }
         }
     }
@@ -34,27 +54,25 @@ class CartAdapter(
             LayoutInflater.from(parent.context),
             R.layout.cart_item, parent, false
         )
-        return ViewHolder(binding)
+        return ViewHolder(binding,mlistner!!)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(cartList[position])
-
+        if(favList.contains(productId(cartList[position].id)))
+            holder.binding.addToWishlistBtn.text  = "Remove From Wishlist"
         holder.binding.plusBtn.setOnClickListener {
-            cartList[position].cart_item.quantity++
-            notifyItemChanged(position)
+            mlistner?.increaseQuantity(position)
+            notifyDataSetChanged()
         }
 
         holder.binding.minusBtn.setOnClickListener {
-            if(cartList[position].cart_item.quantity>1){
-                cartList[position].cart_item.quantity--
-                notifyItemChanged(position)
-            }
-            else{
-                cartList.removeAt(position)
-                notifyItemRemoved(position)
-                notifyItemRangeChanged(position,cartList.size)
-            }
+            mlistner?.decreaseQuantity(position)
+            notifyDataSetChanged()
+        }
+
+        holder.binding.addToWishlistBtn.setOnClickListener {
+            mlistner?.addWishlist(position)
         }
     }
 

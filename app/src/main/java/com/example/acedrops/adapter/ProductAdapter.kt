@@ -49,20 +49,6 @@ class ProductAdapter(
 //        holder.binding.addToWishlistBtn.setOnClickListener { addToWishlist(position, holder) }
     }
 
-    private fun addToWishlist(position: Int, holder: ProductAdapter.ViewHolder) {
-        this.productList[position].also {
-            ServiceBuilder.buildService(ACC_TOKEN).addToWishlist(it.id.toString())
-                .enqueue(object : Callback<Message?> {
-                    override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
-                        TODO("change icon color to red")
-                    }
-
-                    override fun onFailure(call: Call<Message?>, t: Throwable) {
-                        TODO("Not yet implemented")
-                    }
-                })
-        }
-    }
 
     private fun addToCart(
         position: Int,

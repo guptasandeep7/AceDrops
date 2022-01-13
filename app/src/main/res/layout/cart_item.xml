@@ -116,7 +116,7 @@
                     android:textColor="@color/black"
                     android:textSize="24sp"
                     android:layout_gravity="center"
-                    android:background="@drawable/ic_minus"
+                    setBackground="@{product.cart_item.quantity}"
                      />
                 <TextView
                     android:id="@+id/quantity_text"
