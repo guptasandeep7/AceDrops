@@ -38,5 +38,6 @@
     <string name="add_to_cart">Add to cart</string>
     <string name="save_for_later">Save for later</string>
     <string name="Rs">\u20B9</string>
+    <string name="remove_from_wishlist">Remove from wishlist</string>
 
 </resources>

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="product"
             type="com.example.acedrops.model.cart.Cart" />
@@ -12,9 +13,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="10dp"
         android:layout_margin="8dp"
-        android:elevation="4dp">
+        android:elevation="4dp"
+        app:cardCornerRadius="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -70,13 +71,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginRight="8dp"
                 android:layout_marginTop="4dp"
+                android:layout_marginRight="8dp"
                 android:fontFamily="@font/mulish"
-                android:textStyle="bold"
-                android:textColor="@color/blue"
                 android:maxLines="1"
+                android:textColor="@color/blue"
                 android:textSize="24sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/product_desc"
                 app:layout_constraintTop_toBottomOf="@+id/product_desc" />
 
@@ -109,22 +110,22 @@
 
                 <TextView
                     android:id="@+id/minus_btn"
+                    setBackground="@{product.cart_item.quantity}"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginStart="19dp"
-                    android:layout_marginVertical="4dp"
-                    android:textColor="@color/black"
-                    android:textSize="24sp"
                     android:layout_gravity="center"
-                    setBackground="@{product.cart_item.quantity}"
-                     />
+                    android:layout_marginVertical="4dp"
+                    android:layout_marginStart="19dp"
+                    android:textColor="@color/black"
+                    android:textSize="24sp" />
+
                 <TextView
                     android:id="@+id/quantity_text"
+                    toText="@{product.cart_item.quantity}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="22dp"
-                    toText="@{product.cart_item.quantity}"
                     android:layout_marginVertical="4dp"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
@@ -133,10 +134,10 @@
                     android:id="@+id/plus_btn"
                     android:layout_width="24dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
                     android:layout_marginEnd="19dp"
                     android:gravity="center"
                     android:text="+"
-                    android:layout_marginVertical="4dp"
                     android:textColor="@color/black"
                     android:textSize="24sp" />
 
@@ -151,7 +152,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/mulish"
-                android:text="@string/save_for_later"
+                wishlistStatus="@{product.wishlistStatus}"
                 android:textAllCaps="false"
                 android:textSize="14sp"
                 android:textStyle="bold"

@@ -1,8 +1,9 @@
 package com.example.acedrops.repository.dashboard
 
 import androidx.lifecycle.MutableLiveData
-import com.example.acedrops.model.Message
 import com.example.acedrops.model.cart.CartData
+import com.example.acedrops.model.cart.CartResponse
+import com.example.acedrops.model.cart.WishlistResponse
 import com.example.acedrops.network.ApiInterface
 import com.example.acedrops.utill.ApiResponse
 import okhttp3.ResponseBody
@@ -13,9 +14,9 @@ import retrofit2.Response
 class CartRepository(private val service: ApiInterface) {
 
     private val data = MutableLiveData<ApiResponse<CartData>>()
-    private val atcResult = MutableLiveData<ApiResponse<Boolean>>()
-    private val removeFromCart = MutableLiveData<ApiResponse<Boolean>>()
-    private val wishlist = MutableLiveData<ApiResponse<Boolean>>()
+    private val atcResult = MutableLiveData<ApiResponse<CartResponse>>()
+    private val removeFromCart = MutableLiveData<ApiResponse<CartResponse>>()
+    private val wishlist = MutableLiveData<ApiResponse<WishlistResponse>>()
 
     fun getCartList(): MutableLiveData<ApiResponse<CartData>> {
         val call = service.viewCart()
@@ -42,17 +43,20 @@ class CartRepository(private val service: ApiInterface) {
         return data
     }
 
-    fun addToCart(productId: String): MutableLiveData<ApiResponse<Boolean>> {
+    fun addToCart(productId: String): MutableLiveData<ApiResponse<CartResponse>> {
         val call = service.addToCart(productId)
         atcResult.postValue(ApiResponse.Loading())
         try {
-            call.enqueue(object : Callback<Message?> {
-                override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
-                   if (response.isSuccessful) atcResult.postValue(ApiResponse.Success(true))
+            call.enqueue(object : Callback<CartResponse?> {
+                override fun onResponse(
+                    call: Call<CartResponse?>,
+                    response: Response<CartResponse?>
+                ) {
+                    if (response.isSuccessful) atcResult.postValue(ApiResponse.Success(response.body()))
                     else atcResult.postValue(ApiResponse.Error(response.message()))
                 }
 
-                override fun onFailure(call: Call<Message?>, t: Throwable) {
+                override fun onFailure(call: Call<CartResponse?>, t: Throwable) {
                     atcResult.postValue(ApiResponse.Error("Failed : $t"))
                 }
             })
@@ -62,17 +66,20 @@ class CartRepository(private val service: ApiInterface) {
         return atcResult
     }
 
-    fun removeFromCart(productId: String): MutableLiveData<ApiResponse<Boolean>> {
+    fun removeFromCart(productId: String): MutableLiveData<ApiResponse<CartResponse>> {
         val call = service.removeFromCart(productId)
         removeFromCart.postValue(ApiResponse.Loading())
         try {
-            call.enqueue(object : Callback<Message?> {
-                override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
-                   if (response.isSuccessful) removeFromCart.postValue(ApiResponse.Success(true))
+            call.enqueue(object : Callback<CartResponse?> {
+                override fun onResponse(
+                    call: Call<CartResponse?>,
+                    response: Response<CartResponse?>
+                ) {
+                    if (response.isSuccessful) removeFromCart.postValue(ApiResponse.Success(response.body()))
                     else removeFromCart.postValue(ApiResponse.Error(response.message()))
                 }
 
-                override fun onFailure(call: Call<Message?>, t: Throwable) {
+                override fun onFailure(call: Call<CartResponse?>, t: Throwable) {
                     removeFromCart.postValue(ApiResponse.Error("Failed : $t"))
                 }
             })
@@ -82,20 +89,20 @@ class CartRepository(private val service: ApiInterface) {
         return removeFromCart
     }
 
-    fun addRemoveWishlist(productId: String): MutableLiveData<ApiResponse<Boolean>> {
+    fun addRemoveWishlist(productId: String): MutableLiveData<ApiResponse<WishlistResponse>> {
         val call = service.addToWishlist(productId)
         wishlist.postValue(ApiResponse.Loading())
         try {
-            call.enqueue(object : Callback<ResponseBody?> {
+            call.enqueue(object : Callback<WishlistResponse?> {
                 override fun onResponse(
-                    call: Call<ResponseBody?>,
-                    response: Response<ResponseBody?>
+                    call: Call<WishlistResponse?>,
+                    response: Response<WishlistResponse?>
                 ) {
-                    if (response.isSuccessful) wishlist.postValue(ApiResponse.Success(true))
+                    if (response.isSuccessful) wishlist.postValue(ApiResponse.Success(response.body()))
                     else wishlist.postValue(ApiResponse.Error(response.message()))
                 }
 
-                override fun onFailure(call: Call<ResponseBody?>, t: Throwable) {
+                override fun onFailure(call: Call<WishlistResponse?>, t: Throwable) {
                     wishlist.postValue(ApiResponse.Error("Failed : $t"))
                 }
             })

@@ -8,8 +8,6 @@ import androidx.fragment.app.Fragment
 import com.example.acedrops.R
 import com.example.acedrops.adapter.CategoryAdapter
 import com.example.acedrops.databinding.FragmentCategoryBinding
-import com.example.acedrops.databinding.FragmentForgotBinding
-import com.example.acedrops.databinding.FragmentHomeBinding
 import com.example.acedrops.model.CategoryList
 
 class CategoryFragment : Fragment() {
@@ -24,16 +22,16 @@ class CategoryFragment : Fragment() {
         val view = binding.root
 
         val categoryList = mutableListOf<CategoryList>()
-        categoryList.add(CategoryList("Jewellery",R.drawable.ic_jwellery))
-        categoryList.add(CategoryList("Paintings & Portrait",R.drawable.ic_paintings))
-        categoryList.add(CategoryList("Bakery & Choclate",R.drawable.ic_choco_bakery))
-        categoryList.add(CategoryList("Crystal & Resin art",R.drawable.ic_crystal_art))
-        categoryList.add(CategoryList("Women's Fashion",R.drawable.ic_women_fashion))
-        categoryList.add(CategoryList("Jewellery",R.drawable.ic_jwellery))
-        categoryList.add(CategoryList("Paintings & Portrait",R.drawable.ic_paintings))
-        categoryList.add(CategoryList("Bakery & Choclate",R.drawable.ic_choco_bakery))
-        categoryList.add(CategoryList("Crystal & Resin art",R.drawable.ic_crystal_art))
-        categoryList.add(CategoryList("Women's Fashion",R.drawable.ic_women_fashion))
+        categoryList.add(CategoryList("Jewellery", R.drawable.ic_jwellery))
+        categoryList.add(CategoryList("Paintings & Portrait", R.drawable.ic_paintings))
+        categoryList.add(CategoryList("Bakery & Choclate", R.drawable.ic_choco_bakery))
+        categoryList.add(CategoryList("Crystal & Resin art", R.drawable.ic_crystal_art))
+        categoryList.add(CategoryList("Women's Fashion", R.drawable.ic_women_fashion))
+        categoryList.add(CategoryList("Jewellery", R.drawable.ic_jwellery))
+        categoryList.add(CategoryList("Paintings & Portrait", R.drawable.ic_paintings))
+        categoryList.add(CategoryList("Bakery & Choclate", R.drawable.ic_choco_bakery))
+        categoryList.add(CategoryList("Crystal & Resin art", R.drawable.ic_crystal_art))
+        categoryList.add(CategoryList("Women's Fashion", R.drawable.ic_women_fashion))
 
         binding.categoryRv.adapter = categoryAdapter
         categoryAdapter.updateCategoryList(categoryList)
@@ -45,6 +43,7 @@ class CategoryFragment : Fragment() {
         })
         return view
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

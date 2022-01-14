@@ -10,6 +10,8 @@ import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
@@ -21,17 +23,21 @@ import com.example.acedrops.model.home.Category
 import com.example.acedrops.model.home.NewArrival
 import com.example.acedrops.model.home.Shop
 import com.example.acedrops.network.ServiceBuilder
+import com.example.acedrops.repository.Datastore
 import com.example.acedrops.repository.dashboard.home.HomeRepository
+import com.example.acedrops.utill.ApiResponse
+import com.example.acedrops.utill.generateToken
 import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
 import com.example.acedrops.viewModelFactory.HomeViewModelFactory
 import com.example.acedrops.viewmodel.HomeViewModel
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     lateinit var binding: FragmentHomeBinding
-    lateinit var newArrivals: List<NewArrival>
-    lateinit var shops: List<Shop>
-    lateinit var category: List<Category>
+    private var newArrivals = mutableListOf<NewArrival>()
+    private var shops = mutableListOf<Shop>()
+    private var category = mutableListOf<Category>()
     private val shopAdapter = ShopAdapter()
     private val categoryAdapter = CategoryHomeAdapter()
 
@@ -48,20 +54,35 @@ class HomeFragment : Fragment() {
         binding.categoryRecyclerView.adapter = categoryAdapter
 
         homeViewModel.homeData.observe(viewLifecycleOwner, { it ->
-            if (it?.data != null) {
-                it.data.also {
-                    binding.progressBar.visibility = View.GONE
-                    newArrivals = it.newArrival
-                    shops = it.Shop
-                    category = it.category
-                    showNewArrivals(newArrivals)
-                    shopAdapter.setShopList(shops)
-                    categoryAdapter.updateCategoryList(category)
+            when (it) {
+                is ApiResponse.Success -> {
+                    if (it.data != null) {
+                        it.data.also {
+                            binding.progressBar.visibility = View.GONE
+                            newArrivals = it.newArrival as MutableList<NewArrival>
+                            if (shops.isNotEmpty())
+                                shops.clear()
+                            shops = it.Shop as MutableList<Shop>
+                            category = it.category as MutableList<Category>
+                            showNewArrivals(newArrivals)
+                            shopAdapter.setShopList(shops)
+                            categoryAdapter.updateCategoryList(category)
+                        }
+                    }
                 }
-            }
-            if (it.errorMessage != null) {
-                Toast.makeText(requireContext(), it?.errorMessage, Toast.LENGTH_SHORT)
-                    .show()
+                is ApiResponse.Error -> Toast.makeText(
+                    requireContext(),
+                    it.errorMessage,
+                    Toast.LENGTH_SHORT
+                ).show()
+                is ApiResponse.TokenExpire -> {
+                    Toast.makeText(requireContext(), "generateToken expire", Toast.LENGTH_SHORT)
+                        .show()
+                    Log.w("access generateToken ", "ACC_TOKEN is $ACC_TOKEN")
+                    lifecycleScope.launch {
+                        generateToken(requireContext())
+                    }
+                }
             }
         })
 
@@ -69,7 +90,6 @@ class HomeFragment : Fragment() {
             val bundle = bundleOf("ShopList" to shops)
             findNavController().navigate(R.id.action_homeFragment_to_allShopsFragment, bundle)
         }
-
 
         shopAdapter.setOnItemClickListener(object : ShopAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
@@ -83,15 +103,34 @@ class HomeFragment : Fragment() {
 
         categoryAdapter.setOnItemClickListener(object : CategoryHomeAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                Toast.makeText(
-                    requireContext(),
-                    categoryAdapter.categoryList[position].category,
-                    Toast.LENGTH_SHORT
-                ).show()
+//                Toast.makeText(
+//                    requireContext(),
+//                    categoryAdapter.categoryList[position].category,
+//                    Toast.LENGTH_SHORT
+//                ).show()
             }
         })
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val dataStore = Datastore(requireContext())
+
+        generateToken.observe(viewLifecycleOwner, {
+            if (it == null) {
+                lifecycleScope.launch {
+                    dataStore.changeLoginState(false)
+                    view.findNavController().navigate(R.id.action_homeFragment_to_authActivity)
+                    activity?.finish()
+                }
+            } else {
+                Toast.makeText(requireContext(), "Reload fragment", Toast.LENGTH_SHORT).show()
+            }
+        })
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

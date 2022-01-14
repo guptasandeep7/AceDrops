@@ -12,5 +12,6 @@ data class Product(
     val shopId: Int,
     val stock: Int,
     val title: String,
-    val updatedAt: String
+    val updatedAt: String,
+    var wishlistStatus: Int = 0
 )

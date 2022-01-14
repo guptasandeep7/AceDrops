@@ -1,12 +1,13 @@
 package com.example.acedrops.network
 
 import com.example.acedrops.model.AccessTkn
-import com.example.acedrops.model.home.HomeFragmentData
 import com.example.acedrops.model.Message
 import com.example.acedrops.model.Token
 import com.example.acedrops.model.UserData
 import com.example.acedrops.model.cart.CartData
-import okhttp3.ResponseBody
+import com.example.acedrops.model.cart.CartResponse
+import com.example.acedrops.model.cart.WishlistResponse
+import com.example.acedrops.model.home.HomeFragmentData
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -42,21 +43,21 @@ interface ApiInterface {
 
     @FormUrlEncoded
     @POST("/prod/addToCart")
-    fun addToCart(@Field("prodId") productId: String): Call<Message>
+    fun addToCart(@Field("prodId") productId: String): Call<CartResponse>
 
     @FormUrlEncoded
     @POST("/prod/removeFromCart")
-    fun removeFromCart(@Field("prodId") productId: String): Call<Message>
+    fun removeFromCart(@Field("prodId") productId: String): Call<CartResponse>
 
     @FormUrlEncoded
     @POST("/prod/addAndRemFav")
-    fun addToWishlist(@Field("prodId") productId: String): Call<ResponseBody>
+    fun addToWishlist(@Field("prodId") productId: String): Call<WishlistResponse>
 
     @GET("/prod/viewCart")
     fun viewCart(): Call<CartData>
 
     @FormUrlEncoded
     @POST("/auth/generateToken")
-    fun generateToken(@Field("refreshtoken")refreshToken: String): Call<AccessTkn>
+    fun generateToken(@Field("refreshtoken") refreshToken: String): Call<AccessTkn>
 
 }

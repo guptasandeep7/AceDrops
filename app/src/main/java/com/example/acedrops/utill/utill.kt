@@ -33,7 +33,7 @@ fun validPass(password: String): String? {
     }
 }
 
-val generateToken:MutableLiveData<String?> = MutableLiveData()
+val generateToken: MutableLiveData<String?> = MutableLiveData()
 suspend fun generateToken(context: Context) {
     val datastore = Datastore(context)
     val refToken = datastore.getUserDetails(Datastore.REF_TOKEN_KEY)!!

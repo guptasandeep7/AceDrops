@@ -1,6 +1,5 @@
 package com.example.acedrops.adapter
 
-import android.content.res.Resources
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,14 +10,14 @@ import com.example.acedrops.databinding.CartItemBinding
 import com.example.acedrops.model.cart.Cart
 import com.example.acedrops.model.home.productId
 
-class CartAdapter(
-) : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
+class CartAdapter : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
 
     var cartList = mutableListOf<Cart>()
     var favList = mutableListOf<productId>()
     fun updateProductList(product: List<Cart>, favProd: List<productId>) {
         this.cartList = product.toMutableList()
         this.favList = favProd.toMutableList()
+        for (item in cartList) if (favList.contains(productId(item.id))) item.wishlistStatus = 1
         notifyDataSetChanged()
     }
 
@@ -34,12 +33,18 @@ class CartAdapter(
         mlistner = listener
     }
 
+    fun deleteItem(position: Int) {
+        cartList.removeAt(position)
+        notifyDataSetChanged()
+    }
+
     class ViewHolder(val binding: CartItemBinding, listener: onItemClickListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(product: Cart) {
             binding.product = product
             binding.productBasePrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
         }
+
         init {
             itemView.setOnClickListener {
                 listener.decreaseQuantity(adapterPosition)
@@ -54,26 +59,24 @@ class CartAdapter(
             LayoutInflater.from(parent.context),
             R.layout.cart_item, parent, false
         )
-        return ViewHolder(binding,mlistner!!)
+        return ViewHolder(binding, mlistner!!)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(cartList[position])
-        if(favList.contains(productId(cartList[position].id)))
-            holder.binding.addToWishlistBtn.text  = "Remove From Wishlist"
+
         holder.binding.plusBtn.setOnClickListener {
             mlistner?.increaseQuantity(position)
-            notifyDataSetChanged()
         }
 
         holder.binding.minusBtn.setOnClickListener {
             mlistner?.decreaseQuantity(position)
-            notifyDataSetChanged()
         }
 
         holder.binding.addToWishlistBtn.setOnClickListener {
             mlistner?.addWishlist(position)
         }
+        holder.binding.root.isClickable = false
     }
 
     override fun getItemCount(): Int {

@@ -8,8 +8,7 @@ import com.example.acedrops.R
 import com.example.acedrops.databinding.ShopLayoutBinding
 import com.example.acedrops.model.home.Shop
 
-class ShopAdapter(
-) : RecyclerView.Adapter<ShopAdapter.ViewHolder>() {
+class ShopAdapter : RecyclerView.Adapter<ShopAdapter.ViewHolder>() {
 
     private var mlistner: onItemClickListener? = null
 
@@ -23,9 +22,9 @@ class ShopAdapter(
 
     var shopsList = mutableListOf<Shop>()
     fun setShopList(shops: List<Shop>) {
-        for(item in shops){
-            if(item.imgUrls.isNotEmpty())
-            this.shopsList.add(item)
+        for (item in shops) {
+            if (item.imgUrls.isNotEmpty())
+                this.shopsList.add(item)
         }
         notifyDataSetChanged()
     }
@@ -52,7 +51,7 @@ class ShopAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.bind(shopsList[position])
+        holder.bind(shopsList[position])
     }
 
     override fun getItemCount(): Int {

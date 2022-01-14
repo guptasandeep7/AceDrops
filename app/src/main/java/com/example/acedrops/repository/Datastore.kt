@@ -46,10 +46,10 @@ class Datastore(context: Context) {
 
     suspend fun isLogin(): Boolean {
         val key1 = booleanPreferencesKey(LOGIN_KEY)
-        return appContext.datastore.data.first()[key1]?:false
+        return appContext.datastore.data.first()[key1] ?: false
     }
 
-//Login true and save all data to Datastore
+    //Login true and save all data to Datastore
     suspend fun saveToDatastore(it: UserData, context: Context) {
         val datastore = Datastore(context)
         datastore.changeLoginState(true)

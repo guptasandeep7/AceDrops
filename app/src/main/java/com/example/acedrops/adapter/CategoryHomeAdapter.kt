@@ -1,7 +1,6 @@
 package com.example.acedrops.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
@@ -11,8 +10,7 @@ import com.example.acedrops.R
 import com.example.acedrops.databinding.OneCategoryLayoutBinding
 import com.example.acedrops.model.home.Category
 
-class CategoryHomeAdapter(
-) : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolder>(){
+class CategoryHomeAdapter : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolder>() {
 
     var categoryList = mutableListOf<Category>()
     fun updateCategoryList(category: List<Category>) {
@@ -58,7 +56,8 @@ class CategoryHomeAdapter(
         holder.bind(categoryList[position])
         holder.binding.showAllBtn.setOnClickListener {
             val bundle = bundleOf("ProductList" to categoryList[position].products)
-            holder.itemView.findNavController().navigate(R.id.action_homeFragment_to_allProductsFragment,bundle)
+            holder.itemView.findNavController()
+                .navigate(R.id.action_homeFragment_to_allProductsFragment, bundle)
         }
     }
 

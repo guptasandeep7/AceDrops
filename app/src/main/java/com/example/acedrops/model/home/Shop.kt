@@ -7,4 +7,4 @@ data class Shop(
     val id: Int,
     val imgUrls: List<ImgUrl>,
     val shopName: String
-):Serializable
+) : Serializable

@@ -1,7 +1,5 @@
 package com.example.acedrops.model.home
 
-import com.example.acedrops.model.home.ImgUrl
-
 data class NewArrival(
     val basePrice: Int,
     val createdAt: String,

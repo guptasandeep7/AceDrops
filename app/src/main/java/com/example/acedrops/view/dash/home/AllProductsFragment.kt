@@ -1,17 +1,13 @@
 package com.example.acedrops.view.dash.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.acedrops.R
+import androidx.fragment.app.Fragment
 import com.example.acedrops.adapter.ProductAdapter
-import com.example.acedrops.adapter.ShopAdapter
 import com.example.acedrops.databinding.FragmentAllProductsBinding
-import com.example.acedrops.databinding.FragmentAllShopsBinding
 import com.example.acedrops.model.home.Product
-import com.example.acedrops.model.home.Shop
 
 class AllProductsFragment : Fragment() {
     private var _binding: FragmentAllProductsBinding? = null

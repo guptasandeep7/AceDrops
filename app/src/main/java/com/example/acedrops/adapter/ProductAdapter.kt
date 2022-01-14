@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.acedrops.R
 import com.example.acedrops.databinding.ProductsLayoutBinding
 import com.example.acedrops.model.Message
+import com.example.acedrops.model.cart.CartResponse
 import com.example.acedrops.model.home.Product
 import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
@@ -18,8 +19,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProductAdapter(
-) : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
+class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
     var productList = mutableListOf<Product>()
     fun updateProductList(product: List<Product>) {
         this.productList = product.toMutableList()
@@ -56,10 +56,10 @@ class ProductAdapter(
         this.productList[position].also {
             ServiceBuilder.buildService(token = ACC_TOKEN)
                 .addToCart(it.id.toString())
-                .enqueue(object : Callback<Message?> {
+                .enqueue(object : Callback<CartResponse?> {
                     override fun onResponse(
-                        call: Call<Message?>,
-                        response: Response<Message?>
+                        call: Call<CartResponse?>,
+                        response: Response<CartResponse?>
                     ) {
                         if (response.isSuccessful) {
                             snackbar(
@@ -71,7 +71,7 @@ class ProductAdapter(
                         )
                     }
 
-                    override fun onFailure(call: Call<Message?>, t: Throwable) {
+                    override fun onFailure(call: Call<CartResponse?>, t: Throwable) {
                         snackbar("Failed to add to cart", holder)
                     }
                 })

@@ -1,6 +1,6 @@
 package com.example.acedrops.repository.dashboard.home
 
-import com.example.acedrops.model.Message
+import com.example.acedrops.model.cart.CartResponse
 import com.example.acedrops.network.ApiInterface
 import retrofit2.Call
 import retrofit2.Callback
@@ -12,12 +12,15 @@ class ProductsRepository(private val service: ApiInterface) {
     fun addToCart(productId: String): Boolean {
         val call = service.addToCart(productId)
         try {
-            call.enqueue(object : Callback<Message?> {
-                override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
+            call.enqueue(object : Callback<CartResponse?> {
+                override fun onResponse(
+                    call: Call<CartResponse?>,
+                    response: Response<CartResponse?>
+                ) {
                     result = response.isSuccessful
                 }
 
-                override fun onFailure(call: Call<Message?>, t: Throwable) {
+                override fun onFailure(call: Call<CartResponse?>, t: Throwable) {
                     result = false
                 }
             })

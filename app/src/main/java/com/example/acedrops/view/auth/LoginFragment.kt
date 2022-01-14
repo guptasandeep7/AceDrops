@@ -16,12 +16,12 @@ import com.example.acedrops.databinding.FragmentLoginBinding
 import com.example.acedrops.repository.Datastore
 import com.example.acedrops.repository.auth.GoogleSignRepository
 import com.example.acedrops.repository.auth.LoginRepository
+import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.launch
 
@@ -106,8 +106,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private fun updateUI(account: GoogleSignInAccount?) {
         if (account != null) {
             checkToken(account.idToken)
-        }
-        else Toast.makeText(requireContext(), "Failed to sign with google", Toast.LENGTH_SHORT)
+        } else Toast.makeText(requireContext(), "Failed to sign with google", Toast.LENGTH_SHORT)
             .show()
     }
 
@@ -125,6 +124,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
         googleSignRepository.userData.observe(viewLifecycleOwner, {
             binding.progressBar.visibility = View.GONE
+            ACC_TOKEN = it.access_token
             datastore = Datastore(requireContext())
             lifecycleScope.launch {
                 datastore.saveToDatastore(it, requireContext())
@@ -169,6 +169,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
             loginRepository.userDetails.observe(this, {
                 progressBar.visibility = View.GONE
+                ACC_TOKEN = it.access_token
                 datastore = Datastore(requireContext())
                 lifecycleScope.launch {
                     datastore.saveToDatastore(it, requireContext())

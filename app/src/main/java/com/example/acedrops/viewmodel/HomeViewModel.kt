@@ -13,7 +13,7 @@ class HomeViewModel(private val homeRepository: HomeRepository) : ViewModel() {
 
     var homeData = MutableLiveData<ApiResponse<HomeFragmentData>>()
 
-    fun getHomeData():LiveData<ApiResponse<HomeFragmentData>>{
+    fun getHomeData(): LiveData<ApiResponse<HomeFragmentData>> {
         return homeData
     }
 

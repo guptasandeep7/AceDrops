@@ -1,16 +1,15 @@
 package com.example.acedrops.view.auth
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.databinding.FragmentLandingBinding
-import com.example.acedrops.databinding.FragmentLoginBinding
 import com.example.acedrops.repository.Datastore
 import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
 import kotlinx.coroutines.launch
@@ -37,11 +36,11 @@ class LandingFragment : Fragment() {
             }
         }
 
-        binding.signinBtn.setOnClickListener{
+        binding.signinBtn.setOnClickListener {
             findNavController().navigate(R.id.action_landingFragment_to_loginFragment)
         }
 
-        binding.signupBtn.setOnClickListener{
+        binding.signupBtn.setOnClickListener {
             findNavController().navigate(R.id.action_landingFragment_to_signupFragment)
         }
         return view

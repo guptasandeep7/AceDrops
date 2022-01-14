@@ -8,8 +8,7 @@ import com.example.acedrops.R
 import com.example.acedrops.databinding.CategoryLayoutBinding
 import com.example.acedrops.model.CategoryList
 
-class CategoryAdapter(
-) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     var categoryList = mutableListOf<CategoryList>()
     fun updateCategoryList(category: List<CategoryList>) {

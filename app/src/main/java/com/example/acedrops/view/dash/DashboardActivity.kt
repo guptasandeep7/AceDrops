@@ -2,17 +2,13 @@ package com.example.acedrops.view.dash
 
 import android.app.AlertDialog.Builder
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.acedrops.R
 import com.example.acedrops.databinding.ActivityDashboardBinding
-import com.example.acedrops.repository.Datastore
-import kotlinx.coroutines.launch
 
 class DashboardActivity : AppCompatActivity() {
 

@@ -21,10 +21,15 @@ class HomeRepository(private val service: ApiInterface) {
                     call: Call<HomeFragmentData?>,
                     response: retrofit2.Response<HomeFragmentData?>
                 ) {
-                    if (response.isSuccessful) {
-                        data.postValue(ApiResponse.Success(response.body()))
-                    } else {
-                        data.postValue(ApiResponse.Error(response.message()))
+                    when {
+                        response.isSuccessful -> {
+                            data.postValue(ApiResponse.Success(response.body()))
+                        }
+                        response.code() == 403 -> data.postValue(ApiResponse.TokenExpire())
+                        response.code() == 402 -> data.postValue(ApiResponse.TokenExpire())
+                        else -> {
+                            data.postValue(ApiResponse.Error(response.message()))
+                        }
                     }
 
                 }
