@@ -53,39 +53,6 @@ class HomeFragment : Fragment() {
         binding.shopRecyclerView.adapter = shopAdapter
         binding.categoryRecyclerView.adapter = categoryAdapter
 
-        homeViewModel.homeData.observe(viewLifecycleOwner, { it ->
-            when (it) {
-                is ApiResponse.Success -> {
-                    if (it.data != null) {
-                        it.data.also {
-                            binding.progressBar.visibility = View.GONE
-                            newArrivals = it.newArrival as MutableList<NewArrival>
-                            if (shops.isNotEmpty())
-                                shops.clear()
-                            shops = it.Shop as MutableList<Shop>
-                            category = it.category as MutableList<Category>
-                            showNewArrivals(newArrivals)
-                            shopAdapter.setShopList(shops)
-                            categoryAdapter.updateCategoryList(category)
-                        }
-                    }
-                }
-                is ApiResponse.Error -> Toast.makeText(
-                    requireContext(),
-                    it.errorMessage,
-                    Toast.LENGTH_SHORT
-                ).show()
-                is ApiResponse.TokenExpire -> {
-                    Toast.makeText(requireContext(), "generateToken expire", Toast.LENGTH_SHORT)
-                        .show()
-                    Log.w("access generateToken ", "ACC_TOKEN is $ACC_TOKEN")
-                    lifecycleScope.launch {
-                        generateToken(requireContext())
-                    }
-                }
-            }
-        })
-
         binding.allShopBtn.setOnClickListener {
             val bundle = bundleOf("ShopList" to shops)
             findNavController().navigate(R.id.action_homeFragment_to_allShopsFragment, bundle)
@@ -127,10 +94,42 @@ class HomeFragment : Fragment() {
                     activity?.finish()
                 }
             } else {
-                Toast.makeText(requireContext(), "Reload fragment", Toast.LENGTH_SHORT).show()
+                homeViewModel.getHomeData()
             }
         })
 
+        homeViewModel.homeData.observe(viewLifecycleOwner, { it ->
+            when (it) {
+                is ApiResponse.Success -> {
+                    if (it.data != null) {
+                        it.data.also {
+                            binding.progressBar.visibility = View.GONE
+                            newArrivals = it.newArrival as MutableList<NewArrival>
+                            if (shops.isNotEmpty())
+                                shops.clear()
+                            shops = it.Shop as MutableList<Shop>
+                            category = it.category as MutableList<Category>
+                            showNewArrivals(newArrivals)
+                            shopAdapter.setShopList(shops)
+                            categoryAdapter.updateCategoryList(category)
+                        }
+                    }
+                }
+                is ApiResponse.Error -> Toast.makeText(
+                    requireContext(),
+                    it.errorMessage,
+                    Toast.LENGTH_SHORT
+                ).show()
+                is ApiResponse.TokenExpire -> {
+                    Toast.makeText(requireContext(), "generateToken expire", Toast.LENGTH_SHORT)
+                        .show()
+                    Log.w("access generateToken ", "ACC_TOKEN is $ACC_TOKEN")
+                    lifecycleScope.launch {
+                        generateToken(requireContext())
+                    }
+                }
+            }
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

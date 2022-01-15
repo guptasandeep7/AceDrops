@@ -16,6 +16,7 @@ class CartRepository(private val service: ApiInterface) {
     private val data = MutableLiveData<ApiResponse<CartData>>()
     private val atcResult = MutableLiveData<ApiResponse<CartResponse>>()
     private val removeFromCart = MutableLiveData<ApiResponse<CartResponse>>()
+    private val deleteFromCart = MutableLiveData<ApiResponse<CartResponse>>()
     private val wishlist = MutableLiveData<ApiResponse<WishlistResponse>>()
 
     fun getCartList(): MutableLiveData<ApiResponse<CartData>> {
@@ -87,6 +88,29 @@ class CartRepository(private val service: ApiInterface) {
             removeFromCart.postValue(ApiResponse.Error("Error:${e.message}"))
         }
         return removeFromCart
+    }
+
+    fun deleteFromCart(productId: String): MutableLiveData<ApiResponse<CartResponse>> {
+        val call = service.deleteFromCart(productId)
+        deleteFromCart.postValue(ApiResponse.Loading())
+        try {
+            call.enqueue(object : Callback<CartResponse?> {
+                override fun onResponse(
+                    call: Call<CartResponse?>,
+                    response: Response<CartResponse?>
+                ) {
+                    if (response.isSuccessful) deleteFromCart.postValue(ApiResponse.Success(response.body()))
+                    else deleteFromCart.postValue(ApiResponse.Error(response.message()))
+                }
+
+                override fun onFailure(call: Call<CartResponse?>, t: Throwable) {
+                    deleteFromCart.postValue(ApiResponse.Error("Failed : $t"))
+                }
+            })
+        } catch (e: Exception) {
+            deleteFromCart.postValue(ApiResponse.Error("Error:${e.message}"))
+        }
+        return deleteFromCart
     }
 
     fun addRemoveWishlist(productId: String): MutableLiveData<ApiResponse<WishlistResponse>> {

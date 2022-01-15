@@ -46,16 +46,14 @@ class CartFragment : Fragment() {
 
         binding.progressBar.visibility = View.GONE
 
-        swipeGesture = object : SwipeGesture() {
+        swipeGesture = object : SwipeGesture(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
-                        cartAdapter.deleteItem(viewHolder.adapterPosition)
-                        cartViewModel.totalAmount.value =
-                            calTotalAmount(cartAdapter.cartList as ArrayList<Cart>)
+                        cartViewModel.deleteProduct(cartAdapter.cartList[viewHolder.adapterPosition].id.toString())
+                        observerDelete()
                     }
                 }
-                super.onSwiped(viewHolder, direction)
             }
         }
 
@@ -155,7 +153,7 @@ class CartFragment : Fragment() {
             is ApiResponse.Success -> {
                 for (item in cartAdapter.cartList){
                     if(item.id == it.data?.prodId){
-                        item.cart_item.quantity = it.data.quantity
+                        item.cart_item.quantity = it.data.quantity!!
                         cartAdapter.notifyDataSetChanged()
                         break
                     }
@@ -183,11 +181,39 @@ class CartFragment : Fragment() {
                         binding.progressBar.visibility = View.GONE
                     for (item in cartAdapter.cartList){
                         if(item.id == it.data?.prodId){
-                            if (it.data.quantity > 0) {
+                            if (it.data.quantity!! > 0) {
                                 item.cart_item.quantity = it.data.quantity
                             } else {
                                 cartAdapter.cartList.remove(item)
                             }
+                            cartAdapter.notifyDataSetChanged()
+                            break
+                        }
+                    }
+                        cartViewModel.totalAmount.value =
+                            calTotalAmount(cartAdapter.cartList as ArrayList<Cart>)
+                }
+                is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
+                is ApiResponse.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(
+                        requireContext(),
+                        it.errorMessage ?: "Try Again",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        })
+    }
+
+    private fun observerDelete() {
+        cartViewModel.deleteFromCartResult.observe(this, {
+            when (it) {
+                is ApiResponse.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                    for (item in cartAdapter.cartList){
+                        if(item.id == it.data?.prodId){
+                            cartAdapter.cartList.remove(item)
                             cartAdapter.notifyDataSetChanged()
                             break
                         }

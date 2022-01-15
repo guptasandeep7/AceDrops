@@ -40,6 +40,15 @@ class CartViewModel(private val repository: CartRepository) : ViewModel() {
         _removeFromCartResult = repository.removeFromCart(productId)
     }
 
+    private var _deleteFromCartResult: MutableLiveData<ApiResponse<CartResponse>> =
+        MutableLiveData()
+    val deleteFromCartResult: LiveData<ApiResponse<CartResponse>>
+        get() = _deleteFromCartResult
+
+    fun deleteProduct(productId: String) = viewModelScope.launch {
+        _deleteFromCartResult = repository.deleteFromCart(productId)
+    }
+
     private var _wishlistResult: MutableLiveData<ApiResponse<WishlistResponse>> = MutableLiveData()
     val wishlistResult: LiveData<ApiResponse<WishlistResponse>>
         get() = _wishlistResult

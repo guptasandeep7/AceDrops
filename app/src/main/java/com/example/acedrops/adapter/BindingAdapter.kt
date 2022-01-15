@@ -39,7 +39,7 @@ fun TextView.toText(int: Int) {
 
 @BindingAdapter("wishlistStatus")
 fun MaterialButton.wishlistStatus(status: Int) {
-    if (status == 0) this.text = resources.getString(R.string.save_for_later)
+    if (status == 0) this.text = resources.getString(R.string.add_to_wishlist)
     else this.text = resources.getString(R.string.remove_from_wishlist)
 }
 

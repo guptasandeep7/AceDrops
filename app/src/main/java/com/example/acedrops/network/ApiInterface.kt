@@ -50,6 +50,10 @@ interface ApiInterface {
     fun removeFromCart(@Field("prodId") productId: String): Call<CartResponse>
 
     @FormUrlEncoded
+    @POST("/prod/deleteCartProd")
+    fun deleteFromCart(@Field("prodId") productId: String): Call<CartResponse>
+
+    @FormUrlEncoded
     @POST("/prod/addAndRemFav")
     fun addToWishlist(@Field("prodId") productId: String): Call<WishlistResponse>
 
