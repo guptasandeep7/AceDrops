@@ -45,6 +45,7 @@ class CartFragment : Fragment() {
         val view = binding.root
 
         binding.progressBar.visibility = View.GONE
+        binding.cardView2.visibility = View.GONE
 
         swipeGesture = object : SwipeGesture(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -59,6 +60,11 @@ class CartFragment : Fragment() {
 
         cartViewModel.totalAmount.observe(viewLifecycleOwner, {
             binding.viewmodel = cartViewModel
+            if(it==0L){
+                binding.emptyCart.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
+                binding.cardView2.visibility = View.GONE
+            }
         })
 
         cartViewModel.cartData.observe(viewLifecycleOwner, {
@@ -66,6 +72,7 @@ class CartFragment : Fragment() {
                 is ApiResponse.Success -> {
                     if (it.data == null) {
                         binding.emptyCart.visibility = View.VISIBLE
+                        binding.cardView2.visibility = View.GONE
                         binding.progressBar.visibility = View.GONE
                     } else updateUI(it.data)
                 }
@@ -239,11 +246,11 @@ class CartFragment : Fragment() {
             progressBar.visibility = View.GONE
             emptyCart.visibility = View.GONE
             cartRecyclerview.adapter = cartAdapter
+            binding.cardView2.visibility = View.VISIBLE
             cartViewModel.totalAmount.value = calTotalAmount(cartList.prodInCart)
         }
         cartAdapter.updateProductList(cartList.prodInCart, cartList.favProd)
         binding.cartRecyclerview.visibility = View.VISIBLE
-        binding.cardView2.visibility = View.VISIBLE
         val touchHelper = ItemTouchHelper(swipeGesture)
         touchHelper.attachToRecyclerView(binding.cartRecyclerview)
     }

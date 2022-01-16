@@ -21,6 +21,12 @@ fun ImageView.setImage(rId: Int) {
     this.setImageResource(rId)
 }
 
+@BindingAdapter("status")
+fun ImageView.status(status: Int) {
+    if(status==1) this.setImageResource(R.drawable.ic_like_red)
+    else this.setImageResource(R.drawable.ic_like)
+}
+
 @BindingAdapter("toStringText")
 fun TextView.toStringText(long: Long) {
     this.text = "${resources.getString(R.string.Rs)}$long"

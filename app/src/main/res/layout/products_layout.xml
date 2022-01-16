@@ -53,7 +53,7 @@
                     android:id="@+id/wishlist_icon"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/ic_like"
+                    status="@{product.wishlistStatus}"
                     android:scaleType="centerInside" />
             </androidx.cardview.widget.CardView>
 

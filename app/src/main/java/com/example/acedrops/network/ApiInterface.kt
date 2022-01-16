@@ -4,6 +4,7 @@ import com.example.acedrops.model.AccessTkn
 import com.example.acedrops.model.Message
 import com.example.acedrops.model.Token
 import com.example.acedrops.model.UserData
+import com.example.acedrops.model.allproducts.OneCategoryResult
 import com.example.acedrops.model.cart.CartData
 import com.example.acedrops.model.cart.CartResponse
 import com.example.acedrops.model.cart.WishlistResponse
@@ -63,5 +64,8 @@ interface ApiInterface {
     @FormUrlEncoded
     @POST("/auth/generateToken")
     fun generateToken(@Field("refreshtoken") refreshToken: String): Call<AccessTkn>
+
+    @GET("/prod/category/{category}")
+    fun getProductList(@Path("category")categoryName:String): Call<OneCategoryResult>
 
 }

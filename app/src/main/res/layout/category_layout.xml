@@ -16,7 +16,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="164dp"
             android:layout_margin="8dp"
             android:elevation="8dp"
             app:cardCornerRadius="10dp"
@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_jwellery"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="56dp"
                 setImage="@{category.categoryPic}"
                 android:scaleType="fitXY" />
         </androidx.cardview.widget.CardView>

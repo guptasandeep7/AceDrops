@@ -22,6 +22,7 @@ class ShopAdapter : RecyclerView.Adapter<ShopAdapter.ViewHolder>() {
 
     var shopsList = mutableListOf<Shop>()
     fun setShopList(shops: List<Shop>) {
+        shopsList.clear()
         for (item in shops) {
             if (item.imgUrls.isNotEmpty())
                 this.shopsList.add(item)

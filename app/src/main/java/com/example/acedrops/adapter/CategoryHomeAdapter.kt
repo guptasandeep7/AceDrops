@@ -2,19 +2,20 @@ package com.example.acedrops.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.acedrops.R
 import com.example.acedrops.databinding.OneCategoryLayoutBinding
 import com.example.acedrops.model.home.Category
+import com.example.acedrops.model.home.productId
 
-class CategoryHomeAdapter : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolder>() {
+class CategoryHomeAdapter() : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolder>() {
 
     var categoryList = mutableListOf<Category>()
-    fun updateCategoryList(category: List<Category>) {
+    var favList = mutableListOf<productId>()
+    fun updateCategoryList(category: List<Category>,favList: List<productId>) {
         this.categoryList = category.toMutableList()
+        this.favList = favList.toMutableList()
         notifyDataSetChanged()
     }
 
@@ -30,11 +31,11 @@ class CategoryHomeAdapter : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolder>
 
     class ViewHolder(val binding: OneCategoryLayoutBinding, listener: onItemClickListener) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(category: Category) {
+        fun bind(category: Category, favList: List<productId>) {
             binding.category = category
             val productAdapter = ProductAdapter()
             binding.productsRecyclerView.adapter = productAdapter
-            productAdapter.updateProductList(category.products)
+            productAdapter.updateProductList(category.products,favList)
         }
 
         init {
@@ -53,11 +54,9 @@ class CategoryHomeAdapter : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolder>
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(categoryList[position])
+        holder.bind(categoryList[position],favList)
         holder.binding.showAllBtn.setOnClickListener {
-            val bundle = bundleOf("ProductList" to categoryList[position].products)
-            holder.itemView.findNavController()
-                .navigate(R.id.action_homeFragment_to_allProductsFragment, bundle)
+            mlistner?.onItemClick(position)
         }
     }
 

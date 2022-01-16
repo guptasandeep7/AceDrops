@@ -34,10 +34,11 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="acedrop">Acedrop</string>
     <string name="server_client_id">268564059113-4tes04r0sej5c1e1ukpmgv3o8em0n805.apps.googleusercontent.com</string>
-    <string name="continue_shopping_to_add_items_to_cart"><font color="#1983FF">Continue shopping</font> to add items to cart</string>
+    <string name="continue_shopping_to_add_items_to_cart">Continue shopping to add items to cart</string>
     <string name="add_to_cart">Add to cart</string>
     <string name="add_to_wishlist">Add to wishlist</string>
     <string name="Rs">\u20B9</string>
     <string name="remove_from_wishlist">Remove from wishlist</string>
+    <string name="search_for_shops_or_products">Search for shops or products</string>
 
 </resources>

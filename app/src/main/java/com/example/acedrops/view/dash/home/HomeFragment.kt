@@ -19,9 +19,10 @@ import com.example.acedrops.R
 import com.example.acedrops.adapter.CategoryHomeAdapter
 import com.example.acedrops.adapter.ShopAdapter
 import com.example.acedrops.databinding.FragmentHomeBinding
-import com.example.acedrops.model.home.Category
+import com.example.acedrops.model.allproducts.OneCategoryResult
 import com.example.acedrops.model.home.NewArrival
 import com.example.acedrops.model.home.Shop
+import com.example.acedrops.model.home.productId
 import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.repository.Datastore
 import com.example.acedrops.repository.dashboard.home.HomeRepository
@@ -37,7 +38,7 @@ class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     private var newArrivals = mutableListOf<NewArrival>()
     private var shops = mutableListOf<Shop>()
-    private var category = mutableListOf<Category>()
+    private var favList = mutableListOf<productId>()
     private val shopAdapter = ShopAdapter()
     private val categoryAdapter = CategoryHomeAdapter()
 
@@ -70,11 +71,10 @@ class HomeFragment : Fragment() {
 
         categoryAdapter.setOnItemClickListener(object : CategoryHomeAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-//                Toast.makeText(
-//                    requireContext(),
-//                    categoryAdapter.categoryList[position].category,
-//                    Toast.LENGTH_SHORT
-//                ).show()
+                val oneCategory = OneCategoryResult(favList,categoryAdapter.categoryList[position])
+                val bundle = bundleOf("OneCategory" to oneCategory )
+                view.findNavController()
+                    .navigate(R.id.action_homeFragment_to_allProductsFragment, bundle)
             }
         })
 
@@ -105,13 +105,11 @@ class HomeFragment : Fragment() {
                         it.data.also {
                             binding.progressBar.visibility = View.GONE
                             newArrivals = it.newArrival as MutableList<NewArrival>
-                            if (shops.isNotEmpty())
-                                shops.clear()
                             shops = it.Shop as MutableList<Shop>
-                            category = it.category as MutableList<Category>
+                            favList = it.favProd as MutableList<productId>
                             showNewArrivals(newArrivals)
                             shopAdapter.setShopList(shops)
-                            categoryAdapter.updateCategoryList(category)
+                            categoryAdapter.updateCategoryList(it.category,it.favProd)
                         }
                     }
                 }

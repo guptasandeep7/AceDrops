@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.adapter.CategoryAdapter
 import com.example.acedrops.databinding.FragmentCategoryBinding
@@ -21,11 +23,25 @@ class CategoryFragment : Fragment() {
         _binding = FragmentCategoryBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        //Jewellery
+        //Paintings and portraits
+        //Bakery and chocolates
+        //Crystal And resin art
+        //Under garments
+        //Thrift Shops
+        //Decorative items
+        //Customised gifts
+        //Closet and wearable
+        //Stickers and fun
+        //DIY's
+        //Makeup and accessories
+        //Others
+
         val categoryList = mutableListOf<CategoryList>()
         categoryList.add(CategoryList("Jewellery", R.drawable.ic_jwellery))
-        categoryList.add(CategoryList("Paintings & Portrait", R.drawable.ic_paintings))
-        categoryList.add(CategoryList("Bakery & Choclate", R.drawable.ic_choco_bakery))
-        categoryList.add(CategoryList("Crystal & Resin art", R.drawable.ic_crystal_art))
+        categoryList.add(CategoryList("Paintings and portraits", R.drawable.ic_paintings))
+        categoryList.add(CategoryList("Bakery and chocolates", R.drawable.ic_choco_bakery))
+        categoryList.add(CategoryList("Crystal And resin art", R.drawable.ic_crystal_art))
         categoryList.add(CategoryList("Women's Fashion", R.drawable.ic_women_fashion))
         categoryList.add(CategoryList("Jewellery", R.drawable.ic_jwellery))
         categoryList.add(CategoryList("Paintings & Portrait", R.drawable.ic_paintings))
@@ -38,7 +54,8 @@ class CategoryFragment : Fragment() {
 
         categoryAdapter.setOnItemClickListener(object : CategoryAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                TODO("Not yet implemented")
+                val bundle = bundleOf("CategoryName" to categoryAdapter.categoryList[position].categoryName)
+                view.findNavController().navigate(R.id.action_categoryFragment_to_allProductsFragment,bundle)
             }
         })
         return view

@@ -12,6 +12,7 @@ import com.example.acedrops.databinding.ProductsLayoutBinding
 import com.example.acedrops.model.Message
 import com.example.acedrops.model.cart.CartResponse
 import com.example.acedrops.model.home.Product
+import com.example.acedrops.model.home.productId
 import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
 import com.google.android.material.snackbar.Snackbar
@@ -21,8 +22,11 @@ import retrofit2.Response
 
 class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
     var productList = mutableListOf<Product>()
-    fun updateProductList(product: List<Product>) {
+    var favList = mutableListOf<productId>()
+    fun updateProductList(product: List<Product>,favList: List<productId>) {
         this.productList = product.toMutableList()
+        this.favList = favList.toMutableList()
+        for (item in productList) if (favList.contains(productId(item.id))) item.wishlistStatus = 1
         notifyDataSetChanged()
     }
 
@@ -95,6 +99,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
                 holder.itemView.findNavController()
                     .navigate(R.id.action_homeFragment_to_cartFragment)
             }.setActionTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
+            .setAnchorView(R.id.bottomNavigationView)
             .show()
     }
 
