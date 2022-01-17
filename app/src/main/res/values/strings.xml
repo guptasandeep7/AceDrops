@@ -40,5 +40,13 @@
     <string name="Rs">\u20B9</string>
     <string name="remove_from_wishlist">Remove from wishlist</string>
     <string name="search_for_shops_or_products">Search for shops or products</string>
+    <string name="my_wishlist">My Wishlist</string>
+    <string name="manage_address">Manage Address</string>
+    <string name="logout">Logout</string>
+    <string name="help_support"><![CDATA[Help & Support]]></string>
+    <string name="about_acedrop">About Acedrop</string>
+    <string name="faqs">FAQs</string>
+    <string name="terms_conditions"><![CDATA[Terms & Conditions]]></string>
+    <string name="change_password">Change password</string>
 
 </resources>

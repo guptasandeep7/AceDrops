@@ -18,6 +18,9 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         val view = binding.root
+//        val toolbar = binding.toolbar
+//        supportActionBar?.isHideOnContentScrollEnabled = true
+//        setSupportActionBar(toolbar)
         setContentView(view)
 
         val navHostFragment =

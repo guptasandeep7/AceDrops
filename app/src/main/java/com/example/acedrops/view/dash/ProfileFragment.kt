@@ -34,9 +34,8 @@ class ProfileFragment : Fragment() {
         val datastore = activity?.let { Datastore(it) }
 
         lifecycleScope.launch {
-            binding.textviewName.let {
-                it.text = datastore?.getUserDetails(Datastore.NAME_KEY)
-                it.append("\n${datastore?.getUserDetails(Datastore.EMAIL_KEY)}")
+            binding.userName.let {
+                it.text = datastore?.getUserDetails(Datastore.NAME_KEY)?.lowercase()
             }
         }
 

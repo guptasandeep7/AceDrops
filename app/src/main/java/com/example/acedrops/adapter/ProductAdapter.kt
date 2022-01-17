@@ -3,14 +3,15 @@ package com.example.acedrops.adapter
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.acedrops.R
 import com.example.acedrops.databinding.ProductsLayoutBinding
-import com.example.acedrops.model.Message
 import com.example.acedrops.model.cart.CartResponse
+import com.example.acedrops.model.cart.WishlistResponse
 import com.example.acedrops.model.home.Product
 import com.example.acedrops.model.home.productId
 import com.example.acedrops.network.ServiceBuilder
@@ -23,7 +24,7 @@ import retrofit2.Response
 class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
     var productList = mutableListOf<Product>()
     var favList = mutableListOf<productId>()
-    fun updateProductList(product: List<Product>,favList: List<productId>) {
+    fun updateProductList(product: List<Product>, favList: List<productId>) {
         this.productList = product.toMutableList()
         this.favList = favList.toMutableList()
         for (item in productList) if (favList.contains(productId(item.id))) item.wishlistStatus = 1
@@ -48,8 +49,44 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(productList[position])
-        holder.binding.addToCartBtn.setOnClickListener { addToCart(position, holder) }
-//        holder.binding.addToWishlistBtn.setOnClickListener { addToWishlist(position, holder) }
+        holder.binding.addToCartBtn.setOnClickListener {
+            it.isEnabled = false
+            addToCart(position, holder)
+        }
+        holder.binding.addToWishlistBtn.setOnClickListener { addToWishlist(position, holder) }
+    }
+
+    private fun addToWishlist(position: Int, holder: ProductAdapter.ViewHolder) {
+        val call = ServiceBuilder.buildService(ACC_TOKEN)
+            .addToWishlist(productList[position].id.toString())
+        try {
+            call.enqueue(object : Callback<WishlistResponse?> {
+                override fun onResponse(
+                    call: Call<WishlistResponse?>,
+                    response: Response<WishlistResponse?>
+                ) {
+                    if (response.isSuccessful) {
+                        productList[position].wishlistStatus = response.body()?.status?.toInt()!!
+                        notifyItemChanged(position)
+                    } else Toast.makeText(
+                        holder.itemView.context,
+                        "Failed to Add to wishlist",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                override fun onFailure(call: Call<WishlistResponse?>, t: Throwable) {
+                    Toast.makeText(
+                        holder.itemView.context,
+                        "Failed to Add to wishlist",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
+        } catch (e: Exception) {
+            Toast.makeText(holder.itemView.context, "Failed to Add to wishlist", Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 
 
@@ -66,16 +103,22 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
                         response: Response<CartResponse?>
                     ) {
                         if (response.isSuccessful) {
+                            holder.binding.addToCartBtn.isEnabled = true
                             snackbar(
-                                it.title,
+                                "\u20B9${it.discountedPrice} plus taxes\n1 ITEM",
                                 holder
                             )
-                        } else snackbar(
-                            response.message() ?: "Failed to add to cart ${response.code()}", holder
-                        )
+                        } else {
+                            holder.binding.addToCartBtn.isEnabled = true
+                            snackbar(
+                                response.message() ?: "Failed to add to cart ${response.code()}",
+                                holder
+                            )
+                        }
                     }
 
                     override fun onFailure(call: Call<CartResponse?>, t: Throwable) {
+                        holder.binding.addToCartBtn.isEnabled = true
                         snackbar("Failed to add to cart", holder)
                     }
                 })
