@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.acedrops.model.allproducts.OneCategoryResult
+import com.example.acedrops.model.home.Product
 import com.example.acedrops.repository.dashboard.home.ProductRepository
 import com.example.acedrops.utill.ApiResponse
 import kotlinx.coroutines.launch
@@ -17,5 +18,13 @@ class ProductsViewModel(private val repository: ProductRepository) : ViewModel()
 
     fun getProductList(categoryName: String) = viewModelScope.launch {
         _productList = repository.getProductList(categoryName)
+    }
+
+    private var _wishlist: MutableLiveData<ApiResponse<List<Product>>> = MutableLiveData()
+    val wishlist: LiveData<ApiResponse<List<Product>>>
+        get() = _wishlist
+
+    fun getWishlist() = viewModelScope.launch {
+        _wishlist = repository.getWishlist()
     }
 }

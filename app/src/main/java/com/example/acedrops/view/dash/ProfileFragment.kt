@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -17,7 +18,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import kotlinx.coroutines.launch
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(),View.OnClickListener{
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     lateinit var signOutRepository: SignOutRepository
@@ -32,6 +33,7 @@ class ProfileFragment : Fragment() {
         val view = binding.root
 
         val datastore = activity?.let { Datastore(it) }
+        binding.wishlistBtn.setOnClickListener(this)
 
         lifecycleScope.launch {
             binding.userName.let {
@@ -77,7 +79,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun signout(): Boolean {
-        var result: Boolean = false
+        var result = false
         googleSignInClient.signOut().addOnCompleteListener {
             result = true
         }.addOnCanceledListener {
@@ -86,8 +88,23 @@ class ProfileFragment : Fragment() {
         return result
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility = View.GONE
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility = View.VISIBLE
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.wishlist_btn -> {
+                val bundle = bundleOf("Wishlist" to "wishlist")
+                findNavController().navigate(R.id.action_profileFragment_to_allProductsFragment,bundle)
+            }
+        }
     }
 }

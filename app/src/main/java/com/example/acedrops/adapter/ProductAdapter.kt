@@ -23,11 +23,13 @@ import retrofit2.Response
 
 class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
     var productList = mutableListOf<Product>()
-    var favList = mutableListOf<productId>()
-    fun updateProductList(product: List<Product>, favList: List<productId>) {
+    var favList:MutableList<productId>? = null
+    fun updateProductList(product: List<Product>, favList: List<productId>?) {
         this.productList = product.toMutableList()
-        this.favList = favList.toMutableList()
-        for (item in productList) if (favList.contains(productId(item.id))) item.wishlistStatus = 1
+        if(favList!=null){
+            this.favList = favList.toMutableList()
+            for (item in productList) if (favList.contains(productId(item.id))) item.wishlistStatus = 1
+        }
         notifyDataSetChanged()
     }
 
@@ -53,7 +55,12 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
             it.isEnabled = false
             addToCart(position, holder)
         }
-        holder.binding.addToWishlistBtn.setOnClickListener { addToWishlist(position, holder) }
+        holder.binding.addToWishlistBtn.setOnClickListener {
+            if (favList==null){
+                productList.removeAt(position)
+                notifyItemRemoved(position)
+            }else addToWishlist(position, holder)
+        }
     }
 
     private fun addToWishlist(position: Int, holder: ProductAdapter.ViewHolder) {

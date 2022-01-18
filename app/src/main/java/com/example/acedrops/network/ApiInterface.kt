@@ -9,6 +9,7 @@ import com.example.acedrops.model.cart.CartData
 import com.example.acedrops.model.cart.CartResponse
 import com.example.acedrops.model.cart.WishlistResponse
 import com.example.acedrops.model.home.HomeFragmentData
+import com.example.acedrops.model.home.Product
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -66,6 +67,9 @@ interface ApiInterface {
     fun generateToken(@Field("refreshtoken") refreshToken: String): Call<AccessTkn>
 
     @GET("/prod/category/{category}")
-    fun getProductList(@Path("category")categoryName:String): Call<OneCategoryResult>
+    fun getProductList(@Path("category") categoryName: String): Call<OneCategoryResult>
+
+    @GET("/prod/viewWishlist")
+    fun getWishlist(): Call<List<Product>>
 
 }

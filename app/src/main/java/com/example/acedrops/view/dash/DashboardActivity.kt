@@ -2,6 +2,7 @@ package com.example.acedrops.view.dash
 
 import android.app.AlertDialog.Builder
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -9,6 +10,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.acedrops.R
 import com.example.acedrops.databinding.ActivityDashboardBinding
+import com.example.acedrops.view.dash.home.AllProductsFragment
 
 class DashboardActivity : AppCompatActivity() {
 
@@ -18,9 +20,8 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         val view = binding.root
-//        val toolbar = binding.toolbar
-//        supportActionBar?.isHideOnContentScrollEnabled = true
-//        setSupportActionBar(toolbar)
+        val toolbar = binding.toolbar
+        setSupportActionBar(toolbar)
         setContentView(view)
 
         val navHostFragment =
