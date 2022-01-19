@@ -48,5 +48,8 @@
     <string name="faqs">FAQs</string>
     <string name="terms_conditions"><![CDATA[Terms & Conditions]]></string>
     <string name="change_password">Change password</string>
+    <string name="set_password">Set Password</string>
+    <string name="add_new_address">Add new address</string>
+    <string name="no_address_found">No Address Found</string>
 
 </resources>

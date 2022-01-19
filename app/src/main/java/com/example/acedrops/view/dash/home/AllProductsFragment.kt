@@ -44,6 +44,9 @@ class AllProductsFragment : Fragment() {
             activity?.findViewById(R.id.bottomNavigationView)!!
         bottomNavigation?.visibility = View.GONE
 
+        binding.backBtn.setOnClickListener{
+            findNavController().popBackStack()
+        }
         oneCategoryResult = arguments?.getSerializable("OneCategory") as OneCategoryResult?
 
         if (oneCategoryResult == null) {

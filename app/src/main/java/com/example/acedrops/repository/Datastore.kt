@@ -8,7 +8,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.acedrops.model.UserData
-import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
 import kotlinx.coroutines.flow.first
 
 const val DATASTORE_NAME = "user_details"
@@ -23,12 +22,14 @@ class Datastore(context: Context) {
         const val EMAIL_KEY = "email_key"
         const val ACCESS_TOKEN_KEY = "token_key"
         const val REF_TOKEN_KEY = "ref_token_key"
+        const val USER_ID = "user_id"
+        const val GOOGLE_ID = "user_id"
     }
 
-    suspend fun saveUserDetails(key: String, value: String) {
+    suspend fun saveUserDetails(key: String, value: String?) {
         val key1 = stringPreferencesKey(key)
         appContext.datastore.edit { user_details ->
-            user_details[key1] = value
+            user_details[key1] = value.toString()
         }
     }
 
@@ -55,7 +56,9 @@ class Datastore(context: Context) {
         datastore.changeLoginState(true)
         datastore.saveUserDetails(EMAIL_KEY, it.email!!)
         datastore.saveUserDetails(NAME_KEY, it.name!!)
-        ACC_TOKEN = it.access_token
+        if(it.googleId==null) datastore.saveUserDetails(GOOGLE_ID, null)
+        else datastore.saveUserDetails(GOOGLE_ID, it.googleId)
+        datastore.saveUserDetails(USER_ID,it.id.toString())
         datastore.saveUserDetails(ACCESS_TOKEN_KEY, it.access_token!!)
         datastore.saveUserDetails(REF_TOKEN_KEY, it.refresh_token!!)
     }

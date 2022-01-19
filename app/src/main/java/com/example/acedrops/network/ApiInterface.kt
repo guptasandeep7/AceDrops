@@ -1,9 +1,6 @@
 package com.example.acedrops.network
 
-import com.example.acedrops.model.AccessTkn
-import com.example.acedrops.model.Message
-import com.example.acedrops.model.Token
-import com.example.acedrops.model.UserData
+import com.example.acedrops.model.*
 import com.example.acedrops.model.allproducts.OneCategoryResult
 import com.example.acedrops.model.cart.CartData
 import com.example.acedrops.model.cart.CartResponse
@@ -32,6 +29,10 @@ interface ApiInterface {
 
     @POST("/auth/newpass")
     fun newPass(@Body data: UserData): Call<Message>
+
+    @FormUrlEncoded
+    @POST("/auth/changePass")
+    fun changePass(@Field("email")email: String,@Field("password")oldPass:String,@Field("newpass")newPass:String): Call<Message>
 
     @FormUrlEncoded
     @POST("/auth/logout")
@@ -71,5 +72,8 @@ interface ApiInterface {
 
     @GET("/prod/viewWishlist")
     fun getWishlist(): Call<List<Product>>
+
+    @GET("/user/getAddress")
+    fun getAddress(): Call<List<AddressResponse>>
 
 }

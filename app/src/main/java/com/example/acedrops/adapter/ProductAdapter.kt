@@ -56,10 +56,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
             addToCart(position, holder)
         }
         holder.binding.addToWishlistBtn.setOnClickListener {
-            if (favList==null){
-                productList.removeAt(position)
-                notifyItemRemoved(position)
-            }else addToWishlist(position, holder)
+            addToWishlist(position, holder)
         }
     }
 
@@ -73,8 +70,14 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
                     response: Response<WishlistResponse?>
                 ) {
                     if (response.isSuccessful) {
-                        productList[position].wishlistStatus = response.body()?.status?.toInt()!!
-                        notifyItemChanged(position)
+                        if (favList==null){
+                            productList.removeAt(position)
+                            notifyItemRemoved(position)
+                        }
+                        else{
+                            productList[position].wishlistStatus = response.body()?.status?.toInt()!!
+                            notifyItemChanged(position)
+                        }
                     } else Toast.makeText(
                         holder.itemView.context,
                         "Failed to Add to wishlist",

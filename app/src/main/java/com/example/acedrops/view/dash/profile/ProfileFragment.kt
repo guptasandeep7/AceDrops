@@ -1,6 +1,7 @@
-package com.example.acedrops.view.dash
+package com.example.acedrops.view.dash.profile
 
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ class ProfileFragment : Fragment(),View.OnClickListener{
     lateinit var signOutRepository: SignOutRepository
     lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var gso: GoogleSignInOptions
+    private var googleId:String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,12 +35,16 @@ class ProfileFragment : Fragment(),View.OnClickListener{
         val view = binding.root
 
         val datastore = activity?.let { Datastore(it) }
+
+        if(googleId!=null) binding.changePassBtn.visibility = View.GONE
+
         binding.wishlistBtn.setOnClickListener(this)
+        binding.changePassBtn.setOnClickListener(this)
+        binding.manageAddrBtn.setOnClickListener(this)
 
         lifecycleScope.launch {
-            binding.userName.let {
-                it.text = datastore?.getUserDetails(Datastore.NAME_KEY)?.lowercase()
-            }
+                binding.userName.text = datastore?.getUserDetails(Datastore.NAME_KEY)?.lowercase()
+                binding.userEmail.text = datastore?.getUserDetails(Datastore.EMAIL_KEY)?.lowercase()
         }
 
         binding.signOutBtn.setOnClickListener {
@@ -71,6 +77,10 @@ class ProfileFragment : Fragment(),View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val datastore = Datastore(requireContext())
+        lifecycleScope.launch {
+            googleId = datastore.getUserDetails(Datastore.GOOGLE_ID)
+        }
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.server_client_id))
             .requestEmail()
@@ -105,6 +115,8 @@ class ProfileFragment : Fragment(),View.OnClickListener{
                 val bundle = bundleOf("Wishlist" to "wishlist")
                 findNavController().navigate(R.id.action_profileFragment_to_allProductsFragment,bundle)
             }
+            R.id.change_pass_btn -> findNavController().navigate(R.id.action_profileFragment_to_changePasswordFragment)
+            R.id.manage_addr_btn -> findNavController().navigate(R.id.action_profileFragment_to_addressFragment)
         }
     }
 }
