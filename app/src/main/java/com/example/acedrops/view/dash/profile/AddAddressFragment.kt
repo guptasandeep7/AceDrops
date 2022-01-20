@@ -11,62 +11,51 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
-import com.example.acedrops.adapter.AddressAdapter
-import com.example.acedrops.databinding.FragmentAddressBinding
+import com.example.acedrops.databinding.FragmentAddAddressBinding
 import com.example.acedrops.network.ServiceBuilder
+import com.example.acedrops.repository.dashboard.AddAddressRepository
 import com.example.acedrops.repository.dashboard.AddressRepository
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.utill.generateToken
 import com.example.acedrops.view.auth.AuthActivity
+import com.example.acedrops.viewModelFactory.AddAddressViewModelFactory
 import com.example.acedrops.viewModelFactory.AddressViewModelFactory
+import com.example.acedrops.viewmodel.AddAddressViewModel
 import com.example.acedrops.viewmodel.AddressViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
-class AddressFragment : Fragment() {
-    private var _binding: FragmentAddressBinding? = null
+class AddAddressFragment : Fragment(), View.OnClickListener{
+    private var _binding: FragmentAddAddressBinding? = null
     private val binding get() = _binding!!
-    private lateinit var addressViewModel: AddressViewModel
-    private val addressAdapter = AddressAdapter()
+    private lateinit var addAddressViewModel:AddAddressViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAddressBinding.inflate(inflater, container, false)
+        _binding = FragmentAddAddressBinding.inflate(inflater, container, false)
 
         activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility = View.GONE
 
-        binding.backBtn.setOnClickListener { findNavController().popBackStack() }
+        binding.viewmodel = addAddressViewModel
+        binding.backBtn.setOnClickListener(this)
+        binding.saveBtn.setOnClickListener(this)
 
-        binding.addAddressBtn.setOnClickListener { findNavController().navigate(R.id.action_addressFragment_to_addAddressFragment) }
-
-        binding.productsRecyclerView.adapter = addressAdapter
-
-        addressAdapter.setOnItemClickListener(object : AddressAdapter.onItemClickListener {
-            override fun onItemClick(position: Int) {
-                //on click on address
-            }
-        })
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        addressViewModel.address.observe(viewLifecycleOwner, {
+        addAddressViewModel.result.observe(viewLifecycleOwner, {
             when (it) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    if (it.data == null) {
-                        binding.empty.visibility = View.VISIBLE
-                        binding.productsRecyclerView.visibility = View.GONE
-                    } else addressAdapter.updateAddressList(it.data)
+                    Toast.makeText(requireContext(), "Address Successfully Added", Toast.LENGTH_SHORT).show()
                 }
-                is ApiResponse.Loading -> {
-                    binding.empty.visibility = View.GONE
-                    binding.progressBar.visibility = View.VISIBLE
-                }
+                is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
+
                 is ApiResponse.TokenExpire -> {
                     Toast.makeText(requireContext(), "generateToken expire", Toast.LENGTH_SHORT)
                         .show()
@@ -88,10 +77,9 @@ class AddressFragment : Fragment() {
                 findNavController().navigate(R.id.action_addressFragment_to_authActivity)
                 activity?.finish()
             } else {
-                addressViewModel.getAddress()
+                addAddressViewModel.saveAddress()
             }
         })
-
     }
 
     override fun onResume() {
@@ -103,15 +91,14 @@ class AddressFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility = View.GONE
+
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
             View.GONE
-
-        addressViewModel = ViewModelProvider(
+        addAddressViewModel = ViewModelProvider(
             this,
-            AddressViewModelFactory(AddressRepository(ServiceBuilder.buildService(AuthActivity.ACC_TOKEN)))
-        )[AddressViewModel::class.java]
+            AddAddressViewModelFactory(AddAddressRepository(ServiceBuilder.buildService(AuthActivity.ACC_TOKEN)))
+        )[AddAddressViewModel::class.java]
     }
 
     override fun onDestroyView() {
@@ -121,4 +108,41 @@ class AddressFragment : Fragment() {
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
             View.VISIBLE
     }
+
+    override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.back_btn -> findNavController().popBackStack()
+            R.id.save_btn -> {
+                helper()
+                if(validDetails()) {
+                    addAddressViewModel.saveAddress()
+                }
+            }
+        }
+    }
+
+    private fun helper() {
+        with(binding){
+            houseNoLayout.helperText = ""
+            streetLayout.helperText = ""
+            localityLayout.helperText = ""
+            cityLayout.helperText = ""
+            stateLayout.helperText = ""
+        }
+    }
+
+    private fun validDetails():Boolean{
+        with(binding){
+            when{
+                addAddressViewModel.houseNo.value.isNullOrBlank() -> houseNoLayout.helperText = "House number cannot be blank"
+                addAddressViewModel.street.value.isNullOrBlank() -> streetLayout.helperText = "Street name cannot be blank"
+                addAddressViewModel.locality.value.isNullOrBlank() -> localityLayout.helperText = "Locality name cannot be blank"
+                addAddressViewModel.city.value.isNullOrBlank() -> cityLayout.helperText = "City name cannot be blank"
+                addAddressViewModel.state.value.isNullOrBlank() -> stateLayout.helperText = "State name cannot be blank"
+                else -> return true
+            }
+        }
+        return false
+    }
+
 }

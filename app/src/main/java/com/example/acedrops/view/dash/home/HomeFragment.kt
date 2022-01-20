@@ -61,11 +61,8 @@ class HomeFragment : Fragment() {
 
         shopAdapter.setOnItemClickListener(object : ShopAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                Toast.makeText(
-                    requireContext(),
-                    "shop id ${shopAdapter.shopsList[position].id}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                val bundle = bundleOf("ShopId" to shopAdapter.shopsList[position].id)
+                findNavController().navigate(R.id.action_homeFragment_to_shopFragment,bundle)
             }
         })
 

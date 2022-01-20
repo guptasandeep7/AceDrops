@@ -5,7 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.acedrops.R
 import com.example.acedrops.adapter.ShopAdapter
 import com.example.acedrops.databinding.FragmentAllShopsBinding
 import com.example.acedrops.model.home.Shop
@@ -27,11 +30,8 @@ class AllShopsFragment : Fragment() {
         shopAdapter.setShopList(shopList)
         shopAdapter.setOnItemClickListener(object : ShopAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                Toast.makeText(
-                    requireContext(),
-                    "shop id ${shopAdapter.shopsList[position].id}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                val bundle = bundleOf("ShopId" to shopAdapter.shopsList[position].id)
+                findNavController().navigate(R.id.action_allShopsFragment_to_shopFragment,bundle)
             }
         })
         return view

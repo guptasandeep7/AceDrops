@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.dash.home.AllProductsFragment">
+    tools:context=".view.dash.profile.AddressFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -44,10 +44,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/products_recyclerView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/next_btn"
+        app:layout_constraintBottom_toTopOf="@+id/add_address_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
@@ -55,7 +55,7 @@
         tools:listitem="@layout/address_item" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/next_btn"
+        android:id="@+id/add_address_btn"
         android:layout_width="0dp"
         android:layout_height="65dp"
         android:layout_marginStart="22dp"

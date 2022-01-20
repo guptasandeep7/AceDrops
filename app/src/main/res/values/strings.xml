@@ -51,5 +51,14 @@
     <string name="set_password">Set Password</string>
     <string name="add_new_address">Add new address</string>
     <string name="no_address_found">No Address Found</string>
+    <string name="save">Save</string>
+    <string name="house_flat_block_no">HOUSE/ FLAT / BLOCK NO.</string>
+    <string name="street_name_plot_no">STREET NAME / PLOT NO.</string>
+    <string name="locality">LOCALITY</string>
+    <string name="city">CITY</string>
+    <string name="state">STATE</string>
+    <string name="shop">Shop</string>
+    <string name="call">Call</string>
+    <string name="products">Products</string>
 
 </resources>

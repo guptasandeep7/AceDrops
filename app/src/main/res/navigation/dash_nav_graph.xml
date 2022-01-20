@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_homeFragment_to_authActivity"
             app:destination="@id/authActivity" />
+        <action
+            android:id="@+id/action_homeFragment_to_shopFragment"
+            app:destination="@id/shopFragment" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
@@ -68,7 +71,11 @@
         android:id="@+id/allShopsFragment"
         android:name="com.example.acedrops.view.dash.home.AllShopsFragment"
         android:label="fragment_all_shops"
-        tools:layout="@layout/fragment_all_shops" />
+        tools:layout="@layout/fragment_all_shops" >
+        <action
+            android:id="@+id/action_allShopsFragment_to_shopFragment"
+            app:destination="@id/shopFragment" />
+    </fragment>
     <fragment
         android:id="@+id/allProductsFragment"
         android:name="com.example.acedrops.view.dash.home.AllProductsFragment"
@@ -99,7 +106,12 @@
     </fragment>
     <fragment
         android:id="@+id/addAddressFragment"
-        android:name="com.example.acedrops.AddAddressFragment"
+        android:name="com.example.acedrops.view.dash.profile.AddAddressFragment"
         android:label="fragment_add_address"
         tools:layout="@layout/fragment_add_address" />
+    <fragment
+        android:id="@+id/shopFragment"
+        android:name="com.example.acedrops.view.dash.home.ShopFragment"
+        android:label="fragment_shop"
+        tools:layout="@layout/fragment_shop" />
 </navigation>

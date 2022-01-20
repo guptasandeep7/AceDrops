@@ -7,6 +7,7 @@ import com.example.acedrops.model.cart.CartResponse
 import com.example.acedrops.model.cart.WishlistResponse
 import com.example.acedrops.model.home.HomeFragmentData
 import com.example.acedrops.model.home.Product
+import com.example.acedrops.model.home.ShopResult
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -32,7 +33,11 @@ interface ApiInterface {
 
     @FormUrlEncoded
     @POST("/auth/changePass")
-    fun changePass(@Field("email")email: String,@Field("password")oldPass:String,@Field("newpass")newPass:String): Call<Message>
+    fun changePass(
+        @Field("email") email: String,
+        @Field("password") oldPass: String,
+        @Field("newpass") newPass: String
+    ): Call<Message>
 
     @FormUrlEncoded
     @POST("/auth/logout")
@@ -75,5 +80,11 @@ interface ApiInterface {
 
     @GET("/user/getAddress")
     fun getAddress(): Call<List<AddressResponse>>
+
+    @POST("/user/addAddress")
+    fun postAddress(@Body address: AddressResponse): Call<String>
+
+    @GET("/shop/viewOneShop/{shopId}")
+    fun getShopDetails(@Path("shopId") shopId: Int): Call<ShopResult>
 
 }

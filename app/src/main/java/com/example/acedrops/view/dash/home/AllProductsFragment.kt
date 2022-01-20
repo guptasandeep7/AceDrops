@@ -31,7 +31,6 @@ class AllProductsFragment : Fragment() {
     private val binding get() = _binding!!
     private var productAdapter = ProductAdapter()
     private var oneCategoryResult: OneCategoryResult? = null
-    private lateinit var bottomNavigation:BottomNavigationView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,9 +39,7 @@ class AllProductsFragment : Fragment() {
         _binding = FragmentAllProductsBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        bottomNavigation =
-            activity?.findViewById(R.id.bottomNavigationView)!!
-        bottomNavigation?.visibility = View.GONE
+        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =View.GONE
 
         binding.backBtn.setOnClickListener{
             findNavController().popBackStack()
@@ -121,6 +118,7 @@ class AllProductsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility = View.GONE
+        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =View.GONE
 
         productsViewModel = ViewModelProvider(
             this,
@@ -131,12 +129,13 @@ class AllProductsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility = View.GONE
+        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =View.GONE
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        bottomNavigation.visibility = View.VISIBLE
+        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =View.VISIBLE
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility = View.VISIBLE
     }
 }
