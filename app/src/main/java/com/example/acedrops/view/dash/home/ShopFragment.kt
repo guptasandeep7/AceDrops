@@ -1,5 +1,7 @@
 package com.example.acedrops.view.dash.home
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,13 +19,15 @@ import com.example.acedrops.repository.dashboard.home.ShopRepository
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewModelFactory.ShopViewModelFactory
 import com.example.acedrops.viewmodel.ShopViewModel
+import com.google.android.gms.tasks.Tasks.call
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class ShopFragment : Fragment() {
+class ShopFragment : Fragment(), View.OnClickListener{
     private var _binding: FragmentShopBinding? = null
     private lateinit var shopViewModel: ShopViewModel
     private val binding get() = _binding!!
     var shopId:Int = 0
+    lateinit var shopDetails:ShopResult
     private var shopProductAdapter = ShopProductsAdapter()
 
     override fun onCreateView(
@@ -35,13 +39,15 @@ class ShopFragment : Fragment() {
 
         activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =View.GONE
 
-        binding.backBtn.setOnClickListener{ findNavController().popBackStack() }
+        binding.backBtn.setOnClickListener(this)
+        binding.shopCallBtn.setOnClickListener(this)
+        binding.shopEmailBtn.setOnClickListener(this)
 
         binding.productsRecyclerView.adapter = shopProductAdapter
 
         shopProductAdapter.setOnItemClickListener(object : ShopProductsAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                Toast.makeText(requireContext(), shopProductAdapter.productsList[position].id, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), shopProductAdapter.productsList[position].id.toString(), Toast.LENGTH_SHORT).show()
             }
         })
         return view
@@ -54,7 +60,10 @@ class ShopFragment : Fragment() {
             when(it){
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    updateUi(it.data)
+                    binding.shopCallBtn.isEnabled = true
+                    binding.shopEmailBtn.isEnabled = true
+                    shopDetails = it.data!!
+                    updateUi(shopDetails)
                 }
                 is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
                 is ApiResponse.Error -> {
@@ -93,5 +102,26 @@ class ShopFragment : Fragment() {
         _binding = null
         activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =View.VISIBLE
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility = View.VISIBLE
+    }
+
+    override fun onClick(v: View?) {
+       when(v?.id){
+           R.id.back_btn ->  findNavController().popBackStack()
+           R.id.shop_call_btn -> callShop()
+           R.id.shop_email_btn -> emailShop()
+       }
+    }
+
+    private fun emailShop() {
+        val intent = Intent(Intent.ACTION_SENDTO)
+        intent.data = Uri.parse("mailto:${shopDetails.email}")
+        intent.putExtra(Intent.EXTRA_EMAIL, shopDetails.email)
+        startActivity(intent)
+    }
+
+    private fun callShop() {
+        val intent = Intent(Intent.ACTION_DIAL)
+        intent.data = Uri.parse("tel:${shopDetails.phno}")
+        startActivity(intent)
     }
 }
