@@ -7,33 +7,123 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.acedrops.view.dash.HomeFragment"
+        android:name="com.example.acedrops.view.dash.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
+            android:id="@+id/action_homeFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_allShopsFragment"
+            app:destination="@id/allShopsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_allProductsFragment"
+            app:destination="@id/allProductsFragment" />
+        <action
             android:id="@+id/action_homeFragment_to_authActivity"
-            app:destination="@id/authActivity"
-            app:popUpTo="@id/authActivity"
-            app:popUpToInclusive="true"/>
+            app:destination="@id/authActivity" />
+        <action
+            android:id="@+id/action_homeFragment_to_shopFragment"
+            app:destination="@id/shopFragment" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
         android:name="com.example.acedrops.view.dash.CategoryFragment"
         android:label="fragment_category"
-        tools:layout="@layout/fragment_category" />
+        tools:layout="@layout/fragment_category" >
+        <action
+            android:id="@+id/action_categoryFragment_to_allProductsFragment"
+            app:destination="@id/allProductsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.example.acedrops.view.dash.CartFragment"
         android:label="fragment_cart"
-        tools:layout="@layout/fragment_cart" />
+        tools:layout="@layout/fragment_cart" >
+        <action
+            android:id="@+id/action_cartFragment_to_authActivity"
+            app:destination="@id/authActivity"/>
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.acedrops.view.dash.ProfileFragment"
+        android:name="com.example.acedrops.view.dash.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_authActivity"
+            app:destination="@id/authActivity" />
+        <action
+            android:id="@+id/action_profileFragment_to_allProductsFragment"
+            app:destination="@id/allProductsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
+    </fragment>
     <activity
         android:id="@+id/authActivity"
         android:name="com.example.acedrops.view.auth.AuthActivity"
         android:label="activity_auth"
         tools:layout="@layout/activity_auth" />
+    <fragment
+        android:id="@+id/allShopsFragment"
+        android:name="com.example.acedrops.view.dash.home.AllShopsFragment"
+        android:label="fragment_all_shops"
+        tools:layout="@layout/fragment_all_shops" >
+        <action
+            android:id="@+id/action_allShopsFragment_to_shopFragment"
+            app:destination="@id/shopFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/allProductsFragment"
+        android:name="com.example.acedrops.view.dash.home.AllProductsFragment"
+        android:label="fragment_all_products"
+        tools:layout="@layout/fragment_all_products" />
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.acedrops.view.dash.profile.ChangePasswordFragment"
+        android:label="ChangePasswordFragment"
+        tools:layout="@layout/fragment_change_password">
+        <action
+            android:id="@+id/action_changePasswordFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="false"/>
+    </fragment>
+    <fragment
+        android:id="@+id/addressFragment"
+        android:name="com.example.acedrops.view.dash.profile.AddressFragment"
+        android:label="fragment_address"
+        tools:layout="@layout/fragment_address" >
+        <action
+            android:id="@+id/action_addressFragment_to_authActivity"
+            app:destination="@id/authActivity" />
+        <action
+            android:id="@+id/action_addressFragment_to_addAddressFragment"
+            app:destination="@id/addAddressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addAddressFragment"
+        android:name="com.example.acedrops.view.dash.profile.AddAddressFragment"
+        android:label="fragment_add_address"
+        tools:layout="@layout/fragment_add_address" />
+    <fragment
+        android:id="@+id/shopFragment"
+        android:name="com.example.acedrops.view.dash.home.ShopFragment"
+        android:label="fragment_shop"
+        tools:layout="@layout/fragment_shop" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.acedrops.view.dash.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_shopFragment"
+            app:destination="@id/shopFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_allProductsFragment"
+            app:destination="@id/allProductsFragment" />
+    </fragment>
 </navigation>

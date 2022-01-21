@@ -42,7 +42,7 @@ class OtpFragment : Fragment(), View.OnClickListener {
                 binding.timer.visibility = View.VISIBLE
                 binding.resendOtp.isEnabled = false
                 binding.timer.text = when {
-                    millisUntilFinished/1000>9 -> "00:${(millisUntilFinished / 1000)}"
+                    millisUntilFinished / 1000 > 9 -> "00:${(millisUntilFinished / 1000)}"
                     else -> "00:0${(millisUntilFinished / 1000)}"
                 }
 
@@ -97,6 +97,7 @@ class OtpFragment : Fragment(), View.OnClickListener {
             } else {
                 otpRepository.userData.observe(this, {
                     timerCountDown.cancel()
+                    AuthActivity.ACC_TOKEN = it.access_token
                     datastore = Datastore(requireContext())
                     lifecycleScope.launch {
                         datastore.saveToDatastore(

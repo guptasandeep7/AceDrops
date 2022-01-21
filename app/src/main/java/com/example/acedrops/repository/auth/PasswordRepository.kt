@@ -14,8 +14,28 @@ class PasswordRepository {
     var errorMessage = MutableLiveData<String>()
 
     fun newPass(email: String, pass: String) {
-        val request = ServiceBuilder.buildService()
+        val request = ServiceBuilder.buildService(null)
         val call = request.newPass(UserData(email = email, newpass = pass))
+        call.enqueue(object : Callback<Message?> {
+            override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
+                when {
+                    response.isSuccessful -> message.postValue("Password changed Successfully")
+                    response.code() == 422 -> errorMessage.postValue("Enter valid password")
+                    response.code() == 401 -> errorMessage.postValue("Session expired")
+                    response.code() == 400 -> errorMessage.postValue("Try again")
+                    else -> errorMessage.postValue("Something went wrong! Try again")
+                }
+            }
+
+            override fun onFailure(call: Call<Message?>, t: Throwable) {
+                errorMessage.value = t.message
+            }
+        })
+    }
+
+    fun changePass(oldPass: String, newPass: String, userEmail: String) {
+        val request = ServiceBuilder.buildService(null)
+        val call = request.changePass(email = userEmail, oldPass = oldPass, newPass = newPass)
         call.enqueue(object : Callback<Message?> {
             override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
                 when {

@@ -14,7 +14,7 @@ class ForgotRepository {
     var errorMessage = MutableLiveData<String>()
 
     fun forgot(email: String) {
-        val request = ServiceBuilder.buildService()
+        val request = ServiceBuilder.buildService(null)
         val call = request.forgotPass(UserData(email = email))
         call.enqueue(object : Callback<Message?> {
             override fun onResponse(call: Call<Message?>, response: Response<Message?>) {

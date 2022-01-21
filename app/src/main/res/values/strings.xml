@@ -34,5 +34,33 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="acedrop">Acedrop</string>
     <string name="server_client_id">268564059113-4tes04r0sej5c1e1ukpmgv3o8em0n805.apps.googleusercontent.com</string>
+    <string name="continue_shopping_to_add_items_to_cart">Continue shopping to add items to cart</string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="add_to_wishlist">Add to wishlist</string>
+    <string name="Rs">\u20B9</string>
+    <string name="remove_from_wishlist">Remove from wishlist</string>
+    <string name="search_for_shops_or_products">Search for shops or products</string>
+    <string name="my_wishlist">My Wishlist</string>
+    <string name="manage_address">Manage Address</string>
+    <string name="logout">Logout</string>
+    <string name="help_support"><![CDATA[Help & Support]]></string>
+    <string name="about_acedrop">About Acedrop</string>
+    <string name="faqs">FAQs</string>
+    <string name="terms_conditions"><![CDATA[Terms & Conditions]]></string>
+    <string name="change_password">Change password</string>
+    <string name="set_password">Set Password</string>
+    <string name="add_new_address">Add new address</string>
+    <string name="no_address_found">No Address Found</string>
+    <string name="save">Save</string>
+    <string name="house_flat_block_no">HOUSE/ FLAT / BLOCK NO.</string>
+    <string name="street_name_plot_no">STREET NAME / PLOT NO.</string>
+    <string name="locality">LOCALITY</string>
+    <string name="city">CITY</string>
+    <string name="state">STATE</string>
+    <string name="shop">Shop</string>
+    <string name="call">Call</string>
+    <string name="products">Products</string>
+    <string name="no_search_results_found">No search results found!</string>
+    <string name="try_different_keyword">Try different keyword</string>
 
 </resources>
