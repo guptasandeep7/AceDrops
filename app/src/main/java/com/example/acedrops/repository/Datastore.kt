@@ -22,12 +22,14 @@ class Datastore(context: Context) {
         const val EMAIL_KEY = "email_key"
         const val ACCESS_TOKEN_KEY = "token_key"
         const val REF_TOKEN_KEY = "ref_token_key"
+        const val USER_ID = "user_id"
+        const val GOOGLE_ID = "user_id"
     }
 
-    suspend fun saveUserDetails(key: String, value: String) {
+    suspend fun saveUserDetails(key: String, value: String?) {
         val key1 = stringPreferencesKey(key)
         appContext.datastore.edit { user_details ->
-            user_details[key1] = value
+            user_details[key1] = value.toString()
         }
     }
 
@@ -45,15 +47,18 @@ class Datastore(context: Context) {
 
     suspend fun isLogin(): Boolean {
         val key1 = booleanPreferencesKey(LOGIN_KEY)
-        return appContext.datastore.data.first()[key1]?:false
+        return appContext.datastore.data.first()[key1] ?: false
     }
 
-//Login true and save all data to Datastore
+    //Login true and save all data to Datastore
     suspend fun saveToDatastore(it: UserData, context: Context) {
         val datastore = Datastore(context)
         datastore.changeLoginState(true)
         datastore.saveUserDetails(EMAIL_KEY, it.email!!)
         datastore.saveUserDetails(NAME_KEY, it.name!!)
+        if(it.googleId==null) datastore.saveUserDetails(GOOGLE_ID, null)
+        else datastore.saveUserDetails(GOOGLE_ID, it.googleId)
+        datastore.saveUserDetails(USER_ID,it.id.toString())
         datastore.saveUserDetails(ACCESS_TOKEN_KEY, it.access_token!!)
         datastore.saveUserDetails(REF_TOKEN_KEY, it.refresh_token!!)
     }

@@ -13,7 +13,8 @@
         android:theme="@style/Theme.AceDrops">
         <activity
             android:name=".view.dash.DashboardActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateVisible"/>
         <activity
             android:name=".view.auth.AuthActivity"
             android:exported="true"

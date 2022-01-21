@@ -14,7 +14,7 @@ class SignupRepository {
     var errorMessage = MutableLiveData<String>()
 
     fun signUp(email: String, name: String) {
-        val request = ServiceBuilder.buildService()
+        val request = ServiceBuilder.buildService(null)
         val call = request.signup(UserData(email = email, name = name))
         call.enqueue(object : Callback<Message?> {
             override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
