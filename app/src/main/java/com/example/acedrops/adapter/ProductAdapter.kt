@@ -13,7 +13,7 @@ import com.example.acedrops.databinding.ProductsLayoutBinding
 import com.example.acedrops.model.cart.CartResponse
 import com.example.acedrops.model.cart.WishlistResponse
 import com.example.acedrops.model.home.Product
-import com.example.acedrops.model.home.productId
+import com.example.acedrops.model.home.ProductId
 import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
 import com.google.android.material.snackbar.Snackbar
@@ -23,12 +23,12 @@ import retrofit2.Response
 
 class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
     var productList = mutableListOf<Product>()
-    var favList:MutableList<productId>? = null
-    fun updateProductList(product: List<Product>, favList: List<productId>?) {
+    var favList:MutableList<ProductId>? = null
+    fun updateProductList(product: List<Product>, favList: List<ProductId>?) {
         this.productList = product.toMutableList()
         if(favList!=null){
             this.favList = favList.toMutableList()
-            for (item in productList) if (favList.contains(productId(item.id))) item.wishlistStatus = 1
+            for (item in productList) if (favList.contains(ProductId(item.id))) item.wishlistStatus = 1
         }
         notifyDataSetChanged()
     }

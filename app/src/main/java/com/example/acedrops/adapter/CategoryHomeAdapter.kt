@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.acedrops.R
 import com.example.acedrops.databinding.OneCategoryLayoutBinding
 import com.example.acedrops.model.home.Category
-import com.example.acedrops.model.home.productId
+import com.example.acedrops.model.home.ProductId
 
 class CategoryHomeAdapter() : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolder>() {
 
     var categoryList = mutableListOf<Category>()
-    var favList = mutableListOf<productId>()
-    fun updateCategoryList(category: List<Category>,favList: List<productId>) {
+    var favList = mutableListOf<ProductId>()
+    fun updateCategoryList(category: List<Category>,favList: List<ProductId>) {
         this.categoryList = category.toMutableList()
         this.favList = favList.toMutableList()
         notifyDataSetChanged()
@@ -31,7 +31,7 @@ class CategoryHomeAdapter() : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolde
 
     class ViewHolder(val binding: OneCategoryLayoutBinding, listener: onItemClickListener) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(category: Category, favList: List<productId>) {
+        fun bind(category: Category, favList: List<ProductId>) {
             binding.category = category
             val productAdapter = ProductAdapter()
             binding.productsRecyclerView.adapter = productAdapter

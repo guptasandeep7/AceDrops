@@ -1,6 +1,7 @@
 package com.example.acedrops.view.dash
 
 import android.app.AlertDialog.Builder
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +27,10 @@ class DashboardActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.container2) as NavHostFragment
         val navController: NavController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
+
+        binding.searchBtn.setOnClickListener{
+            navController.navigate(R.id.searchFragment)
+        }
     }
 
     override fun onBackPressed() =

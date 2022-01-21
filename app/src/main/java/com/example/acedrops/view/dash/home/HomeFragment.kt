@@ -22,7 +22,7 @@ import com.example.acedrops.databinding.FragmentHomeBinding
 import com.example.acedrops.model.allproducts.OneCategoryResult
 import com.example.acedrops.model.home.NewArrival
 import com.example.acedrops.model.home.Shop
-import com.example.acedrops.model.home.productId
+import com.example.acedrops.model.home.ProductId
 import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.repository.Datastore
 import com.example.acedrops.repository.dashboard.home.HomeRepository
@@ -38,7 +38,7 @@ class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     private var newArrivals = mutableListOf<NewArrival>()
     private var shops = mutableListOf<Shop>()
-    private var favList = mutableListOf<productId>()
+    private var favList = mutableListOf<ProductId>()
     private val shopAdapter = ShopAdapter()
     private val categoryAdapter = CategoryHomeAdapter()
 
@@ -83,18 +83,6 @@ class HomeFragment : Fragment() {
 
         val dataStore = Datastore(requireContext())
 
-        generateToken.observe(viewLifecycleOwner, {
-            if (it == null) {
-                lifecycleScope.launch {
-                    dataStore.changeLoginState(false)
-                    view.findNavController().navigate(R.id.action_homeFragment_to_authActivity)
-                    activity?.finish()
-                }
-            } else {
-                homeViewModel.getHomeData()
-            }
-        })
-
         homeViewModel.homeData.observe(viewLifecycleOwner, { it ->
             when (it) {
                 is ApiResponse.Success -> {
@@ -103,18 +91,21 @@ class HomeFragment : Fragment() {
                             binding.progressBar.visibility = View.GONE
                             newArrivals = it.newArrival as MutableList<NewArrival>
                             shops = it.Shop as MutableList<Shop>
-                            favList = it.favProd as MutableList<productId>
+                            favList = it.favProd as MutableList<ProductId>
                             showNewArrivals(newArrivals)
                             shopAdapter.setShopList(shops)
                             categoryAdapter.updateCategoryList(it.category,it.favProd)
                         }
                     }
                 }
-                is ApiResponse.Error -> Toast.makeText(
-                    requireContext(),
-                    it.errorMessage,
-                    Toast.LENGTH_SHORT
-                ).show()
+                is ApiResponse.Error -> {
+                    Toast.makeText(
+                        requireContext(),
+                        it.errorMessage,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    homeViewModel.getHomeData()
+                }
                 is ApiResponse.TokenExpire -> {
                     Toast.makeText(requireContext(), "generateToken expire", Toast.LENGTH_SHORT)
                         .show()
@@ -122,6 +113,17 @@ class HomeFragment : Fragment() {
                     lifecycleScope.launch {
                         generateToken(requireContext())
                     }
+                    generateToken.observe(viewLifecycleOwner, {
+                        if (it == null) {
+                            lifecycleScope.launch {
+                                dataStore.changeLoginState(false)
+                                view.findNavController().navigate(R.id.action_homeFragment_to_authActivity)
+                                activity?.finish()
+                            }
+                        } else {
+                            homeViewModel.getHomeData()
+                        }
+                    })
                 }
             }
         })

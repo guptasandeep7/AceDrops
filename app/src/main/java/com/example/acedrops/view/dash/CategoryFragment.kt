@@ -23,20 +23,6 @@ class CategoryFragment : Fragment() {
         _binding = FragmentCategoryBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        //Jewellery
-        //Paintings and portraits
-        //Bakery and chocolates
-        //Crystal And resin art
-        //Under garments
-        //Thrift Shops
-        //Decorative items
-        //Customised gifts
-        //Closet and wearable
-        //Stickers and fun
-        //DIY's
-        //Makeup and accessories
-        //Others
-
         val categoryList = mutableListOf<CategoryList>()
         categoryList.add(CategoryList("Jewellery", R.drawable.ic_jwellery))
         categoryList.add(CategoryList("Paintings and portraits", R.drawable.ic_paintings))

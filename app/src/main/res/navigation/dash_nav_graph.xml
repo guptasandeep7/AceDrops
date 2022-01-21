@@ -114,4 +114,16 @@
         android:name="com.example.acedrops.view.dash.home.ShopFragment"
         android:label="fragment_shop"
         tools:layout="@layout/fragment_shop" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.acedrops.view.dash.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_shopFragment"
+            app:destination="@id/shopFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_allProductsFragment"
+            app:destination="@id/allProductsFragment" />
+    </fragment>
 </navigation>

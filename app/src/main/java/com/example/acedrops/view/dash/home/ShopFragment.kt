@@ -3,11 +3,11 @@ package com.example.acedrops.view.dash.home
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
@@ -19,15 +19,14 @@ import com.example.acedrops.repository.dashboard.home.ShopRepository
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewModelFactory.ShopViewModelFactory
 import com.example.acedrops.viewmodel.ShopViewModel
-import com.google.android.gms.tasks.Tasks.call
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class ShopFragment : Fragment(), View.OnClickListener{
+class ShopFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentShopBinding? = null
     private lateinit var shopViewModel: ShopViewModel
     private val binding get() = _binding!!
-    var shopId:Int = 0
-    lateinit var shopDetails:ShopResult
+    var shopId: Int = 0
+    lateinit var shopDetails: ShopResult
     private var shopProductAdapter = ShopProductsAdapter()
 
     override fun onCreateView(
@@ -37,7 +36,8 @@ class ShopFragment : Fragment(), View.OnClickListener{
         _binding = FragmentShopBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =View.GONE
+        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
+            View.GONE
 
         binding.backBtn.setOnClickListener(this)
         binding.shopCallBtn.setOnClickListener(this)
@@ -47,7 +47,11 @@ class ShopFragment : Fragment(), View.OnClickListener{
 
         shopProductAdapter.setOnItemClickListener(object : ShopProductsAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                Toast.makeText(requireContext(), shopProductAdapter.productsList[position].id.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    shopProductAdapter.productsList[position].id.toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
         return view
@@ -57,7 +61,7 @@ class ShopFragment : Fragment(), View.OnClickListener{
         super.onViewCreated(view, savedInstanceState)
 
         shopViewModel.shopDetails.observe(viewLifecycleOwner, {
-            when(it){
+            when (it) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
                     binding.shopCallBtn.isEnabled = true
@@ -81,35 +85,41 @@ class ShopFragment : Fragment(), View.OnClickListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility = View.GONE
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =View.GONE
+        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
+            View.GONE
+        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
+            View.GONE
 
         shopId = arguments?.getInt("ShopId") as Int
         shopViewModel = ViewModelProvider(
             this,
-            ShopViewModelFactory(ShopRepository(ServiceBuilder.buildService()),shopId)
+            ShopViewModelFactory(ShopRepository(ServiceBuilder.buildService()), shopId)
         )[ShopViewModel::class.java]
     }
 
     override fun onResume() {
         super.onResume()
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility = View.GONE
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =View.GONE
+        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
+            View.GONE
+        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
+            View.GONE
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =View.VISIBLE
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility = View.VISIBLE
+        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
+            View.VISIBLE
+        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
+            View.VISIBLE
     }
 
     override fun onClick(v: View?) {
-       when(v?.id){
-           R.id.back_btn ->  findNavController().popBackStack()
-           R.id.shop_call_btn -> callShop()
-           R.id.shop_email_btn -> emailShop()
-       }
+        when (v?.id) {
+            R.id.back_btn -> findNavController().popBackStack()
+            R.id.shop_call_btn -> callShop()
+            R.id.shop_email_btn -> emailShop()
+        }
     }
 
     private fun emailShop() {

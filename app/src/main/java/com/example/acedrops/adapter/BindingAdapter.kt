@@ -4,6 +4,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import coil.load
+import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.example.acedrops.R
 import com.google.android.material.button.MaterialButton
 
@@ -13,6 +14,15 @@ fun ImageView.imageFromUrl(url: String?) {
         this.load(url) {
             placeholder(R.drawable.placeholder)
             crossfade(true)
+        }
+}
+@BindingAdapter("imageFromUrlSearch")
+fun ImageView.imageFromUrlSearch(url: String?) {
+    if (url != null)
+        this.load(url) {
+            placeholder(R.drawable.placeholder)
+            crossfade(true)
+            scaleType = ImageView.ScaleType.CENTER_CROP
         }
 }
 

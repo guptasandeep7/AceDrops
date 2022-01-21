@@ -8,16 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.acedrops.R
 import com.example.acedrops.databinding.CartItemBinding
 import com.example.acedrops.model.cart.Cart
-import com.example.acedrops.model.home.productId
+import com.example.acedrops.model.home.ProductId
 
 class CartAdapter : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
 
     var cartList = mutableListOf<Cart>()
-    var favList = mutableListOf<productId>()
-    fun updateProductList(product: List<Cart>, favProd: List<productId>) {
+    var favList = mutableListOf<ProductId>()
+    fun updateProductList(product: List<Cart>, favProd: List<ProductId>) {
         this.cartList = product.toMutableList()
         this.favList = favProd.toMutableList()
-        for (item in cartList) if (favList.contains(productId(item.id))) item.wishlistStatus = 1
+        for (item in cartList) if (favList.contains(ProductId(item.id))) item.wishlistStatus = 1
         notifyDataSetChanged()
     }
 
