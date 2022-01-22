@@ -83,6 +83,19 @@ class HomeFragment : Fragment() {
 
         val dataStore = Datastore(requireContext())
 
+        generateToken.observe(viewLifecycleOwner, {
+            if (it == null) {
+                lifecycleScope.launch {
+                    dataStore.changeLoginState(false)
+                    view.findNavController().navigate(R.id.action_homeFragment_to_authActivity)
+                    activity?.finish()
+                }
+            } else {
+                Log.w("NEW ACCESS TOKEN", "onViewCreated: $ACC_TOKEN", )
+                homeViewModel.getHomeData()
+            }
+        })
+
         homeViewModel.homeData.observe(viewLifecycleOwner, { it ->
             when (it) {
                 is ApiResponse.Success -> {
@@ -113,17 +126,6 @@ class HomeFragment : Fragment() {
                     lifecycleScope.launch {
                         generateToken(requireContext())
                     }
-                    generateToken.observe(viewLifecycleOwner, {
-                        if (it == null) {
-                            lifecycleScope.launch {
-                                dataStore.changeLoginState(false)
-                                view.findNavController().navigate(R.id.action_homeFragment_to_authActivity)
-                                activity?.finish()
-                            }
-                        } else {
-                            homeViewModel.getHomeData()
-                        }
-                    })
                 }
             }
         })

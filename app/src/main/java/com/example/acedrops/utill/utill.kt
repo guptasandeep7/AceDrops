@@ -37,15 +37,13 @@ val generateToken: MutableLiveData<String?> = MutableLiveData()
 suspend fun generateToken(context: Context) {
     val datastore = Datastore(context)
     val refToken = datastore.getUserDetails(Datastore.REF_TOKEN_KEY)!!
-    var accessTkn: String? = null
     ServiceBuilder.buildService().generateToken(refreshToken = refToken)
         .enqueue(object : Callback<AccessTkn?> {
             override fun onResponse(call: Call<AccessTkn?>, response: Response<AccessTkn?>) {
                 when {
                     response.isSuccessful -> {
-                        accessTkn = response.body()?.access_token.toString()
-                        ACC_TOKEN = accessTkn.toString()
-                        generateToken.postValue(accessTkn.toString())
+                        ACC_TOKEN = response.body()?.access_token.toString()
+                        generateToken.postValue(ACC_TOKEN)
                     }
                     response.code() == 402 -> {
                         Toast.makeText(
@@ -59,7 +57,7 @@ suspend fun generateToken(context: Context) {
                     else -> {
                         Log.w("generate generateToken", "Response: code is ${response.code()}")
                         Log.w("generate generateToken", "ref generateToken is $refToken")
-                        Log.w("generate generateToken", "access generateToken is $accessTkn")
+                        Log.w("generate generateToken", "access generateToken is $ACC_TOKEN")
                         generateToken.postValue(null)
                     }
                 }

@@ -11,15 +11,15 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(private val homeRepository: HomeRepository) : ViewModel() {
 
-    var homeData = MutableLiveData<ApiResponse<HomeFragmentData>>()
+    private var _homeData = MutableLiveData<ApiResponse<HomeFragmentData>>()
+    val homeData: LiveData<ApiResponse<HomeFragmentData>>
+    get() = _homeData
 
-    fun getHomeData(): LiveData<ApiResponse<HomeFragmentData>> {
-        return homeData
+    fun getHomeData() = viewModelScope.launch {
+        _homeData = homeRepository.getData()
     }
 
     init {
-        viewModelScope.launch {
-            homeData = homeRepository.getData()
-        }
+        getHomeData()
     }
 }
