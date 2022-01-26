@@ -28,20 +28,26 @@ class CategoryFragment : Fragment() {
         categoryList.add(CategoryList("Paintings and portraits", R.drawable.ic_paintings))
         categoryList.add(CategoryList("Bakery and chocolates", R.drawable.ic_choco_bakery))
         categoryList.add(CategoryList("Crystal And resin art", R.drawable.ic_crystal_art))
-        categoryList.add(CategoryList("Women's Fashion", R.drawable.ic_women_fashion))
         categoryList.add(CategoryList("Jewellery", R.drawable.ic_jwellery))
-        categoryList.add(CategoryList("Paintings & Portrait", R.drawable.ic_paintings))
-        categoryList.add(CategoryList("Bakery & Choclate", R.drawable.ic_choco_bakery))
-        categoryList.add(CategoryList("Crystal & Resin art", R.drawable.ic_crystal_art))
-        categoryList.add(CategoryList("Women's Fashion", R.drawable.ic_women_fashion))
+        categoryList.add(CategoryList("Paintings and portraits", R.drawable.ic_paintings))
+        categoryList.add(CategoryList("Bakery and chocolates", R.drawable.ic_choco_bakery))
+        categoryList.add(CategoryList("Crystal And resin art", R.drawable.ic_crystal_art))
+//        categoryList.add(CategoryList("Women's Fashion", R.drawable.ic_women_fashion))
+//        categoryList.add(CategoryList("Jewellery", R.drawable.ic_jwellery))
+//        categoryList.add(CategoryList("Paintings & Portrait", R.drawable.ic_paintings))
+//        categoryList.add(CategoryList("Bakery & Choclate", R.drawable.ic_choco_bakery))
+//        categoryList.add(CategoryList("Crystal & Resin art", R.drawable.ic_crystal_art))
+//        categoryList.add(CategoryList("Women's Fashion", R.drawable.ic_women_fashion))
 
         binding.categoryRv.adapter = categoryAdapter
         categoryAdapter.updateCategoryList(categoryList)
 
         categoryAdapter.setOnItemClickListener(object : CategoryAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                val bundle = bundleOf("CategoryName" to categoryAdapter.categoryList[position].categoryName)
-                view.findNavController().navigate(R.id.action_categoryFragment_to_allProductsFragment,bundle)
+                val bundle =
+                    bundleOf("CategoryName" to categoryAdapter.categoryList[position].categoryName)
+                view.findNavController()
+                    .navigate(R.id.action_categoryFragment_to_allProductsFragment, bundle)
             }
         })
         return view

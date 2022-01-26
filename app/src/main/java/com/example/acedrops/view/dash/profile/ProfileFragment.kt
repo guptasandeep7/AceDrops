@@ -1,5 +1,6 @@
 package com.example.acedrops.view.dash.profile
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 class ProfileFragment : Fragment(),View.OnClickListener{
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    lateinit var datastore:Datastore
     lateinit var signOutRepository: SignOutRepository
     lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var gso: GoogleSignInOptions
@@ -34,9 +36,10 @@ class ProfileFragment : Fragment(),View.OnClickListener{
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        val datastore = activity?.let { Datastore(it) }
+        datastore = Datastore(requireContext())
 
         if(googleId!=null) binding.changePassBtn.visibility = View.GONE
+        binding.userPhnNo.visibility = View.GONE
 
         binding.wishlistBtn.setOnClickListener(this)
         binding.changePassBtn.setOnClickListener(this)
@@ -48,30 +51,46 @@ class ProfileFragment : Fragment(),View.OnClickListener{
         }
 
         binding.signOutBtn.setOnClickListener {
-            binding.progressBar.visibility = View.VISIBLE
-            signOutRepository = SignOutRepository()
-            signOutRepository.let { it ->
-                lifecycleScope.launch {
-                    it.signOut(datastore?.getUserDetails(Datastore.REF_TOKEN_KEY)!!)
-                }
-                it.message.observe(viewLifecycleOwner, {
-                    lifecycleScope.launch {
-                        datastore?.changeLoginState(false)
-                        signout()
-                        activity?.finish()
-                        findNavController().navigate(R.id.action_profileFragment_to_authActivity)
-                    }
-
-                })
-
-                it.errorMessage.observe(viewLifecycleOwner, {
-                    binding.progressBar.visibility = View.GONE
-                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-                })
-            }
+            alertBox()
         }
 
         return view
+    }
+
+    private fun alertBox() {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Logout")
+            .setMessage("Are you sure you want to Logout?")
+            .setPositiveButton("Exit") { dialog, id ->
+                logout()
+            }
+            .setNeutralButton("Cancel") { dialog, id -> }
+        val exit = builder.create()
+        exit.show()
+    }
+
+    private fun logout() {
+        binding.progressBar.visibility = View.VISIBLE
+        signOutRepository = SignOutRepository()
+        signOutRepository.let { it ->
+            lifecycleScope.launch {
+                it.signOut(datastore.getUserDetails(Datastore.REF_TOKEN_KEY)!!)
+            }
+            it.message.observe(viewLifecycleOwner, {
+                lifecycleScope.launch {
+                    datastore.changeLoginState(false)
+                    signout()
+                    activity?.finish()
+                    findNavController().navigate(R.id.action_profileFragment_to_authActivity)
+                }
+
+            })
+
+            it.errorMessage.observe(viewLifecycleOwner, {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            })
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

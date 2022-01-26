@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.acedrops.R
@@ -125,6 +127,11 @@ class CartFragment : Fragment() {
             override fun addWishlist(position: Int) {
                 cartViewModel.addWishlist(cartAdapter.cartList[position].id.toString())
                 observerWishlistResult()
+            }
+
+            override fun onItemClick(position: Int) {
+                val bundle = bundleOf("Product" to cartAdapter.cartList[position] )
+                findNavController().navigate(R.id.action_cartFragment_to_productFragment,bundle)
             }
         })
     }

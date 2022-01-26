@@ -63,7 +63,11 @@ class SearchFragment : Fragment() {
         searchAdapter.setOnItemClickListener(object : SearchAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
                 when (searchAdapter.searchList[position].type) {
-                    0 -> { //navigate to product fragment
+                    0 -> {
+                        val bundle =
+                            bundleOf("Product" to searchAdapter.searchList[position].product)
+                        findNavController()
+                            .navigate(R.id.action_searchFragment_to_productFragment, bundle)
                     }
                     1 -> {
                         val bundle =
@@ -124,7 +128,8 @@ class SearchFragment : Fragment() {
                     id = item.id,
                     title = item.title,
                     type = 0,
-                    imageUrl = item.imgUrls[0].imageUrl
+                    imageUrl = item.imgUrls[0].imageUrl,
+                    product = item
                 )
             )
         }

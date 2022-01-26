@@ -67,7 +67,7 @@ class HomeFragment : Fragment() {
         })
 
         categoryAdapter.setOnItemClickListener(object : CategoryHomeAdapter.onItemClickListener {
-            override fun onItemClick(position: Int) {
+            override fun showAll(position: Int) {
                 val oneCategory = OneCategoryResult(favList,categoryAdapter.categoryList[position])
                 val bundle = bundleOf("OneCategory" to oneCategory )
                 view.findNavController()
@@ -83,25 +83,14 @@ class HomeFragment : Fragment() {
 
         val dataStore = Datastore(requireContext())
 
-        generateToken.observe(viewLifecycleOwner, {
-            if (it == null) {
-                lifecycleScope.launch {
-                    dataStore.changeLoginState(false)
-                    view.findNavController().navigate(R.id.action_homeFragment_to_authActivity)
-                    activity?.finish()
-                }
-            } else {
-                Log.w("NEW ACCESS TOKEN", "onViewCreated: $ACC_TOKEN", )
-                homeViewModel.getHomeData()
-            }
-        })
-
         homeViewModel.homeData.observe(viewLifecycleOwner, { it ->
             when (it) {
                 is ApiResponse.Success -> {
                     if (it.data != null) {
                         it.data.also {
                             binding.progressBar.visibility = View.GONE
+                            binding.allShopBtn.visibility = View.VISIBLE
+                            binding.textView.visibility = View.VISIBLE
                             newArrivals = it.newArrival as MutableList<NewArrival>
                             shops = it.Shop as MutableList<Shop>
                             favList = it.favProd as MutableList<ProductId>
@@ -120,11 +109,23 @@ class HomeFragment : Fragment() {
                     homeViewModel.getHomeData()
                 }
                 is ApiResponse.TokenExpire -> {
-                    Toast.makeText(requireContext(), "generateToken expire", Toast.LENGTH_SHORT)
-                        .show()
+//                    Toast.makeText(requireContext(), "generateToken expire", Toast.LENGTH_SHORT)
+//                        .show()
                     Log.w("access generateToken ", "ACC_TOKEN is $ACC_TOKEN")
                     lifecycleScope.launch {
                         generateToken(requireContext())
+                        generateToken.observe(viewLifecycleOwner, {
+                            if (it == null) {
+                                lifecycleScope.launch {
+                                    dataStore.changeLoginState(false)
+                                    view.findNavController().navigate(R.id.action_homeFragment_to_authActivity)
+                                    activity?.finish()
+                                }
+                            } else {
+                                Log.w("NEW ACCESS TOKEN", "onViewCreated: $ACC_TOKEN", )
+                                homeViewModel.getHomeData()
+                            }
+                        })
                     }
                 }
             }

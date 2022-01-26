@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:text="@string/no_address_found"
         android:visibility="gone"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

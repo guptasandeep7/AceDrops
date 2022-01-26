@@ -23,6 +23,7 @@ import com.example.acedrops.viewModelFactory.AddressViewModelFactory
 import com.example.acedrops.viewmodel.AddAddressViewModel
 import com.example.acedrops.viewmodel.AddressViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 
 class AddAddressFragment : Fragment(), View.OnClickListener{
@@ -40,25 +41,33 @@ class AddAddressFragment : Fragment(), View.OnClickListener{
 
         binding.viewmodel = addAddressViewModel
         binding.backBtn.setOnClickListener(this)
-        binding.saveBtn.setOnClickListener(this)
+        binding.saveBtn.setOnClickListener{
+            helper()
+            if(validDetails()) {
+                addAddressViewModel.saveAddress()
+                saveObserver()
+            }
+        }
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    private fun saveObserver() {
         addAddressViewModel.result.observe(viewLifecycleOwner, {
             when (it) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    Toast.makeText(requireContext(), "Address Successfully Added", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Address Successfully Added",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
 
                 is ApiResponse.TokenExpire -> {
-                    Toast.makeText(requireContext(), "generateToken expire", Toast.LENGTH_SHORT)
-                        .show()
+    //                    Toast.makeText(requireContext(), "generateToken expire", Toast.LENGTH_SHORT)
+    //                        .show()
                     Log.w("access generateToken ", "ACC_TOKEN is ${AuthActivity.ACC_TOKEN}")
                     lifecycleScope.launch {
                         generateToken(requireContext())
@@ -69,15 +78,6 @@ class AddAddressFragment : Fragment(), View.OnClickListener{
                     it.errorMessage ?: "Something went wrong!!!",
                     Toast.LENGTH_SHORT
                 ).show()
-            }
-        })
-
-        generateToken.observe(viewLifecycleOwner, {
-            if (it == null) {
-                findNavController().navigate(R.id.action_addressFragment_to_authActivity)
-                activity?.finish()
-            } else {
-                addAddressViewModel.saveAddress()
             }
         })
     }
@@ -112,12 +112,6 @@ class AddAddressFragment : Fragment(), View.OnClickListener{
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.back_btn -> findNavController().popBackStack()
-            R.id.save_btn -> {
-                helper()
-                if(validDetails()) {
-                    addAddressViewModel.saveAddress()
-                }
-            }
         }
     }
 

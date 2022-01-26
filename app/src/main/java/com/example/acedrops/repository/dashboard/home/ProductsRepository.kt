@@ -9,7 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProductRepository(private val service: ApiInterface) {
+class ProductsRepository(private val service: ApiInterface) {
 
     private val data = MutableLiveData<ApiResponse<OneCategoryResult>>()
     private val wishlist = MutableLiveData<ApiResponse<List<Product>>>()

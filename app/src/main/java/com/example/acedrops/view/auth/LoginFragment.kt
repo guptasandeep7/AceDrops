@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.databinding.FragmentLoginBinding
@@ -17,8 +16,6 @@ import com.example.acedrops.model.Token
 import com.example.acedrops.model.UserData
 import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.repository.Datastore
-import com.example.acedrops.repository.auth.GoogleSignRepository
-import com.example.acedrops.repository.auth.LoginRepository
 import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
 import com.example.acedrops.view.dash.DashboardActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -27,7 +24,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
@@ -37,8 +33,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private lateinit var loginRepository: LoginRepository
-    private lateinit var googleSignRepository: GoogleSignRepository
     lateinit var datastore: Datastore
 
     //google sign in
@@ -64,8 +58,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        googleSignRepository = GoogleSignRepository()
-        loginRepository = LoginRepository()
         datastore = Datastore(requireContext())
 
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

@@ -27,19 +27,20 @@
 
             <TextView
                 android:id="@+id/catg_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{category.categoryName}"
                 style="@style/TextColor"
                 android:textSize="16sp"
-                android:layout_marginLeft="16dp"
+                android:layout_gravity="top"
+                android:gravity="top|center"
                 android:layout_marginTop="8dp" />
 
             <ImageView
                 android:id="@+id/catg_pic"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_jwellery"
+                android:src="@drawable/placeholder"
                 android:layout_marginTop="56dp"
                 setImage="@{category.categoryPic}"
                 android:scaleType="fitXY" />

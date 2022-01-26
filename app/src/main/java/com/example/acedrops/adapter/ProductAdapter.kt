@@ -23,12 +23,13 @@ import retrofit2.Response
 
 class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
     var productList = mutableListOf<Product>()
-    var favList:MutableList<ProductId>? = null
+    var favList: MutableList<ProductId>? = null
     fun updateProductList(product: List<Product>, favList: List<ProductId>?) {
         this.productList = product.toMutableList()
-        if(favList!=null){
+        if (favList != null) {
             this.favList = favList.toMutableList()
-            for (item in productList) if (favList.contains(ProductId(item.id))) item.wishlistStatus = 1
+            for (item in productList) if (favList.contains(ProductId(item.id))) item.wishlistStatus =
+                1
         }
         notifyDataSetChanged()
     }
@@ -58,6 +59,17 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
         holder.binding.addToWishlistBtn.setOnClickListener {
             addToWishlist(position, holder)
         }
+        holder.binding.productCard.setOnClickListener {
+//            val bundle = bundleOf("Product" to productList[position])
+//            when (view) {
+//                HomeFragment().view -> {
+//                    view?.findNavController()
+//                        ?.navigate(R.id.action_homeFragment_to_productFragment, bundle)
+//                }
+//                AllProductsFragment().view -> view?.findNavController()
+//                    ?.navigate(R.id.action_allProductsFragment_to_productFragment, bundle)
+//            }
+        }
     }
 
     private fun addToWishlist(position: Int, holder: ProductAdapter.ViewHolder) {
@@ -70,12 +82,12 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
                     response: Response<WishlistResponse?>
                 ) {
                     if (response.isSuccessful) {
-                        if (favList==null){
+                        if (favList == null) {
                             productList.removeAt(position)
                             notifyItemRemoved(position)
-                        }
-                        else{
-                            productList[position].wishlistStatus = response.body()?.status?.toInt()!!
+                        } else {
+                            productList[position].wishlistStatus =
+                                response.body()?.status?.toInt()!!
                             notifyItemChanged(position)
                         }
                     } else Toast.makeText(

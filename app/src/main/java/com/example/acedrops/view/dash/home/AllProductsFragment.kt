@@ -5,20 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import android.widget.Toolbar
-import androidx.core.view.isGone
-import androidx.databinding.adapters.ViewBindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI
 import com.example.acedrops.R
 import com.example.acedrops.adapter.ProductAdapter
 import com.example.acedrops.databinding.FragmentAllProductsBinding
 import com.example.acedrops.model.allproducts.OneCategoryResult
 import com.example.acedrops.model.home.Product
 import com.example.acedrops.network.ServiceBuilder
-import com.example.acedrops.repository.dashboard.home.ProductRepository
+import com.example.acedrops.repository.dashboard.home.ProductsRepository
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
 import com.example.acedrops.viewModelFactory.ProductsViewModelFactory
@@ -122,7 +118,7 @@ class AllProductsFragment : Fragment() {
 
         productsViewModel = ViewModelProvider(
             this,
-            ProductsViewModelFactory(ProductRepository(ServiceBuilder.buildService(ACC_TOKEN)))
+            ProductsViewModelFactory(ProductsRepository(ServiceBuilder.buildService(ACC_TOKEN)))
         )[ProductsViewModel::class.java]
     }
 

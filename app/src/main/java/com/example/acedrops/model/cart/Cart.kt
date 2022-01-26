@@ -4,7 +4,7 @@ data class Cart(
     val basePrice: Int,
     val cart_item: CartItem,
     val createdAt: String,
-    val description: String,
+    val shortDescription: String,
     val discountedPrice: Int,
     val id: Int,
     val imgUrls: List<ImgUrl>,

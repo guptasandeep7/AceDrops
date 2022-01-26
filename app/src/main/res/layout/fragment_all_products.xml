@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context=".view.dash.home.AllProductsFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -20,8 +20,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center"
-            android:src="@drawable/ic_vector__10_"
             android:backgroundTint="#00FFFFFF"
+            android:src="@drawable/ic_vector__10_"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="11dp" />
 
@@ -29,13 +29,13 @@
             android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
             android:fontFamily="@font/mulish"
+            android:gravity="start"
             android:text="@string/my_wishlist"
             android:textColor="?android:textColorPrimary"
-            android:textStyle="bold"
             android:textSize="16sp"
-            android:gravity="start"
-            android:layout_marginLeft="30dp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageButton2"
             app:layout_constraintTop_toTopOf="parent" />
@@ -44,7 +44,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/products_recyclerView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="8dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"

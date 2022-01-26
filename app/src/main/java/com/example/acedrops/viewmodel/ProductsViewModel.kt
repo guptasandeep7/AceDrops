@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.acedrops.model.allproducts.OneCategoryResult
 import com.example.acedrops.model.home.Product
-import com.example.acedrops.repository.dashboard.home.ProductRepository
+import com.example.acedrops.repository.dashboard.home.ProductsRepository
 import com.example.acedrops.utill.ApiResponse
 import kotlinx.coroutines.launch
 
-class ProductsViewModel(private val repository: ProductRepository) : ViewModel() {
+class ProductsViewModel(private val repository: ProductsRepository) : ViewModel() {
 
     private var _productList: MutableLiveData<ApiResponse<OneCategoryResult>> = MutableLiveData()
     val productList: LiveData<ApiResponse<OneCategoryResult>>

@@ -9,12 +9,15 @@ import com.example.acedrops.databinding.OneCategoryLayoutBinding
 import com.example.acedrops.model.home.Category
 import com.example.acedrops.model.home.ProductId
 
-class CategoryHomeAdapter() : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolder>() {
+class CategoryHomeAdapter : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolder>() {
 
     var categoryList = mutableListOf<Category>()
     var favList = mutableListOf<ProductId>()
-    fun updateCategoryList(category: List<Category>,favList: List<ProductId>) {
-        this.categoryList = category.toMutableList()
+    fun updateCategoryList(category: List<Category>, favList: List<ProductId>) {
+        category.forEach {
+            if(!it.products.isNullOrEmpty())
+                categoryList.add(it)
+        }
         this.favList = favList.toMutableList()
         notifyDataSetChanged()
     }
@@ -22,7 +25,7 @@ class CategoryHomeAdapter() : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolde
     private var mlistner: onItemClickListener? = null
 
     interface onItemClickListener {
-        fun onItemClick(position: Int)
+        fun showAll(position: Int)
     }
 
     fun setOnItemClickListener(listener: onItemClickListener) {
@@ -31,16 +34,18 @@ class CategoryHomeAdapter() : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolde
 
     class ViewHolder(val binding: OneCategoryLayoutBinding, listener: onItemClickListener) :
         RecyclerView.ViewHolder(binding.root) {
+
+        private val productAdapter = ProductAdapter()
+
         fun bind(category: Category, favList: List<ProductId>) {
             binding.category = category
-            val productAdapter = ProductAdapter()
             binding.productsRecyclerView.adapter = productAdapter
-            productAdapter.updateProductList(category.products,favList)
+            productAdapter.updateProductList(category.products, favList)
         }
 
         init {
             itemView.setOnClickListener {
-                listener.onItemClick(adapterPosition)
+                listener.showAll(adapterPosition)
             }
         }
     }
@@ -54,9 +59,9 @@ class CategoryHomeAdapter() : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolde
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(categoryList[position],favList)
+        holder.bind(categoryList[position], favList)
         holder.binding.showAllBtn.setOnClickListener {
-            mlistner?.onItemClick(position)
+            mlistner?.showAll(position)
         }
     }
 

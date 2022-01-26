@@ -10,6 +10,7 @@
     </data>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/product_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
@@ -81,7 +82,7 @@
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/mulish_semi_bold"
                 android:maxLines="1"
-                android:text="@{product.description}"
+                android:text="@{product.shortDescription}"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

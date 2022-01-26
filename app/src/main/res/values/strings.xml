@@ -62,5 +62,6 @@
     <string name="products">Products</string>
     <string name="no_search_results_found">No search results found!</string>
     <string name="try_different_keyword">Try different keyword</string>
+    <string name="buy_now">Buy now</string>
 
 </resources>

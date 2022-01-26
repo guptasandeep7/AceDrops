@@ -1,9 +1,11 @@
 package com.example.acedrops.model.home
 
+import java.io.Serializable
+
 data class Product(
     val basePrice: Int,
     val createdAt: String,
-    val description: String,
+    val shortDescription: String,
     val discountedPrice: Int,
     val id: Int,
     val imgUrls: List<ImgUrl>,
@@ -14,4 +16,4 @@ data class Product(
     val title: String,
     val updatedAt: String,
     var wishlistStatus: Int = 0
-)
+):Serializable
