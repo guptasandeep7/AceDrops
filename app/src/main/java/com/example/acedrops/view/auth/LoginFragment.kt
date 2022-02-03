@@ -85,10 +85,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+
         if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
         }
@@ -97,11 +95,9 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
-            // Signed in successfully, show authenticated UI.
             updateUI(account)
-        } catch (e: ApiException) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+        }
+        catch (e: ApiException) {
             Log.w(TAG, "signInResult:failed code=${e.statusCode}")
             updateUI(null)
         }
@@ -110,14 +106,14 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private fun updateUI(account: GoogleSignInAccount?) {
         if (account != null) {
             checkToken(account.idToken)
-        } else Toast.makeText(requireContext(), "Failed to sign with google", Toast.LENGTH_SHORT)
+        }
+        else Toast.makeText(requireContext(), "Failed to sign with google", Toast.LENGTH_SHORT)
             .show()
     }
 
     private fun checkToken(idToken: String?) {
         if (idToken != null) {
             gSignUp(idToken)
-
         }
     }
 
@@ -135,8 +131,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
                             response.body()
                                 ?.let { datastore.saveToDatastore(it, requireContext()) }
                             binding.progressBar.visibility = View.GONE
-                            activity?.finish()
                             startActivity(Intent(activity, DashboardActivity::class.java))
+                            activity?.finish()
                         }
                     }
                     response.code() == 503 -> Toast.makeText(

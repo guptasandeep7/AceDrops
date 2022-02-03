@@ -1,17 +1,20 @@
 package com.example.acedrops.repository.dashboard
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.example.acedrops.model.cart.CartData
 import com.example.acedrops.model.cart.CartResponse
 import com.example.acedrops.model.cart.WishlistResponse
-import com.example.acedrops.network.ApiInterface
+import com.example.acedrops.network.ServiceBuilder
+import com.example.acedrops.repository.Datastore
 import com.example.acedrops.utill.ApiResponse
-import okhttp3.ResponseBody
+import com.example.acedrops.utill.generateToken
+import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CartRepository(private val service: ApiInterface) {
+class CartRepository() {
 
     private val data = MutableLiveData<ApiResponse<CartData>>()
     private val atcResult = MutableLiveData<ApiResponse<CartResponse>>()
@@ -19,16 +22,30 @@ class CartRepository(private val service: ApiInterface) {
     private val deleteFromCart = MutableLiveData<ApiResponse<CartResponse>>()
     private val wishlist = MutableLiveData<ApiResponse<WishlistResponse>>()
 
-    fun getCartList(): MutableLiveData<ApiResponse<CartData>> {
-        val call = service.viewCart()
+    suspend fun getCartList(context: Context): MutableLiveData<ApiResponse<CartData>> {
+
+        val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
+
+        val call = ServiceBuilder.buildService(token).viewCart()
         data.postValue(ApiResponse.Loading())
         try {
             call.enqueue(object : Callback<CartData?> {
                 override fun onResponse(call: Call<CartData?>, response: Response<CartData?>) {
                     when {
                         response.isSuccessful -> data.postValue(ApiResponse.Success(response.body()))
-                        response.code() == 403 -> data.postValue(ApiResponse.TokenExpire())
-                        response.code() == 402 -> data.postValue(ApiResponse.Error("Invalid Token"))
+                        response.code() == 403 || response.code() == 402 -> {
+
+                            runBlocking {
+                                generateToken(
+                                    token!!,
+                                    Datastore(context).getUserDetails(
+                                        Datastore.REF_TOKEN_KEY
+                                    )!!, context
+                                )
+                                getCartList(context)
+                            }
+
+                        }
                         response.code() == 400 -> data.postValue(ApiResponse.Success(null))
                         else -> data.postValue(ApiResponse.Error(response.message()))
                     }
@@ -44,8 +61,14 @@ class CartRepository(private val service: ApiInterface) {
         return data
     }
 
-    fun addToCart(productId: String): MutableLiveData<ApiResponse<CartResponse>> {
-        val call = service.addToCart(productId)
+    suspend fun addToCart(
+        productId: String,
+        context: Context
+    ): MutableLiveData<ApiResponse<CartResponse>> {
+
+        val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
+
+        val call = ServiceBuilder.buildService(token).addToCart(productId)
         atcResult.postValue(ApiResponse.Loading())
         try {
             call.enqueue(object : Callback<CartResponse?> {
@@ -67,8 +90,14 @@ class CartRepository(private val service: ApiInterface) {
         return atcResult
     }
 
-    fun removeFromCart(productId: String): MutableLiveData<ApiResponse<CartResponse>> {
-        val call = service.removeFromCart(productId)
+    suspend fun removeFromCart(
+        productId: String,
+        context: Context
+    ): MutableLiveData<ApiResponse<CartResponse>> {
+
+        val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
+
+        val call = ServiceBuilder.buildService(token).removeFromCart(productId)
         removeFromCart.postValue(ApiResponse.Loading())
         try {
             call.enqueue(object : Callback<CartResponse?> {
@@ -90,8 +119,14 @@ class CartRepository(private val service: ApiInterface) {
         return removeFromCart
     }
 
-    fun deleteFromCart(productId: String): MutableLiveData<ApiResponse<CartResponse>> {
-        val call = service.deleteFromCart(productId)
+    suspend fun deleteFromCart(
+        productId: String,
+        context: Context
+    ): MutableLiveData<ApiResponse<CartResponse>> {
+
+        val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
+
+        val call = ServiceBuilder.buildService(token).deleteFromCart(productId)
         deleteFromCart.postValue(ApiResponse.Loading())
         try {
             call.enqueue(object : Callback<CartResponse?> {
@@ -113,8 +148,11 @@ class CartRepository(private val service: ApiInterface) {
         return deleteFromCart
     }
 
-    fun addRemoveWishlist(productId: String): MutableLiveData<ApiResponse<WishlistResponse>> {
-        val call = service.addToWishlist(productId)
+    suspend fun addRemoveWishlist(productId: String,context: Context): MutableLiveData<ApiResponse<WishlistResponse>> {
+
+        val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
+
+        val call = ServiceBuilder.buildService(token).addToWishlist(productId)
         wishlist.postValue(ApiResponse.Loading())
         try {
             call.enqueue(object : Callback<WishlistResponse?> {

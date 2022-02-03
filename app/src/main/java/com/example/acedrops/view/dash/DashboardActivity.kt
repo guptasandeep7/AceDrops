@@ -31,19 +31,17 @@ class DashboardActivity : AppCompatActivity() {
 
         datastore = Datastore(this)
 
-        val job = lifecycleScope.launch {
+        lifecycleScope.launch {
             AuthActivity.ACC_TOKEN = datastore.getUserDetails(Datastore.ACCESS_TOKEN_KEY)
         }
 
-        if(job.isCompleted){
-            val navHostFragment =
-                supportFragmentManager.findFragmentById(R.id.container2) as NavHostFragment
-            val navController: NavController = navHostFragment.navController
-            binding.bottomNavigationView.setupWithNavController(navController)
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.container2) as NavHostFragment
+        val navController: NavController = navHostFragment.navController
+        binding.bottomNavigationView.setupWithNavController(navController)
 
-            binding.searchBtn.setOnClickListener{
-                navController.navigate(R.id.searchFragment)
-            }
+        binding.searchBtn.setOnClickListener{
+            navController.navigate(R.id.searchFragment)
         }
     }
 

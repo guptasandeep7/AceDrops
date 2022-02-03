@@ -3,6 +3,7 @@ package com.example.acedrops.view.dash.profile
 import android.app.AlertDialog
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +39,17 @@ class ProfileFragment : Fragment(),View.OnClickListener{
 
         datastore = Datastore(requireContext())
 
-        if(googleId!=null) binding.changePassBtn.visibility = View.GONE
+        val job = lifecycleScope.launch {
+            googleId = datastore.getUserDetails(Datastore.GOOGLE_ID)
+        }
+
+        if(job.isCompleted){
+            if(googleId.equals("null")) {
+                binding.changePassBtn.visibility = View.VISIBLE
+            }
+            else binding.changePassBtn.visibility = View.GONE
+        }
+
         binding.userPhnNo.visibility = View.GONE
 
         binding.wishlistBtn.setOnClickListener(this)
@@ -46,8 +57,8 @@ class ProfileFragment : Fragment(),View.OnClickListener{
         binding.manageAddrBtn.setOnClickListener(this)
 
         lifecycleScope.launch {
-                binding.userName.text = datastore?.getUserDetails(Datastore.NAME_KEY)?.lowercase()
-                binding.userEmail.text = datastore?.getUserDetails(Datastore.EMAIL_KEY)?.lowercase()
+                binding.userName.text = datastore.getUserDetails(Datastore.NAME_KEY)?.lowercase()
+                binding.userEmail.text = datastore.getUserDetails(Datastore.EMAIL_KEY)?.lowercase()
         }
 
         binding.signOutBtn.setOnClickListener {
@@ -96,10 +107,6 @@ class ProfileFragment : Fragment(),View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val datastore = Datastore(requireContext())
-        lifecycleScope.launch {
-            googleId = datastore.getUserDetails(Datastore.GOOGLE_ID)
-        }
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.server_client_id))
             .requestEmail()

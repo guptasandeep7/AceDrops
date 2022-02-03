@@ -150,5 +150,9 @@
         android:id="@+id/productFragment"
         android:name="com.example.acedrops.view.dash.ProductFragment"
         android:label="ProductFragment"
-        tools:layout="@layout/fragment_product"/>
+        tools:layout="@layout/fragment_product">
+        <action
+            android:id="@+id/action_productFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
+    </fragment>
 </navigation>

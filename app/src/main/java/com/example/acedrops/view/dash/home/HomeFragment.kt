@@ -1,5 +1,6 @@
 package com.example.acedrops.view.dash.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -23,13 +25,11 @@ import com.example.acedrops.model.allproducts.OneCategoryResult
 import com.example.acedrops.model.home.NewArrival
 import com.example.acedrops.model.home.Shop
 import com.example.acedrops.model.home.ProductId
-import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.repository.Datastore
-import com.example.acedrops.repository.dashboard.home.HomeRepository
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.utill.generateToken
+import com.example.acedrops.view.auth.AuthActivity
 import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
-import com.example.acedrops.viewModelFactory.HomeViewModelFactory
 import com.example.acedrops.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
 
@@ -45,12 +45,51 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         val view = binding.root
 
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        homeViewModel =
+            ViewModelProvider((context as FragmentActivity?)!!)[HomeViewModel::class.java]
+
         binding.progressBar.visibility = View.VISIBLE
+
+        homeViewModel.getHomeData(requireContext())?.observe(viewLifecycleOwner, { it ->
+            when (it) {
+                is ApiResponse.Success -> {
+                    if (it.data != null) {
+                        it.data.also {
+                            binding.progressBar.visibility = View.GONE
+                            binding.allShopBtn.visibility = View.VISIBLE
+                            binding.textView.visibility = View.VISIBLE
+                            newArrivals = it.newArrival as MutableList<NewArrival>
+                            shops = it.Shop as MutableList<Shop>
+                            favList = it.favProd as MutableList<ProductId>
+                            showNewArrivals(newArrivals)
+                            shopAdapter.setShopList(shops)
+                            categoryAdapter.updateCategoryList(it.category,it.favProd)
+                        }
+                    }
+                }
+                is ApiResponse.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(
+                        requireContext(),
+                        it.errorMessage,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+            }
+        })
+
         binding.shopRecyclerView.adapter = shopAdapter
         binding.categoryRecyclerView.adapter = categoryAdapter
 
@@ -74,71 +113,6 @@ class HomeFragment : Fragment() {
                     .navigate(R.id.action_homeFragment_to_allProductsFragment, bundle)
             }
         })
-
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val dataStore = Datastore(requireContext())
-
-        homeViewModel.homeData.observe(viewLifecycleOwner, { it ->
-            when (it) {
-                is ApiResponse.Success -> {
-                    if (it.data != null) {
-                        it.data.also {
-                            binding.progressBar.visibility = View.GONE
-                            binding.allShopBtn.visibility = View.VISIBLE
-                            binding.textView.visibility = View.VISIBLE
-                            newArrivals = it.newArrival as MutableList<NewArrival>
-                            shops = it.Shop as MutableList<Shop>
-                            favList = it.favProd as MutableList<ProductId>
-                            showNewArrivals(newArrivals)
-                            shopAdapter.setShopList(shops)
-                            categoryAdapter.updateCategoryList(it.category,it.favProd)
-                        }
-                    }
-                }
-                is ApiResponse.Error -> {
-                    Toast.makeText(
-                        requireContext(),
-                        it.errorMessage,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    homeViewModel.getHomeData()
-                }
-                is ApiResponse.TokenExpire -> {
-//                    Toast.makeText(requireContext(), "generateToken expire", Toast.LENGTH_SHORT)
-//                        .show()
-                    Log.w("access generateToken ", "ACC_TOKEN is $ACC_TOKEN")
-                    lifecycleScope.launch {
-                        generateToken(requireContext())
-                        generateToken.observe(viewLifecycleOwner, {
-                            if (it == null) {
-                                lifecycleScope.launch {
-                                    dataStore.changeLoginState(false)
-                                    view.findNavController().navigate(R.id.action_homeFragment_to_authActivity)
-                                    activity?.finish()
-                                }
-                            } else {
-                                Log.w("NEW ACCESS TOKEN", "onViewCreated: $ACC_TOKEN", )
-                                homeViewModel.getHomeData()
-                            }
-                        })
-                    }
-                }
-            }
-        })
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        Log.w("HOME FRAGMENT", "onCreate: ACCESS TOKEN $ACC_TOKEN")
-        val homeRepository = HomeRepository(ServiceBuilder.buildService(token = ACC_TOKEN))
-        val homeViewModelFactory = HomeViewModelFactory(homeRepository)
-        homeViewModel = ViewModelProvider(this, homeViewModelFactory)[HomeViewModel::class.java]
 
     }
 

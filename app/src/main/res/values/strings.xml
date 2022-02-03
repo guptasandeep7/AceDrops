@@ -63,5 +63,9 @@
     <string name="no_search_results_found">No search results found!</string>
     <string name="try_different_keyword">Try different keyword</string>
     <string name="buy_now">Buy now</string>
+    <string name="_5">/5</string>
+    <string name="write_a_review">Write a review....</string>
+    <string name="post">Post</string>
+    <string name="subtotal">Subtotal</string>
 
 </resources>

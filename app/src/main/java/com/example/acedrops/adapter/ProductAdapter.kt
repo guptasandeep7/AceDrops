@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -60,15 +61,8 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
             addToWishlist(position, holder)
         }
         holder.binding.productCard.setOnClickListener {
-//            val bundle = bundleOf("Product" to productList[position])
-//            when (view) {
-//                HomeFragment().view -> {
-//                    view?.findNavController()
-//                        ?.navigate(R.id.action_homeFragment_to_productFragment, bundle)
-//                }
-//                AllProductsFragment().view -> view?.findNavController()
-//                    ?.navigate(R.id.action_allProductsFragment_to_productFragment, bundle)
-//            }
+            val bundle = bundleOf("Product" to productList[position])
+            holder.itemView.findNavController().navigate(R.id.action_homeFragment_to_productFragment,bundle)
         }
     }
 
@@ -84,7 +78,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
                     if (response.isSuccessful) {
                         if (favList == null) {
                             productList.removeAt(position)
-                            notifyItemRemoved(position)
+                            notifyDataSetChanged()
                         } else {
                             productList[position].wishlistStatus =
                                 response.body()?.status?.toInt()!!
@@ -125,7 +119,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
                         response: Response<CartResponse?>
                     ) {
                         if (response.isSuccessful) {
-                            holder.binding.addToCartBtn.isEnabled = true
+                            holder.binding.addToCartBtn.isEnabled = false
                             snackbar(
                                 "\u20B9${it.discountedPrice} plus taxes\n1 ITEM",
                                 holder
@@ -133,7 +127,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
                         } else {
                             holder.binding.addToCartBtn.isEnabled = true
                             snackbar(
-                                response.message() ?: "Failed to add to cart ${response.code()}",
+                                response.message() ?: "Failed to add to cart : Try Again",
                                 holder
                             )
                         }
@@ -156,7 +150,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
         holder: ViewHolder
     ) {
         Snackbar.make(
-            holder.itemView,
+            holder.itemView.rootView,
             text,
             Snackbar.LENGTH_SHORT
         ).setBackgroundTint(ContextCompat.getColor(holder.itemView.context, R.color.blue))

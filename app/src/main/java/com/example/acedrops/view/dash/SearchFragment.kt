@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.adapter.SearchAdapter
@@ -23,12 +22,10 @@ import com.example.acedrops.model.search.SearchResult
 import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.repository.dashboard.SearchRepository
 import com.example.acedrops.utill.ApiResponse
-import com.example.acedrops.utill.generateToken
 import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
-import com.example.acedrops.viewModelFactory.SearchViewModelFactory
+import com.example.acedrops.viewmodel.HomeViewModel
 import com.example.acedrops.viewmodel.SearchViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
@@ -37,11 +34,11 @@ class SearchFragment : Fragment() {
     private val searchAdapter = SearchAdapter()
     private var searchList = mutableListOf<SearchItem>()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        searchViewModel =
+            ViewModelProvider((context as FragmentActivity?)!!)[SearchViewModel::class.java]
 
         activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
             View.GONE
@@ -53,8 +50,28 @@ class SearchFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (!s.isNullOrBlank()) searchViewModel.getSearch(s.toString())
-                observerSearch()
+                if (!s.isNullOrBlank())
+                    searchViewModel.getSearch(s.toString(),requireContext()).observe(viewLifecycleOwner, {
+                        when (it) {
+                            is ApiResponse.Success -> {
+                                binding.progressBar.visibility = View.GONE
+                                val data = it.data!!
+                                if (data.products.isNullOrEmpty() && data.shops.isNullOrEmpty() && data.categoryProds.isNullOrEmpty()) {
+                                    binding.empty.visibility = View.VISIBLE
+                                    binding.searchRecyclerView.visibility = View.GONE
+                                } else updateUI(it.data)
+                            }
+                            is ApiResponse.Loading -> {
+                                binding.empty.visibility = View.GONE
+                                binding.progressBar.visibility = View.VISIBLE
+                            }
+                            is ApiResponse.Error -> Toast.makeText(
+                                requireContext(),
+                                it.errorMessage ?: "Something went wrong!!!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
             }
 
             override fun afterTextChanged(p0: Editable?) {}
@@ -83,39 +100,6 @@ class SearchFragment : Fragment() {
                         )
                     }
                 }
-            }
-        })
-        return binding.root
-    }
-
-    private fun observerSearch() {
-        searchViewModel.searchData.observe(viewLifecycleOwner, {
-            when (it) {
-                is ApiResponse.Success -> {
-                    binding.progressBar.visibility = View.GONE
-                    val data = it.data!!
-                    if (data.products.isNullOrEmpty() && data.shops.isNullOrEmpty() && data.categoryProds.isNullOrEmpty()) {
-                        binding.empty.visibility = View.VISIBLE
-                        binding.searchRecyclerView.visibility = View.GONE
-                    } else updateUI(it.data)
-                }
-                is ApiResponse.Loading -> {
-                    binding.empty.visibility = View.GONE
-                    binding.progressBar.visibility = View.VISIBLE
-                }
-                is ApiResponse.TokenExpire -> {
-                    Toast.makeText(requireContext(), "generateToken expire", Toast.LENGTH_SHORT)
-                        .show()
-                    Log.w("access generateToken ", "ACC_TOKEN is $ACC_TOKEN")
-                    lifecycleScope.launch {
-                        generateToken(requireContext())
-                    }
-                }
-                is ApiResponse.Error -> Toast.makeText(
-                    requireContext(),
-                    it.errorMessage ?: "Something went wrong!!!",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
         })
     }
@@ -152,20 +136,6 @@ class SearchFragment : Fragment() {
         binding.searchRecyclerView.visibility = View.VISIBLE
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        generateToken.observe(viewLifecycleOwner, {
-            if (it == null) {
-                findNavController().navigate(R.id.action_addressFragment_to_authActivity)
-                activity?.finish()
-            } else {
-                onAttach(requireContext())
-            }
-        })
-
-    }
-
     private fun View.showKeyboard() {
         this.requestFocus()
         val inputMethodManager =
@@ -191,10 +161,15 @@ class SearchFragment : Fragment() {
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
             View.GONE
 
-        searchViewModel = ViewModelProvider(
-            this,
-            SearchViewModelFactory(SearchRepository(ServiceBuilder.buildService(ACC_TOKEN)))
-        )[SearchViewModel::class.java]
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
     override fun onDestroyView() {

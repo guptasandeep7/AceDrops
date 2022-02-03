@@ -1,20 +1,26 @@
 package com.example.acedrops.repository.dashboard
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.example.acedrops.model.AddressResponse
 import com.example.acedrops.model.Message
 import com.example.acedrops.network.ApiInterface
+import com.example.acedrops.network.ServiceBuilder
+import com.example.acedrops.repository.Datastore
 import com.example.acedrops.utill.ApiResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AddAddressRepository(val buildService: ApiInterface) {
+class AddAddressRepository {
 
     private val data = MutableLiveData<ApiResponse<Boolean>>()
 
-    fun postAddress(address:AddressResponse): MutableLiveData<ApiResponse<Boolean>> {
-        val call = buildService.postAddress(address = address)
+    suspend fun postAddress(address:AddressResponse,context: Context): MutableLiveData<ApiResponse<Boolean>> {
+
+        val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
+
+        val call = ServiceBuilder.buildService(token).postAddress(address = address)
         data.postValue(ApiResponse.Loading())
         try {
             call.enqueue(object : Callback<String?> {

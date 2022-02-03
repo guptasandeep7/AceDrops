@@ -3,9 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Sandeep/.gradle/caches/transforms-3/2a0c57c7529dc09aea58cb0bdc13cdc6/transformed/jetified-ImageSlideshow-0.1.0/res/drawable/gradient.xml" value="0.2484375" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/border.xml" value="0.2484375" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/border_curve.xml" value="0.2484375" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/border_curve_10.xml" value="0.2484375" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/border_curve_line.xml" value="0.13229166666666667" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/color_border.xml" value="0.2484375" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/curve.xml" value="0.2484375" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/gradient_color.xml" value="0.2484375" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/home_icon.xml" value="0.2484375" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/ic_delete_white_24.xml" value="0.2484375" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/drawable/ic_like.xml" value="0.2484375" />
@@ -22,30 +27,33 @@
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/activity_main.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/activity_product.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/address_item.xml" value="0.4" />
-        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/cart_item.xml" value="0.536" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/cart_item.xml" value="0.4" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/category_layout.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragmen_change_password.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_add_address.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_address.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_all_products.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_all_shops.xml" value="0.23229166666666667" />
-        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_cart.xml" value="0.2972972972972973" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_cart.xml" value="0.2523364485981308" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_category.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_change_password.xml" value="0.1" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_description.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_forgot.xml" value="0.21666666666666667" />
-        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_home.xml" value="0.11852245548764284" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_home.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_landing.xml" value="0.24015748031496062" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_login.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_otp.xml" value="0.536" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_password.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_product.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_profile.xml" value="0.2" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_review.xml" value="0.2" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_search.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_set_pass.xml" value="0.264" />
-        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_shop.xml" value="0.264" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_shop.xml" value="0.4" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_signup.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/one_category_layout.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/products_layout.xml" value="0.264" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/review_item.xml" value="0.48653846153846153" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/search_item.xml" value="0.34842105263157896" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/shop_layout.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/shop_product_item.xml" value="0.23229166666666667" />

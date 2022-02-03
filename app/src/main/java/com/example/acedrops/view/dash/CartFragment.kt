@@ -1,7 +1,6 @@
 package com.example.acedrops.view.dash
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +8,8 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -21,14 +19,8 @@ import com.example.acedrops.adapter.SwipeGesture
 import com.example.acedrops.databinding.FragmentCartBinding
 import com.example.acedrops.model.cart.Cart
 import com.example.acedrops.model.cart.CartData
-import com.example.acedrops.network.ServiceBuilder
-import com.example.acedrops.repository.dashboard.CartRepository
 import com.example.acedrops.utill.ApiResponse
-import com.example.acedrops.utill.generateToken
-import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
-import com.example.acedrops.viewModelFactory.CartViewModelFactory
 import com.example.acedrops.viewmodel.CartViewModel
-import kotlinx.coroutines.launch
 import java.util.*
 
 class CartFragment : Fragment() {
@@ -46,6 +38,15 @@ class CartFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_cart, container, false)
         val view = binding.root
 
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        cartViewModel =
+            ViewModelProvider((context as FragmentActivity?)!!)[CartViewModel::class.java]
+
         binding.progressBar.visibility = View.GONE
         binding.cardView2.visibility = View.GONE
 
@@ -53,7 +54,7 @@ class CartFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
-                        cartViewModel.deleteProduct(cartAdapter.cartList[viewHolder.adapterPosition].id.toString())
+                        cartViewModel.deleteProduct(cartAdapter.cartList[viewHolder.adapterPosition].id.toString(),requireContext())
                         observerDelete()
                     }
                 }
@@ -69,7 +70,7 @@ class CartFragment : Fragment() {
             }
         })
 
-        cartViewModel.cartData.observe(viewLifecycleOwner, {
+        cartViewModel.getCartData(requireContext())?.observe(viewLifecycleOwner, {
             when (it) {
                 is ApiResponse.Success -> {
                     if (it.data == null) {
@@ -82,55 +83,36 @@ class CartFragment : Fragment() {
                     binding.emptyCart.visibility = View.GONE
                     binding.progressBar.visibility = View.VISIBLE
                 }
-                is ApiResponse.TokenExpire -> {
-                    Toast.makeText(requireContext(), "generateToken expire", Toast.LENGTH_SHORT)
-                        .show()
-                    Log.w("access generateToken ", "ACC_TOKEN is $ACC_TOKEN")
-                    lifecycleScope.launch {
-                        generateToken(requireContext())
-                    }
+
+                is ApiResponse.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(
+                        requireContext(),
+                        it.errorMessage ?: "Something went wrong!!!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-                is ApiResponse.Error -> Toast.makeText(
-                    requireContext(),
-                    it.errorMessage ?: "Something went wrong!!!",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
         })
-
-        generateToken.observe(viewLifecycleOwner, {
-            if (it == null) {
-                view.findNavController().navigate(R.id.action_cartFragment_to_authActivity)
-                activity?.finish()
-            } else {
-                cartViewModel.getCartData()
-            }
-        })
-
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         cartAdapter.setOnItemClickListener(object : CartAdapter.onItemClickListener {
             override fun decreaseQuantity(position: Int) {
-                cartViewModel.decreaseQuantity(cartAdapter.cartList[position].id.toString())
+                cartViewModel.decreaseQuantity(cartAdapter.cartList[position].id.toString(),requireContext())
                 observerRemove()
             }
 
             override fun increaseQuantity(position: Int) {
-                cartViewModel.increaseQuantity(cartAdapter.cartList[position].id.toString())
+                cartViewModel.increaseQuantity(cartAdapter.cartList[position].id.toString(),requireContext())
                 observerAdd()
             }
 
             override fun addWishlist(position: Int) {
-                cartViewModel.addWishlist(cartAdapter.cartList[position].id.toString())
+                cartViewModel.addWishlist(cartAdapter.cartList[position].id.toString(),requireContext())
                 observerWishlistResult()
             }
 
             override fun onItemClick(position: Int) {
-                val bundle = bundleOf("Product" to cartAdapter.cartList[position] )
+                val bundle = bundleOf("Product" to cartAdapter.cartList[position])
                 findNavController().navigate(R.id.action_cartFragment_to_productFragment,bundle)
             }
         })
@@ -268,12 +250,4 @@ class CartFragment : Fragment() {
         return total
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.w("api call", "onCreate: $ACC_TOKEN")
-        cartViewModel = ViewModelProvider(
-            this,
-            CartViewModelFactory(CartRepository(ServiceBuilder.buildService(token = ACC_TOKEN)))
-        )[CartViewModel::class.java]
-    }
 }

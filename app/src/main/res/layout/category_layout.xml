@@ -32,6 +32,8 @@
                 android:text="@{category.categoryName}"
                 style="@style/TextColor"
                 android:textSize="16sp"
+                android:paddingHorizontal="5dp"
+                android:clipToOutline="true"
                 android:layout_gravity="top"
                 android:gravity="top|center"
                 android:layout_marginTop="8dp" />

@@ -14,6 +14,7 @@ import com.example.acedrops.databinding.FragmentOtpBinding
 import com.example.acedrops.model.UserData
 import com.example.acedrops.repository.Datastore
 import com.example.acedrops.repository.auth.OtpRepository
+import com.example.acedrops.repository.auth.SignupRepository
 import com.example.acedrops.view.auth.ForgotFragment.Companion.forgot
 import com.example.acedrops.view.auth.SignupFragment.Companion.Email
 import com.example.acedrops.view.auth.SignupFragment.Companion.Name
@@ -63,9 +64,16 @@ class OtpFragment : Fragment(), View.OnClickListener {
                 next()
             }
             R.id.resend_otp -> {
-                Toast.makeText(requireContext(), "OTP resend successfully", Toast.LENGTH_SHORT)
-                    .show()
-                timerCountDown.start()
+                val signupRepository = SignupRepository()
+                signupRepository.signUp(email = Email, name = Name)
+                signupRepository.message.observe(this, {
+                    Toast.makeText(requireContext(), "OTP resend successfully", Toast.LENGTH_SHORT)
+                        .show()
+                    timerCountDown.start()
+                })
+                signupRepository.errorMessage.observe(this, {
+                    Toast.makeText(this.context, it, Toast.LENGTH_SHORT).show()
+                })
             }
         }
     }
@@ -109,8 +117,6 @@ class OtpFragment : Fragment(), View.OnClickListener {
                             ),
                             requireContext()
                         )
-                        activity?.finish()
-                        findNavController().navigate(R.id.action_otpFragment_to_dashboardActivity)
                     }
                 })
             }

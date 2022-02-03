@@ -64,23 +64,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="6dp"
-            android:visibility="gone"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintStart_toStartOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="16dp">
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/textView4"
                     style="@style/TextColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:text="Subtotal"
+                    android:layout_marginStart="22dp"
+                    android:text="@string/subtotal"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@+id/total_amount"
                     app:layout_constraintStart_toStartOf="parent"
@@ -89,23 +88,24 @@
                 <TextView
                     android:id="@+id/total_amount"
                     style="@style/TextColor"
+                    toStringText="@{viewmodel.totalAmount}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    toStringText="@{viewmodel.totalAmount}"
+                    android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textSize="24sp"
                     app:layout_constraintStart_toEndOf="@+id/textView4"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="0dp"
-                    android:layout_height="65dp"
+                    android:layout_height="56dp"
                     android:layout_marginStart="22dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="22dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="8dp"
                     android:fontFamily="@font/mulish"
+                    android:paddingHorizontal="40dp"
                     android:text="Proceed"
                     android:textAllCaps="false"
                     android:textSize="16sp"
@@ -122,13 +122,13 @@
             android:id="@+id/cart_recyclerview"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView2"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"
             android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/cardView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/cart_item" />
 
         <ProgressBar

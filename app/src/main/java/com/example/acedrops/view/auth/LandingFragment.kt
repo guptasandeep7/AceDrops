@@ -35,8 +35,8 @@ class LandingFragment : Fragment() {
         lifecycleScope.launch {
             if(datastore.isLogin()){
                 ACC_TOKEN = datastore.getUserDetails(Datastore.ACCESS_TOKEN_KEY)
-                activity?.finish()
                 findNavController().navigate(R.id.action_landingFragment_to_dashboardActivity)
+                activity?.finish()
             }
         }
 
