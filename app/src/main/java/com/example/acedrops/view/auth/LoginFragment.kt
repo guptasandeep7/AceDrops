@@ -96,8 +96,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
         try {
             val account = completedTask.getResult(ApiException::class.java)
             updateUI(account)
-        }
-        catch (e: ApiException) {
+        } catch (e: ApiException) {
             Log.w(TAG, "signInResult:failed code=${e.statusCode}")
             updateUI(null)
         }
@@ -106,9 +105,11 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private fun updateUI(account: GoogleSignInAccount?) {
         if (account != null) {
             checkToken(account.idToken)
+        } else {
+            binding.progressBar.visibility = View.GONE
+            Toast.makeText(requireContext(), "Failed to sign with google", Toast.LENGTH_SHORT)
+                .show()
         }
-        else Toast.makeText(requireContext(), "Failed to sign with google", Toast.LENGTH_SHORT)
-            .show()
     }
 
     private fun checkToken(idToken: String?) {
@@ -135,25 +136,25 @@ class LoginFragment : Fragment(), View.OnClickListener {
                             activity?.finish()
                         }
                     }
-                    response.code() == 503 -> Toast.makeText(
-                        requireContext(),
-                        response.message(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    else -> Toast.makeText(
-                        requireContext(),
-                        response.message(),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    response.code() == 503 -> errorMessage(response.message())
+                    else -> errorMessage(response.message())
                 }
-                binding.progressBar.visibility = View.GONE
-                binding.signinBtn.isEnabled = true
             }
 
             override fun onFailure(call: Call<UserData?>, t: Throwable) {
-                Toast.makeText(requireContext(), "Failed:${t.message}", Toast.LENGTH_SHORT).show()
+                errorMessage(t.message.toString())
             }
         })
+    }
+
+    private fun errorMessage(it: String) {
+        binding.progressBar.visibility = View.GONE
+        binding.signinBtn.isEnabled = true
+        Toast.makeText(
+            requireContext(),
+            it,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     //Check details are valid or not
@@ -180,9 +181,9 @@ class LoginFragment : Fragment(), View.OnClickListener {
     //Custom Login
     private fun login() {
         binding.signinBtn.isEnabled = false
+        val progressBar = binding.progressBar
         val email = binding.email.text.toString().trim()
         val pass = binding.pass.text.toString().trim()
-        val progressBar = binding.progressBar
         helper()
         if (isValid(email, pass)) {
             progressBar.visibility = View.VISIBLE
@@ -197,42 +198,23 @@ class LoginFragment : Fragment(), View.OnClickListener {
             override fun onResponse(call: Call<UserData?>, response: Response<UserData?>) {
                 when {
                     response.isSuccessful -> {
-                        val responseBody = response.body()
-                        ACC_TOKEN = responseBody?.access_token
+                        val responseBody = response.body()!!
                         runBlocking {
-                            responseBody?.let { datastore.saveToDatastore(it, requireContext()) }
+                            datastore.saveToDatastore(responseBody, requireContext())
                             binding.progressBar.visibility = View.GONE
                             activity?.finish()
                             startActivity(Intent(activity, DashboardActivity::class.java))
                         }
                     }
-                    response.code() == 401 -> Toast.makeText(
-                                                requireContext(),
-                                                "Wrong password",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                    response.code() == 422 -> Toast.makeText(
-                                                requireContext(),
-                                                "Enter correct email and password",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                    response.code() == 404 -> Toast.makeText(
-                                                requireContext(),
-                                                "User does not exists please signup",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                    else -> Toast.makeText(
-                            requireContext(),
-                            "User not registered",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    response.code() == 401 -> errorMessage("Wrong password")
+                    response.code() == 422 -> errorMessage("Enter correct email and password")
+                    response.code() == 404 -> errorMessage("User does not exists please signup")
+                    else -> errorMessage("User not registered")
                 }
-                binding.progressBar.visibility = View.GONE
-                binding.signinBtn.isEnabled = true
             }
 
             override fun onFailure(call: Call<UserData?>, t: Throwable) {
-                Toast.makeText(requireContext(), "Failed:${t.message}", Toast.LENGTH_SHORT).show()
+                errorMessage(t.message.toString())
             }
         })
     }

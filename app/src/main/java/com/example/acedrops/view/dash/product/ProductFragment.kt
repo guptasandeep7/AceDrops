@@ -56,6 +56,10 @@ class ProductFragment : Fragment() {
             findNavController().navigateUp()
         }
 
+        binding.searchBtn.setOnClickListener{
+            findNavController().navigate(R.id.action_productFragment_to_searchFragment)
+        }
+
         binding.addToCartBtn.setOnClickListener { addToCart() }
 
     }

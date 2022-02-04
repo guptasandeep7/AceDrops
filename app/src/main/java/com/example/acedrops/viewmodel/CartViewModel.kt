@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.acedrops.model.cart.CartData
 import com.example.acedrops.model.cart.CartResponse
 import com.example.acedrops.model.cart.WishlistResponse
-import com.example.acedrops.repository.dashboard.CartRepository
+import com.example.acedrops.repository.CartRepository
 import com.example.acedrops.utill.ApiResponse
 import kotlinx.coroutines.launch
 

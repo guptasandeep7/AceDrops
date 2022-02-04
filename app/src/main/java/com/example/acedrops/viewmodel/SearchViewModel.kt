@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.acedrops.model.search.SearchResult
-import com.example.acedrops.repository.dashboard.SearchRepository
+import com.example.acedrops.repository.SearchRepository
 import com.example.acedrops.utill.ApiResponse
 import kotlinx.coroutines.launch
 

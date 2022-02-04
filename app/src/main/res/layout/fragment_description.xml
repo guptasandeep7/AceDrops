@@ -11,32 +11,36 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingHorizontal="8dp">
 
         <TextView
             android:id="@+id/textView7"
+            style="@style/TextColor"
+            android:layout_marginHorizontal="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/mulish"
             android:gravity="start"
             android:text="@{viewmodel.productDetails.data.prod.description.toString()}"
-            android:textSize="11sp"
-            style="@style/TextColor"
-            android:fontFamily="@font/mulish"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView3"
             android:layout_width="match_parent"
             android:layout_height="68dp"
             android:layout_marginTop="24dp"
-            app:cardCornerRadius="10dp"
+            android:layout_marginHorizontal="5dp"
             android:background="@drawable/border_curve_10"
             android:clickable="true"
+            android:focusable="true"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView7"
-            android:focusable="true">
+            app:layout_constraintTop_toBottomOf="@+id/textView7">
 
             <View
                 android:layout_width="8dp"
@@ -46,56 +50,72 @@
 
             <TextView
                 android:id="@+id/shop_name"
+                style="@style/TextColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/TextColor"
-                android:textSize="14sp"
-                android:maxLines="1"
-                android:text="Shop"
-                android:clipToOutline="true"
                 android:layout_gravity="top"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="8dp" />
+                android:layout_marginTop="8dp"
+                android:clipToOutline="true"
+                android:maxLines="1"
+                android:text="Shop"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/product_title"
                 style="@style/TextColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="8dp"
-                android:maxLines="1"
-                android:textStyle="bold"
                 android:layout_marginBottom="8dp"
-                android:layout_gravity="bottom"
-                android:text="@{viewmodel.productDetails.data.prod.shop.shopName.toString()}"
                 android:clipToOutline="true"
-                android:textSize="16sp" />
+                android:maxLines="1"
+                android:text="@{viewmodel.productDetails.data.prod.shop.shopName.toString()}"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <ImageButton
                 android:id="@+id/show_all_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:paddingVertical="5dp"
-                android:paddingHorizontal="10dp"
                 android:layout_gravity="end|center"
+                android:layout_marginEnd="16dp"
                 android:background="#00FFFFFF"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp"
                 android:src="@drawable/ic_vector__9_"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <androidx.recyclerview.widget.RecyclerView
+        <TextView
+            android:id="@+id/textView12"
+            style="@style/TextColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="8dp"
+            android:text="@string/similar_products"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@+id/cardView3"
+            tools:layout_editor_absoluteX="16dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/similar_prod_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:focusable="true"
+            android:nestedScrollingEnabled="false"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:listitem="@layout/products_layout"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/cardView3" />
+            app:layout_constraintTop_toBottomOf="@+id/textView12"
+            app:spanCount="2"
+            tools:listitem="@layout/products_layout" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

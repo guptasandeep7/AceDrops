@@ -154,5 +154,20 @@
         <action
             android:id="@+id/action_productFragment_to_cartFragment"
             app:destination="@id/cartFragment" />
+        <action
+            android:id="@+id/action_productFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_productFragment_to_shopFragment"
+            app:destination="@id/shopFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/descriptionFragment"
+        android:name="com.example.acedrops.view.dash.product.DescriptionFragment"
+        android:label="DescriptionFragment"
+        tools:layout="@layout/fragment_description">
+        <action
+            android:id="@+id/action_descriptionFragment_to_shopFragment"
+            app:destination="@id/shopFragment" />
     </fragment>
 </navigation>

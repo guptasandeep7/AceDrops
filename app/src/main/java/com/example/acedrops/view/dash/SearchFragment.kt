@@ -19,11 +19,7 @@ import com.example.acedrops.adapter.SearchAdapter
 import com.example.acedrops.databinding.FragmentSearchBinding
 import com.example.acedrops.model.search.SearchItem
 import com.example.acedrops.model.search.SearchResult
-import com.example.acedrops.network.ServiceBuilder
-import com.example.acedrops.repository.dashboard.SearchRepository
 import com.example.acedrops.utill.ApiResponse
-import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
-import com.example.acedrops.viewmodel.HomeViewModel
 import com.example.acedrops.viewmodel.SearchViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 

@@ -1,4 +1,4 @@
-package com.example.acedrops.repository.dashboard
+package com.example.acedrops.repository
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData

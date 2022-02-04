@@ -2,8 +2,6 @@ package com.example.acedrops.view.dash.profile
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.provider.ContactsContract
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,21 +12,24 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.databinding.FragmentProfileBinding
+import com.example.acedrops.model.Message
+import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.repository.Datastore
-import com.example.acedrops.repository.auth.SignOutRepository
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class ProfileFragment : Fragment(),View.OnClickListener{
+class ProfileFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-    lateinit var datastore:Datastore
-    lateinit var signOutRepository: SignOutRepository
+    lateinit var datastore: Datastore
     lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var gso: GoogleSignInOptions
-    private var googleId:String? = null
+    private var googleId: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,11 +44,10 @@ class ProfileFragment : Fragment(),View.OnClickListener{
             googleId = datastore.getUserDetails(Datastore.GOOGLE_ID)
         }
 
-        if(job.isCompleted){
-            if(googleId.equals("null")) {
+        if (job.isCompleted) {
+            if (googleId.equals("null")) {
                 binding.changePassBtn.visibility = View.VISIBLE
-            }
-            else binding.changePassBtn.visibility = View.GONE
+            } else binding.changePassBtn.visibility = View.GONE
         }
 
         binding.userPhnNo.visibility = View.GONE
@@ -57,8 +57,8 @@ class ProfileFragment : Fragment(),View.OnClickListener{
         binding.manageAddrBtn.setOnClickListener(this)
 
         lifecycleScope.launch {
-                binding.userName.text = datastore.getUserDetails(Datastore.NAME_KEY)?.lowercase()
-                binding.userEmail.text = datastore.getUserDetails(Datastore.EMAIL_KEY)?.lowercase()
+            binding.userName.text = datastore.getUserDetails(Datastore.NAME_KEY)?.lowercase()
+            binding.userEmail.text = datastore.getUserDetails(Datastore.EMAIL_KEY)?.lowercase()
         }
 
         binding.signOutBtn.setOnClickListener {
@@ -72,7 +72,7 @@ class ProfileFragment : Fragment(),View.OnClickListener{
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Logout")
             .setMessage("Are you sure you want to Logout?")
-            .setPositiveButton("Exit") { dialog, id ->
+            .setPositiveButton("Logout") { dialog, id ->
                 logout()
             }
             .setNeutralButton("Cancel") { dialog, id -> }
@@ -82,26 +82,42 @@ class ProfileFragment : Fragment(),View.OnClickListener{
 
     private fun logout() {
         binding.progressBar.visibility = View.VISIBLE
-        signOutRepository = SignOutRepository()
-        signOutRepository.let { it ->
-            lifecycleScope.launch {
-                it.signOut(datastore.getUserDetails(Datastore.REF_TOKEN_KEY)!!)
-            }
-            it.message.observe(viewLifecycleOwner, {
-                lifecycleScope.launch {
-                    datastore.changeLoginState(false)
-                    signout()
-                    activity?.finish()
-                    findNavController().navigate(R.id.action_profileFragment_to_authActivity)
-                }
-
-            })
-
-            it.errorMessage.observe(viewLifecycleOwner, {
-                binding.progressBar.visibility = View.GONE
-                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-            })
+        lifecycleScope.launch {
+            signOut(datastore.getUserDetails(Datastore.REF_TOKEN_KEY)!!)
         }
+    }
+
+    fun signOut(refToken: String) {
+        val request = ServiceBuilder.buildService(null)
+        val call = request.logOut(refToken)
+        call.enqueue(object : Callback<Message?> {
+            override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
+                when {
+                    response.isSuccessful || response.code() == 400 -> {
+                        lifecycleScope.launch {
+                            datastore.changeLoginState(false)
+                            signout()
+                            activity?.finish()
+                            findNavController().navigate(R.id.action_profileFragment_to_authActivity)
+                        }
+
+                    }
+                    else -> {
+                        binding.progressBar.visibility = View.GONE
+                        Toast.makeText(
+                            requireContext(),
+                            response.body()?.message ?: "Try Again",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Message?>, t: Throwable) {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -126,20 +142,25 @@ class ProfileFragment : Fragment(),View.OnClickListener{
 
     override fun onResume() {
         super.onResume()
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility = View.GONE
+        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
+            View.GONE
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility = View.VISIBLE
+        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
+            View.VISIBLE
     }
 
     override fun onClick(v: View?) {
-        when(v?.id){
+        when (v?.id) {
             R.id.wishlist_btn -> {
                 val bundle = bundleOf("Wishlist" to "wishlist")
-                findNavController().navigate(R.id.action_profileFragment_to_allProductsFragment,bundle)
+                findNavController().navigate(
+                    R.id.action_profileFragment_to_allProductsFragment,
+                    bundle
+                )
             }
             R.id.change_pass_btn -> findNavController().navigate(R.id.action_profileFragment_to_changePasswordFragment)
             R.id.manage_addr_btn -> findNavController().navigate(R.id.action_profileFragment_to_addressFragment)

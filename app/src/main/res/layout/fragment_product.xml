@@ -56,17 +56,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/search_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:layout_marginHorizontal="16dp"
-                android:background="@drawable/border_curve"
-                android:hint="@string/search_for_shops_or_products"
-                android:inputType="text"
-                android:textSize="14sp"
-                android:paddingHorizontal="16dp" />
-
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.core.widget.NestedScrollView
@@ -86,7 +75,7 @@
                 <com.denzcoskun.imageslider.ImageSlider
                     android:id="@+id/product_images"
                     android:layout_width="match_parent"
-                    android:layout_height="230dp"
+                    android:layout_height="350dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
@@ -106,7 +95,7 @@
                     android:layout_marginEnd="16dp"
                     android:maxLines="1"
                     android:text="@{product.title}"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -123,7 +112,7 @@
                     android:fontFamily="@font/mulish_semi_bold"
                     android:maxLines="1"
                     android:text="@{product.shortDescription}"
-                    android:textSize="10sp"
+                    android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/product_name" />
@@ -155,15 +144,15 @@
                     android:fontFamily="@font/mulish_semi_bold"
                     android:gravity="center_vertical"
                     android:maxLines="1"
-                    android:textSize="10sp"
+                    android:textSize="11sp"
                     app:layout_constraintBottom_toBottomOf="@+id/product_price"
                     app:layout_constraintStart_toEndOf="@id/product_price"
                     app:layout_constraintTop_toBottomOf="@+id/product_short_desc" />
 
                 <LinearLayout
                     android:id="@+id/linearLayout"
-                    android:layout_width="36dp"
-                    android:layout_height="14dp"
+                    android:layout_width="40dp"
+                    android:layout_height="16dp"
                     android:layout_marginTop="4dp"
                     android:background="@drawable/curve"
                     android:backgroundTint="@color/blue"
@@ -229,16 +218,16 @@
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tab_product"
                     android:layout_width="match_parent"
-                    android:layout_marginHorizontal="16dp"
                     android:layout_height="50dp"
+                    android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="24dp"
-                    android:background="@drawable/border"
+                    android:background="@drawable/border_curve"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/add_to_cart_btn"
                     app:tabGravity="fill"
-                    app:tabIndicatorFullWidth="true"
+                    app:tabIndicatorFullWidth="false"
                     app:tabIndicatorGravity="bottom"
                     app:tabMode="fixed"
                     />
@@ -246,9 +235,7 @@
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewpager_product"
                     android:layout_width="match_parent"
-                    android:layout_height="500dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
                     android:focusable="true"
                     app:layout_constraintBottom_toBottomOf="parent"

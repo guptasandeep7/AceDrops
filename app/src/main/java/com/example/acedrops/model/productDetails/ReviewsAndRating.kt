@@ -7,5 +7,5 @@ data class ReviewsAndRating(
     val rating: Int,
     val review: String,
     val updatedAt: String,
-    val userId: Int
+    val userId: String
 )

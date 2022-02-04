@@ -23,7 +23,7 @@ class Datastore(context: Context) {
         const val ACCESS_TOKEN_KEY = "token_key"
         const val REF_TOKEN_KEY = "ref_token_key"
         const val USER_ID = "user_id"
-        const val GOOGLE_ID = "user_id"
+        const val GOOGLE_ID = "google_id"
     }
 
     suspend fun saveUserDetails(key: String, value: String?) {

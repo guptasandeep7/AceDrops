@@ -1,7 +1,8 @@
-package com.example.acedrops.repository.dashboard
+package com.example.acedrops.repository
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
+import com.example.acedrops.model.allproducts.OneCategoryResult
 import com.example.acedrops.model.cart.CartResponse
 import com.example.acedrops.model.productDetails.ProductDetails
 import com.example.acedrops.network.ServiceBuilder
@@ -18,6 +19,7 @@ class ProductRepository {
 
     private val addToCartResult = MutableLiveData<ApiResponse<Boolean>>()
     private val productDetails = MutableLiveData<ApiResponse<ProductDetails>>()
+    private val productsList = MutableLiveData<ApiResponse<OneCategoryResult>>()
 
     suspend fun addToCart(productId: Int, context: Context): MutableLiveData<ApiResponse<Boolean>> {
 
@@ -57,6 +59,38 @@ class ProductRepository {
         }
         return addToCartResult
     }
+
+
+    suspend fun getProductList(categoryName: String, context: Context): MutableLiveData<ApiResponse<OneCategoryResult>> {
+
+        val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
+
+        val call = ServiceBuilder.buildService(token).getProductList(categoryName)
+        productsList.postValue(ApiResponse.Loading())
+        try {
+            call.enqueue(object : Callback<OneCategoryResult?> {
+                override fun onResponse(
+                    call: Call<OneCategoryResult?>,
+                    response: Response<OneCategoryResult?>
+                ) {
+                    when {
+                        response.isSuccessful ->
+                            productsList.postValue(ApiResponse.Success(response.body()))
+                        else ->
+                            productsList.postValue(ApiResponse.Error(response.message()))
+                    }
+                }
+
+                override fun onFailure(call: Call<OneCategoryResult?>, t: Throwable) {
+                    productsList.postValue(ApiResponse.Error("Something went wrong!! ${t.message}"))
+                }
+            })
+        } catch (e: Exception) {
+            productsList.postValue(ApiResponse.Error(e.message))
+        }
+        return productsList
+    }
+
 
     suspend fun getProductDetails(
         productId: Int,

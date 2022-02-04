@@ -10,7 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.databinding.FragmentForgotBinding
-import com.example.acedrops.repository.auth.ForgotRepository
+import com.example.acedrops.model.Message
+import com.example.acedrops.model.UserData
+import com.example.acedrops.network.ServiceBuilder
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class ForgotFragment : Fragment() {
@@ -21,40 +26,55 @@ class ForgotFragment : Fragment() {
 
     private var _binding: FragmentForgotBinding? = null
     private val binding get() = _binding!!
-    private lateinit var forgotRepository: ForgotRepository
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentForgotBinding.inflate(inflater, container, false)
         val view = binding.root
 
-
         binding.nextBtn.setOnClickListener {
-            val btn = binding.nextBtn
-            btn.isEnabled = false
+
+            binding.nextBtn.isEnabled = false
             val email = binding.email.text.toString().trim()
             binding.emailLayout.helperText = ""
+
             if (isValid(email)) {
-                forgotRepository = ForgotRepository()
                 binding.progressBar.visibility = View.VISIBLE
-                forgotRepository.forgot(email)
-
-                forgotRepository.message.observe(viewLifecycleOwner, {
-                    SignupFragment.Email = email
-                    forgot = true
-                    findNavController().navigate(R.id.action_forgotFragment_to_otpFragment)
-                })
-
-                forgotRepository.errorMessage.observe(viewLifecycleOwner, {
-                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-                    binding.progressBar.visibility = View.GONE
-                    btn.isEnabled = true
-                })
-
-            } else btn.isEnabled = true
+                forgot(email)
+            } else binding.nextBtn.isEnabled = true
         }
         return view
+    }
+
+    private fun forgot(email: String) {
+        val request = ServiceBuilder.buildService(null)
+        val call = request.forgotPass(UserData(email = email))
+        call.enqueue(object : Callback<Message?> {
+            override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
+                when {
+                    response.isSuccessful -> {
+                        SignupFragment.Email = email
+                        forgot = true
+                        findNavController().navigate(R.id.action_forgotFragment_to_otpFragment)
+                    }
+                    response.code() == 422 -> errorMessage("Enter correct email id")
+                    response.code() == 404 -> errorMessage("Email id is not registered")
+                    else -> errorMessage("Incorrect Email Id")
+                }
+            }
+
+            override fun onFailure(call: Call<Message?>, t: Throwable) {
+                errorMessage(t.message.toString())
+            }
+        })
+    }
+
+    private fun errorMessage(it: String) {
+        Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+        binding.progressBar.visibility = View.GONE
+        binding.nextBtn.isEnabled = true
     }
 
     private fun isValid(email: String): Boolean {

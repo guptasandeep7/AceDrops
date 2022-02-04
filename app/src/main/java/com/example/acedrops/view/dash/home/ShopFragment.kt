@@ -16,7 +16,7 @@ import com.example.acedrops.adapter.ShopProductsAdapter
 import com.example.acedrops.databinding.FragmentShopBinding
 import com.example.acedrops.model.home.ShopResult
 import com.example.acedrops.network.ServiceBuilder
-import com.example.acedrops.repository.dashboard.home.ShopRepository
+import com.example.acedrops.repository.home.ShopRepository
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewModelFactory.ShopViewModelFactory
 import com.example.acedrops.viewmodel.ShopViewModel
