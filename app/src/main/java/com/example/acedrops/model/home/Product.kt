@@ -16,4 +16,4 @@ data class Product(
     val title: String,
     val updatedAt: String,
     var wishlistStatus: Int = 0
-):Serializable
+) : Serializable

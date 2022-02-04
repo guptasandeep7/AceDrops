@@ -1,20 +1,29 @@
 package com.example.acedrops.repository.dashboard
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.example.acedrops.model.cart.CartResponse
-import com.example.acedrops.network.ApiInterface
+import com.example.acedrops.model.productDetails.ProductDetails
+import com.example.acedrops.network.ServiceBuilder
+import com.example.acedrops.repository.Datastore
 import com.example.acedrops.utill.ApiResponse
+import com.example.acedrops.utill.generateToken
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Exception
 
-class ProductRepository(private val service: ApiInterface) {
+class ProductRepository {
 
     private val addToCartResult = MutableLiveData<ApiResponse<Boolean>>()
+    private val productDetails = MutableLiveData<ApiResponse<ProductDetails>>()
 
-    suspend fun addToCart(productId: Int): MutableLiveData<ApiResponse<Boolean>> {
-        val call = service.addToCart(productId.toString())
+    suspend fun addToCart(productId: Int, context: Context): MutableLiveData<ApiResponse<Boolean>> {
+
+        val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
+
+        val call = ServiceBuilder.buildService(token).addToCart(productId.toString())
         addToCartResult.postValue(ApiResponse.Loading())
         try {
             call.enqueue(object : Callback<CartResponse?> {
@@ -22,17 +31,76 @@ class ProductRepository(private val service: ApiInterface) {
                     call: Call<CartResponse?>,
                     response: Response<CartResponse?>
                 ) {
-                    if (response.isSuccessful) addToCartResult.postValue(ApiResponse.Success(data = true))
-                    else addToCartResult.postValue(ApiResponse.Error(response.message()))
+                    when {
+                        response.isSuccessful -> addToCartResult.postValue(ApiResponse.Success(data = true))
+                        response.code() == 403 || response.code() == 402 -> {
+                            GlobalScope.launch {
+                                generateToken(
+                                    token!!,
+                                    Datastore(context).getUserDetails(
+                                        Datastore.REF_TOKEN_KEY
+                                    )!!, context
+                                )
+                                addToCart(productId, context)
+                            }
+                        }
+                        else -> addToCartResult.postValue(ApiResponse.Error(response.message()))
+                    }
                 }
 
                 override fun onFailure(call: Call<CartResponse?>, t: Throwable) {
                     addToCartResult.postValue(ApiResponse.Error(t.message))
                 }
             })
-        }catch (e:Exception){
+        } catch (e: Exception) {
             addToCartResult.postValue(ApiResponse.Error(e.message))
         }
         return addToCartResult
+    }
+
+    suspend fun getProductDetails(
+        productId: Int,
+        context: Context
+    ): MutableLiveData<ApiResponse<ProductDetails>> {
+
+        val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
+
+        val call = ServiceBuilder.buildService(token).getProductDetails(productId)
+        productDetails.postValue(ApiResponse.Loading())
+        try {
+            call.enqueue(object : Callback<ProductDetails?> {
+                override fun onResponse(
+                    call: Call<ProductDetails?>,
+                    response: Response<ProductDetails?>
+                ) {
+                    when {
+                        response.isSuccessful -> productDetails.postValue(
+                            ApiResponse.Success(
+                                response.body()
+                            )
+                        )
+                        response.code() == 403 || response.code() == 402 -> {
+                            GlobalScope.launch {
+                                generateToken(
+                                    token!!,
+                                    Datastore(context).getUserDetails(
+                                        Datastore.REF_TOKEN_KEY
+                                    )!!, context
+                                )
+                                getProductDetails(productId, context)
+                            }
+                        }
+                        else -> productDetails.postValue(ApiResponse.Error(response.message()))
+                    }
+                }
+
+                override fun onFailure(call: Call<ProductDetails?>, t: Throwable) {
+                    productDetails.postValue(ApiResponse.Error(t.message))
+                }
+            })
+        } catch (e: Exception) {
+            productDetails.postValue(ApiResponse.Error(e.message))
+        }
+        return productDetails
     }
 }

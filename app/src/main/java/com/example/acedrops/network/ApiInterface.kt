@@ -8,6 +8,7 @@ import com.example.acedrops.model.cart.WishlistResponse
 import com.example.acedrops.model.home.HomeFragmentData
 import com.example.acedrops.model.home.Product
 import com.example.acedrops.model.home.ShopResult
+import com.example.acedrops.model.productDetails.ProductDetails
 import com.example.acedrops.model.search.SearchResult
 import retrofit2.Call
 import retrofit2.http.*
@@ -88,8 +89,13 @@ interface ApiInterface {
     @GET("/shop/viewOneShop/{shopId}")
     fun getShopDetails(@Path("shopId") shopId: Int): Call<ShopResult>
 
+    @GET("/prod/viewProd/{prodId}")
+    fun getProductDetails(@Path("prodId") prodId: Int): Call<ProductDetails>
+
     @FormUrlEncoded
     @POST("/user/search")
     fun postSearch(@Field("toSearch")toSearch:String):Call<SearchResult>
+
+
 
 }

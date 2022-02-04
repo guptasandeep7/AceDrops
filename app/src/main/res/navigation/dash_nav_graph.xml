@@ -148,7 +148,7 @@
     </fragment>
     <fragment
         android:id="@+id/productFragment"
-        android:name="com.example.acedrops.view.dash.ProductFragment"
+        android:name="com.example.acedrops.view.dash.product.ProductFragment"
         android:label="ProductFragment"
         tools:layout="@layout/fragment_product">
         <action

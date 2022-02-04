@@ -2,8 +2,8 @@ package com.example.acedrops.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.acedrops.view.dash.DescriptionFragment
-import com.example.acedrops.view.dash.ReviewFragment
+import com.example.acedrops.view.dash.product.DescriptionFragment
+import com.example.acedrops.view.dash.product.ReviewFragment
 
 class PageAdapter(fa: Fragment) : FragmentStateAdapter(fa) {
     override fun getItemCount(): Int = 2
