@@ -1,7 +1,6 @@
 package com.example.acedrops.viewmodel
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,49 +13,53 @@ import kotlinx.coroutines.launch
 
 class CartViewModel : ViewModel() {
 
-    private var _cartData: MutableLiveData<ApiResponse<CartData>>? = null
+    var totalAmount = MutableLiveData<Long>(0)
+
+    private var cartData: MutableLiveData<ApiResponse<CartData>>? = null
 
     fun getCartData(context: Context): MutableLiveData<ApiResponse<CartData>>? {
         viewModelScope.launch {
-            _cartData = CartRepository().getCartList(context)
+            cartData = CartRepository().getCartList(context)
         }
-        return _cartData
+        return cartData
     }
 
-    var totalAmount = MutableLiveData<Long>(0)
+    var atcResult: MutableLiveData<ApiResponse<CartResponse>> = MutableLiveData()
 
-    private var _atcResult: MutableLiveData<ApiResponse<CartResponse>> = MutableLiveData()
-    val atcResult: LiveData<ApiResponse<CartResponse>>
-        get() = _atcResult
-
-    fun increaseQuantity(productId: String, context: Context) = viewModelScope.launch {
-        _atcResult = CartRepository().addToCart(productId, context)
+    fun increaseQuantity(productId: String, context: Context): MutableLiveData<ApiResponse<CartResponse>> {
+        viewModelScope.launch {
+            atcResult = CartRepository().addToCart(productId, context)
+        }
+        return atcResult
     }
 
-    private var _removeFromCartResult: MutableLiveData<ApiResponse<CartResponse>> =
+    private var removeFromCartResult: MutableLiveData<ApiResponse<CartResponse>> =
         MutableLiveData()
-    val removeFromCartResult: LiveData<ApiResponse<CartResponse>>
-        get() = _removeFromCartResult
 
-    fun decreaseQuantity(productId: String, context: Context) = viewModelScope.launch {
-        _removeFromCartResult = CartRepository().removeFromCart(productId, context)
+    fun decreaseQuantity(productId: String, context: Context): MutableLiveData<ApiResponse<CartResponse>> {
+        viewModelScope.launch {
+            removeFromCartResult = CartRepository().removeFromCart(productId, context)
+        }
+        return removeFromCartResult
     }
 
-    private var _deleteFromCartResult: MutableLiveData<ApiResponse<CartResponse>> =
+    var deleteFromCartResult: MutableLiveData<ApiResponse<CartResponse>> =
         MutableLiveData()
-    val deleteFromCartResult: LiveData<ApiResponse<CartResponse>>
-        get() = _deleteFromCartResult
 
-    fun deleteProduct(productId: String, context: Context) = viewModelScope.launch {
-        _deleteFromCartResult = CartRepository().deleteFromCart(productId, context)
+    fun deleteProduct(productId: String, context: Context): MutableLiveData<ApiResponse<CartResponse>> {
+        viewModelScope.launch {
+            deleteFromCartResult = CartRepository().deleteFromCart(productId, context)
+        }
+        return deleteFromCartResult
     }
 
-    private var _wishlistResult: MutableLiveData<ApiResponse<WishlistResponse>> = MutableLiveData()
-    val wishlistResult: LiveData<ApiResponse<WishlistResponse>>
-        get() = _wishlistResult
+    private var wishlistResult: MutableLiveData<ApiResponse<WishlistResponse>> = MutableLiveData()
 
-    fun addWishlist(productId: String, context: Context) = viewModelScope.launch {
-        _wishlistResult = CartRepository().addRemoveWishlist(productId, context)
+    fun addWishlist(productId: String, context: Context): MutableLiveData<ApiResponse<WishlistResponse>> {
+        viewModelScope.launch {
+            wishlistResult = CartRepository().addRemoveWishlist(productId, context)
+        }
+        return wishlistResult
     }
 
 }

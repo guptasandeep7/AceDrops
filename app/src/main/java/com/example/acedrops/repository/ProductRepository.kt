@@ -1,12 +1,15 @@
 package com.example.acedrops.repository
 
 import android.content.Context
+import android.util.Log
+import androidx.core.util.LogWriter
 import androidx.lifecycle.MutableLiveData
 import com.example.acedrops.model.allproducts.OneCategoryResult
 import com.example.acedrops.model.cart.CartResponse
+import com.example.acedrops.model.cart.WishlistResponse
+import com.example.acedrops.model.home.Product
 import com.example.acedrops.model.productDetails.ProductDetails
 import com.example.acedrops.network.ServiceBuilder
-import com.example.acedrops.repository.Datastore
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.utill.generateToken
 import kotlinx.coroutines.GlobalScope
@@ -20,11 +23,13 @@ class ProductRepository {
     private val addToCartResult = MutableLiveData<ApiResponse<Boolean>>()
     private val productDetails = MutableLiveData<ApiResponse<ProductDetails>>()
     private val productsList = MutableLiveData<ApiResponse<OneCategoryResult>>()
+    private val wishlist = MutableLiveData<ApiResponse<List<Product>>>()
+    private val addToWishlist = MutableLiveData<ApiResponse<WishlistResponse>>()
 
     suspend fun addToCart(productId: Int, context: Context): MutableLiveData<ApiResponse<Boolean>> {
 
         val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
-
+        Log.w("PRODUCT REPO", "addToCart: $token", )
         val call = ServiceBuilder.buildService(token).addToCart(productId.toString())
         addToCartResult.postValue(ApiResponse.Loading())
         try {
@@ -60,8 +65,49 @@ class ProductRepository {
         return addToCartResult
     }
 
+    suspend fun addRemoveWishlist(productId: String,context: Context): MutableLiveData<ApiResponse<WishlistResponse>> {
 
-    suspend fun getProductList(categoryName: String, context: Context): MutableLiveData<ApiResponse<OneCategoryResult>> {
+        val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
+
+        val call = ServiceBuilder.buildService(token).addToWishlist(productId)
+        addToWishlist.postValue(ApiResponse.Loading())
+        try {
+            call.enqueue(object : Callback<WishlistResponse?> {
+                override fun onResponse(
+                    call: Call<WishlistResponse?>,
+                    response: Response<WishlistResponse?>
+                ) {
+                    when {
+                        response.isSuccessful -> addToWishlist.postValue(ApiResponse.Success(response.body()))
+                        response.code() == 403 || response.code() == 402 -> {
+                            GlobalScope.launch {
+                                generateToken(
+                                    token!!,
+                                    Datastore(context).getUserDetails(
+                                        Datastore.REF_TOKEN_KEY
+                                    )!!, context
+                                )
+                                addRemoveWishlist(productId, context)
+                            }
+                        }
+                        else -> addToWishlist.postValue(ApiResponse.Error(response.message()))
+                    }
+                }
+
+                override fun onFailure(call: Call<WishlistResponse?>, t: Throwable) {
+                    addToWishlist.postValue(ApiResponse.Error("Failed : $t"))
+                }
+            })
+        } catch (e: Exception) {
+            addToWishlist.postValue(ApiResponse.Error("Error:${e.message}"))
+        }
+        return addToWishlist
+    }
+
+    suspend fun getProductList(
+        categoryName: String,
+        context: Context
+    ): MutableLiveData<ApiResponse<OneCategoryResult>> {
 
         val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
 
@@ -136,5 +182,35 @@ class ProductRepository {
             productDetails.postValue(ApiResponse.Error(e.message))
         }
         return productDetails
+    }
+
+    suspend fun getWishlist(context: Context): MutableLiveData<ApiResponse<List<Product>>> {
+
+        val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
+
+        val call = ServiceBuilder.buildService(token).getWishlist()
+        wishlist.postValue(ApiResponse.Loading())
+        try {
+            call.enqueue(object : Callback<List<Product>?> {
+                override fun onResponse(
+                    call: Call<List<Product>?>,
+                    response: Response<List<Product>?>
+                ) {
+                    when {
+                        response.isSuccessful ->
+                            wishlist.postValue(ApiResponse.Success(response.body()))
+                        else ->
+                            wishlist.postValue(ApiResponse.Error(response.message()))
+                    }
+                }
+
+                override fun onFailure(call: Call<List<Product>?>, t: Throwable) {
+                    wishlist.postValue(ApiResponse.Error("Something went wrong!! ${t.message}"))
+                }
+            })
+        } catch (e: Exception) {
+            wishlist.postValue(ApiResponse.Error(e.message))
+        }
+        return wishlist
     }
 }

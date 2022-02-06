@@ -9,12 +9,14 @@ import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.repository.Datastore
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.utill.generateToken
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CartRepository() {
+class CartRepository {
 
     private val data = MutableLiveData<ApiResponse<CartData>>()
     private val atcResult = MutableLiveData<ApiResponse<CartResponse>>()
@@ -76,8 +78,21 @@ class CartRepository() {
                     call: Call<CartResponse?>,
                     response: Response<CartResponse?>
                 ) {
-                    if (response.isSuccessful) atcResult.postValue(ApiResponse.Success(response.body()))
-                    else atcResult.postValue(ApiResponse.Error(response.message()))
+                    when {
+                        response.isSuccessful -> atcResult.postValue(ApiResponse.Success(response.body()))
+                        response.code() == 403 || response.code() == 402 -> {
+                            GlobalScope.launch {
+                                generateToken(
+                                    token!!,
+                                    Datastore(context).getUserDetails(
+                                        Datastore.REF_TOKEN_KEY
+                                    )!!, context
+                                )
+                                addToCart(productId, context)
+                            }
+                        }
+                        else -> atcResult.postValue(ApiResponse.Error(response.message()))
+                    }
                 }
 
                 override fun onFailure(call: Call<CartResponse?>, t: Throwable) {
@@ -105,8 +120,21 @@ class CartRepository() {
                     call: Call<CartResponse?>,
                     response: Response<CartResponse?>
                 ) {
-                    if (response.isSuccessful) removeFromCart.postValue(ApiResponse.Success(response.body()))
-                    else removeFromCart.postValue(ApiResponse.Error(response.message()))
+                    when {
+                        response.isSuccessful -> removeFromCart.postValue(ApiResponse.Success(response.body()))
+                        response.code() == 403 || response.code() == 402 -> {
+                            GlobalScope.launch {
+                                generateToken(
+                                    token!!,
+                                    Datastore(context).getUserDetails(
+                                        Datastore.REF_TOKEN_KEY
+                                    )!!, context
+                                )
+                                addToCart(productId, context)
+                            }
+                        }
+                        else -> removeFromCart.postValue(ApiResponse.Error(response.message()))
+                    }
                 }
 
                 override fun onFailure(call: Call<CartResponse?>, t: Throwable) {
@@ -134,8 +162,21 @@ class CartRepository() {
                     call: Call<CartResponse?>,
                     response: Response<CartResponse?>
                 ) {
-                    if (response.isSuccessful) deleteFromCart.postValue(ApiResponse.Success(response.body()))
-                    else deleteFromCart.postValue(ApiResponse.Error(response.message()))
+                    when {
+                        response.isSuccessful -> deleteFromCart.postValue(ApiResponse.Success(response.body()))
+                        response.code() == 403 || response.code() == 402 -> {
+                            GlobalScope.launch {
+                                generateToken(
+                                    token!!,
+                                    Datastore(context).getUserDetails(
+                                        Datastore.REF_TOKEN_KEY
+                                    )!!, context
+                                )
+                                addToCart(productId, context)
+                            }
+                        }
+                        else -> deleteFromCart.postValue(ApiResponse.Error(response.message()))
+                    }
                 }
 
                 override fun onFailure(call: Call<CartResponse?>, t: Throwable) {
@@ -160,8 +201,21 @@ class CartRepository() {
                     call: Call<WishlistResponse?>,
                     response: Response<WishlistResponse?>
                 ) {
-                    if (response.isSuccessful) wishlist.postValue(ApiResponse.Success(response.body()))
-                    else wishlist.postValue(ApiResponse.Error(response.message()))
+                    when {
+                        response.isSuccessful -> wishlist.postValue(ApiResponse.Success(response.body()))
+                        response.code() == 403 || response.code() == 402 -> {
+                            GlobalScope.launch {
+                                generateToken(
+                                    token!!,
+                                    Datastore(context).getUserDetails(
+                                        Datastore.REF_TOKEN_KEY
+                                    )!!, context
+                                )
+                                addToCart(productId, context)
+                            }
+                        }
+                        else -> wishlist.postValue(ApiResponse.Error(response.message()))
+                    }
                 }
 
                 override fun onFailure(call: Call<WishlistResponse?>, t: Throwable) {

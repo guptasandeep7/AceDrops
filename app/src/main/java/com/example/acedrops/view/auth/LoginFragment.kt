@@ -16,7 +16,6 @@ import com.example.acedrops.model.Token
 import com.example.acedrops.model.UserData
 import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.repository.Datastore
-import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
 import com.example.acedrops.view.dash.DashboardActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -126,9 +125,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
                 when {
                     response.isSuccessful -> {
                         binding.progressBar.visibility = View.GONE
-                        ACC_TOKEN = response.body()?.access_token
                         runBlocking {
-                            ACC_TOKEN = response.body()?.access_token
                             response.body()
                                 ?.let { datastore.saveToDatastore(it, requireContext()) }
                             binding.progressBar.visibility = View.GONE

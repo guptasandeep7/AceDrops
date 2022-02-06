@@ -4,57 +4,163 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.adapter.ProductAdapter
+import com.example.acedrops.adapter.status
 import com.example.acedrops.databinding.FragmentAllProductsBinding
 import com.example.acedrops.model.allproducts.OneCategoryResult
 import com.example.acedrops.model.home.Product
-import com.example.acedrops.network.ServiceBuilder
-import com.example.acedrops.repository.home.ProductsRepository
 import com.example.acedrops.utill.ApiResponse
-import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
-import com.example.acedrops.viewModelFactory.ProductsViewModelFactory
-import com.example.acedrops.viewmodel.ProductsViewModel
+import com.example.acedrops.viewmodel.CartViewModel
+import com.example.acedrops.viewmodel.ProductViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 
 class AllProductsFragment : Fragment() {
     private var _binding: FragmentAllProductsBinding? = null
-    private lateinit var productsViewModel: ProductsViewModel
+    private var productViewModel = ProductViewModel()
     private val binding get() = _binding!!
     private var productAdapter = ProductAdapter()
-    private var oneCategoryResult: OneCategoryResult? = null
+    private var cartViewModel = CartViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAllProductsBinding.inflate(inflater, container, false)
-        val view = binding.root
+        return binding.root
+    }
 
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =View.GONE
 
-        binding.backBtn.setOnClickListener{
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
+            View.GONE
+
+        binding.backBtn.setOnClickListener {
             findNavController().popBackStack()
         }
-        oneCategoryResult = arguments?.getSerializable("OneCategory") as OneCategoryResult?
 
-        if (oneCategoryResult == null) {
+        if (productViewModel.oneCategoryData.value == null) {
             val categoryName = arguments?.getString("CategoryName")
             if (categoryName != null) {
                 binding.toolbarTitle.text = categoryName
-                productsViewModel.getProductList(categoryName)
+                getProductList(categoryName)
             }
-            else productsViewModel.getWishlist()
         } else {
-            binding.toolbarTitle.text = oneCategoryResult!!.result?.category
-            initRecyclerView(oneCategoryResult!!)
+            binding.toolbarTitle.text = productViewModel.oneCategoryData.value!!.result?.category
+            initRecyclerView(productViewModel.oneCategoryData.value!!)
         }
 
-        return view
+        productAdapter.setOnItemClickListener(object : ProductAdapter.onItemClickListener {
+            override fun onItemClick(product: Product) {
+                val bundle = bundleOf("Product" to product)
+                findNavController().navigate(R.id.action_allProductsFragment_to_productFragment, bundle)
+            }
+
+            override fun onAddToCartClick(product: Product, view: View) {
+                addToCart(product, view)
+            }
+
+            override fun onAddToWishlistClick(product: Product, view: View) {
+                addToWishlist(product, view)
+            }
+        })
+
+    }
+
+    private fun addToCart(product: Product, view: View) {
+        cartViewModel.increaseQuantity(productId = product.id.toString(), requireContext())
+            .observe(viewLifecycleOwner, {
+                when (it) {
+                    is ApiResponse.Success -> {
+                        view.isEnabled = true
+                        binding.progressBar.visibility = View.GONE
+                        snackbar(
+                            "\u20B9${product.discountedPrice} plus taxes\n1 ITEM"
+                        )
+                    }
+
+                    is ApiResponse.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        view.isEnabled = true
+                        snackbar(
+                            it.errorMessage ?: "Failed to add to cart : Try Again"
+                        )
+                    }
+
+                    is ApiResponse.Loading -> {
+                        view.isEnabled = false
+//                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                }
+            })
+    }
+
+    private fun addToWishlist(product: Product, view: View) {
+        cartViewModel.addWishlist(productId = product.id.toString(), requireContext())
+            .observe(viewLifecycleOwner, {
+                when (it) {
+                    is ApiResponse.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        view as ImageView
+                        view.status(it.data?.status?.toInt()!!)
+                        if (it.data.status.toInt() == 1)
+                            Toast.makeText(
+                                requireContext(),
+                                "Added to wishlist",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        else
+                            Toast.makeText(
+                                requireContext(),
+                                "Removed from wishlist",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                    }
+
+                    is ApiResponse.Loading -> {
+//                        binding.progressBar.visibility = View.VISIBLE
+                    }
+
+                    is ApiResponse.Error -> Toast.makeText(
+                        requireContext(),
+                        it.errorMessage,
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                }
+            })
+    }
+
+    private fun getProductList(categoryName: String) {
+        productViewModel.getProductList(categoryName, requireContext())
+            .observe(viewLifecycleOwner, {
+                when (it) {
+                    is ApiResponse.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        it.data?.let { it1 -> initRecyclerView(it1) }
+                    }
+                    is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
+                    is ApiResponse.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        Toast.makeText(
+                            requireContext(),
+                            it.errorMessage ?: "Try Again",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            })
     }
 
     private fun initRecyclerView(oneCategoryResult: OneCategoryResult) {
@@ -65,73 +171,55 @@ class AllProductsFragment : Fragment() {
         )
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        productsViewModel.productList.observe(viewLifecycleOwner, {
-            when (it) {
-                is ApiResponse.Success -> {
-                    binding.progressBar.visibility = View.GONE
-                    it.data?.let { it1 -> initRecyclerView(it1) }
-                }
-                is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
-                is ApiResponse.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    Toast.makeText(
-                        requireContext(),
-                        it.errorMessage ?: "Try Again",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        })
-
-        productsViewModel.wishlist.observe(viewLifecycleOwner, {
-            when (it) {
-                is ApiResponse.Success -> {
-                    binding.progressBar.visibility = View.GONE
-                    it.data?.let { it1 -> updateList(it1) }
-                }
-                is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
-                is ApiResponse.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    Toast.makeText(
-                        requireContext(),
-                        it.errorMessage ?: "Try Again",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        })
+    private fun snackbar(
+        text: String
+    ) {
+        view?.let {
+            Snackbar.make(
+                it,
+                text,
+                Snackbar.LENGTH_SHORT
+            ).setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.blue))
+                .setAction("View Cart") {
+                    findNavController()
+                        .navigate(R.id.action_allProductsFragment_to_cartFragment)
+                }.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                .setAnchorView(R.id.bottomNavigationView)
+                .show()
+        }
     }
-
-    private fun updateList(list: List<Product>) {
-        for (item in list) item.wishlistStatus = 1
-        binding.productsRecyclerView.adapter = productAdapter
-        productAdapter.updateProductList(list, null)
-    }
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility = View.GONE
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =View.GONE
+        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
+            View.GONE
+        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
+            View.GONE
 
-        productsViewModel = ViewModelProvider(
-            this,
-            ProductsViewModelFactory(ProductsRepository(ServiceBuilder.buildService(ACC_TOKEN)))
-        )[ProductsViewModel::class.java]
+        productViewModel =
+            ViewModelProvider((context as FragmentActivity?)!!)[ProductViewModel::class.java]
+
+        try {
+            productViewModel.oneCategoryData.value = arguments?.getSerializable("OneCategory") as OneCategoryResult?
+        } catch (e: Exception) {
+
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility = View.GONE
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =View.GONE
+        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
+            View.GONE
+        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
+            View.GONE
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =View.VISIBLE
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility = View.VISIBLE
+        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
+            View.VISIBLE
+        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
+            View.VISIBLE
     }
 }

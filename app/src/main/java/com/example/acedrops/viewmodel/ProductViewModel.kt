@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.acedrops.model.allproducts.OneCategoryResult
+import com.example.acedrops.model.cart.WishlistResponse
 import com.example.acedrops.model.home.Product
 import com.example.acedrops.model.productDetails.ProductDetails
+import com.example.acedrops.repository.CartRepository
 import com.example.acedrops.repository.ProductRepository
 import com.example.acedrops.utill.ApiResponse
 import kotlinx.coroutines.launch
@@ -16,14 +18,16 @@ class ProductViewModel : ViewModel() {
     var product = MutableLiveData<Product>()
     var productDetails: MutableLiveData<ApiResponse<ProductDetails>> = MutableLiveData()
     var productList: MutableLiveData<ApiResponse<OneCategoryResult>> = MutableLiveData()
-
-    private var _atcResult: MutableLiveData<ApiResponse<Boolean>> = MutableLiveData()
+    var oneCategoryData: MutableLiveData<OneCategoryResult> = MutableLiveData()
+    var wishlist: MutableLiveData<ApiResponse<List<Product>>> = MutableLiveData()
+    var atcResult: MutableLiveData<ApiResponse<Boolean>> = MutableLiveData()
+    var wishlistResult: MutableLiveData<ApiResponse<WishlistResponse>> = MutableLiveData()
 
     fun addToCart(productId: Int, context: Context): MutableLiveData<ApiResponse<Boolean>> {
         viewModelScope.launch {
-            _atcResult = ProductRepository().addToCart(productId, context)
+            atcResult = ProductRepository().addToCart(productId, context)
         }
-        return _atcResult
+        return atcResult
     }
 
     fun getProductDetails(
@@ -44,6 +48,20 @@ class ProductViewModel : ViewModel() {
             productList = ProductRepository().getProductList(categoryName, context)
         }
         return productList
+    }
+
+    fun addWishlist(productId: String, context: Context): MutableLiveData<ApiResponse<WishlistResponse>> {
+        viewModelScope.launch {
+            wishlistResult = ProductRepository().addRemoveWishlist(productId, context)
+        }
+        return wishlistResult
+    }
+
+    fun getWishlist(context: Context): MutableLiveData<ApiResponse<List<Product>>> {
+        viewModelScope.launch {
+            wishlist = ProductRepository().getWishlist(context)
+        }
+        return wishlist
     }
 
 }

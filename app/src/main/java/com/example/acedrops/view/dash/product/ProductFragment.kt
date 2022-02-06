@@ -16,6 +16,7 @@ import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.acedrops.R
 import com.example.acedrops.adapter.PageAdapter
+import com.example.acedrops.adapter.status
 import com.example.acedrops.databinding.FragmentProductBinding
 import com.example.acedrops.model.home.ImgUrl
 import com.example.acedrops.model.home.Product
@@ -56,12 +57,48 @@ class ProductFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        binding.searchBtn.setOnClickListener{
+        binding.searchBtn.setOnClickListener {
             findNavController().navigate(R.id.action_productFragment_to_searchFragment)
         }
 
-        binding.addToCartBtn.setOnClickListener { addToCart() }
+        binding.addToCartBtn.setOnClickListener { addToCart(productViewModel.product.value!!.id) }
+        binding.addToWishlistBtn.setOnClickListener {
+            addToWishlist(productViewModel.product.value!!.id)
+        }
 
+    }
+
+    private fun addToWishlist(id: Int) {
+        productViewModel.addWishlist(productId = id.toString(), requireContext())
+            .observe(viewLifecycleOwner, {
+                when (it) {
+                    is ApiResponse.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        binding.addToWishlistBtn.status(it.data?.status?.toInt()!!)
+
+                        if (it.data.status.toInt() == 1)
+                            Toast.makeText(
+                                requireContext(),
+                                "Added to wishlist",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        else
+                            Toast.makeText(
+                                requireContext(),
+                                "Removed from wishlist",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                    }
+                    is ApiResponse.Error -> Toast.makeText(
+                        requireContext(),
+                        it.errorMessage,
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+
+                    is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
+                }
+            })
     }
 
     private fun getProductDetails() {
@@ -70,7 +107,12 @@ class ProductFragment : Fragment() {
                 when (it) {
                     is ApiResponse.Success -> {
                         binding.rating.text = (it.data?.rating ?: 0).toString()
+                        if (productViewModel.productDetails.value?.data?.isFav == true)
+                            binding.addToWishlistBtn.status(1)
+                        else
+                            binding.addToWishlistBtn.status(0)
                     }
+
                     is ApiResponse.Error -> Toast.makeText(
                         requireContext(),
                         it.errorMessage,
@@ -81,8 +123,8 @@ class ProductFragment : Fragment() {
             })
     }
 
-    private fun addToCart() {
-        productViewModel.addToCart(productViewModel.product.value!!.id, requireContext())
+    private fun addToCart(id: Int) {
+        productViewModel.addToCart(id, requireContext())
             .observe(viewLifecycleOwner, {
                 when (it) {
                     is ApiResponse.Success -> if (it.data == true) {

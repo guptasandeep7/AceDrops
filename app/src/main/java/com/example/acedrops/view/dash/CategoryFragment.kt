@@ -19,7 +19,7 @@ class CategoryFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCategoryBinding.inflate(inflater, container, false)
         val view = binding.root
 
@@ -28,20 +28,15 @@ class CategoryFragment : Fragment() {
         categoryList.add(CategoryList("Paintings and portraits", R.drawable.ic_paintings))
         categoryList.add(CategoryList("Bakery and chocolates", R.drawable.ic_choco_bakery))
         categoryList.add(CategoryList("Crystal And resin art", R.drawable.ic_crystal_art))
-        categoryList.add(CategoryList("Jewellery", R.drawable.ic_jwellery))
-        categoryList.add(CategoryList("Paintings and portraits", R.drawable.ic_paintings))
-        categoryList.add(CategoryList("Bakery and chocolates", R.drawable.ic_choco_bakery))
-        categoryList.add(CategoryList("Crystal And resin art", R.drawable.ic_crystal_art))
-        categoryList.add(CategoryList("Jewellery", R.drawable.ic_jwellery))
-        categoryList.add(CategoryList("Paintings and portraits", R.drawable.ic_paintings))
-        categoryList.add(CategoryList("Bakery and chocolates", R.drawable.ic_choco_bakery))
-        categoryList.add(CategoryList("Crystal And resin art", R.drawable.ic_crystal_art))
-//        categoryList.add(CategoryList("Women's Fashion", R.drawable.ic_women_fashion))
-//        categoryList.add(CategoryList("Jewellery", R.drawable.ic_jwellery))
-//        categoryList.add(CategoryList("Paintings & Portrait", R.drawable.ic_paintings))
-//        categoryList.add(CategoryList("Bakery & Choclate", R.drawable.ic_choco_bakery))
-//        categoryList.add(CategoryList("Crystal & Resin art", R.drawable.ic_crystal_art))
-//        categoryList.add(CategoryList("Women's Fashion", R.drawable.ic_women_fashion))
+        categoryList.add(CategoryList("Under garments", R.drawable.ic_women_fashion))
+        categoryList.add(CategoryList("Thrift Shops", R.drawable.ic_women_fashion))
+        categoryList.add(CategoryList("Decorative items", R.drawable.ic_women_fashion))
+        categoryList.add(CategoryList("Closet and wearable", R.drawable.ic_women_fashion))
+        categoryList.add(CategoryList("Stickers and fun", R.drawable.ic_women_fashion))
+        categoryList.add(CategoryList("DIY's", R.drawable.ic_women_fashion))
+        categoryList.add(CategoryList("Makeup and accessories", R.drawable.ic_women_fashion))
+        categoryList.add(CategoryList("Others", R.drawable.ic_women_fashion))
+
 
         binding.categoryRv.adapter = categoryAdapter
         categoryAdapter.updateCategoryList(categoryList)

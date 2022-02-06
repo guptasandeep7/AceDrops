@@ -1,22 +1,15 @@
 package com.example.acedrops.view.dash
 
 import android.app.AlertDialog.Builder
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.acedrops.R
 import com.example.acedrops.databinding.ActivityDashboardBinding
 import com.example.acedrops.repository.Datastore
-import com.example.acedrops.view.auth.AuthActivity
-import com.example.acedrops.view.dash.home.AllProductsFragment
-import kotlinx.coroutines.launch
 
 class DashboardActivity : AppCompatActivity() {
 
@@ -31,16 +24,12 @@ class DashboardActivity : AppCompatActivity() {
 
         datastore = Datastore(this)
 
-        lifecycleScope.launch {
-            AuthActivity.ACC_TOKEN = datastore.getUserDetails(Datastore.ACCESS_TOKEN_KEY)
-        }
-
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.container2) as NavHostFragment
         val navController: NavController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
 
-        binding.searchBtn.setOnClickListener{
+        binding.searchBtn.setOnClickListener {
             navController.navigate(R.id.searchFragment)
         }
     }

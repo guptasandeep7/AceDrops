@@ -49,7 +49,7 @@ class ShopFragment : Fragment(), View.OnClickListener {
         shopProductAdapter.setOnItemClickListener(object : ShopProductsAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
                 val bundle = bundleOf("Product" to shopProductAdapter.productsList[position])
-                findNavController().navigate(R.id.action_shopFragment_to_productFragment,bundle)
+                findNavController().navigate(R.id.action_shopFragment_to_productFragment, bundle)
             }
         })
         return view
