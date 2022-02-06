@@ -31,7 +31,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
     interface onItemClickListener {
         fun onItemClick(product: Product)
         fun onAddToCartClick(product: Product, view: View)
-        fun onAddToWishlistClick(product: Product, view: View)
+        fun onAddToWishlistClick(product: Product, view: View,position: Int)
     }
 
     fun setOnItemClickListener(listener: onItemClickListener) {
@@ -62,7 +62,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
         }
 
         holder.binding.addToWishlistBtn.setOnClickListener {
-            mlistner?.onAddToWishlistClick(productList[position], it)
+            mlistner?.onAddToWishlistClick(productList[position], it, position)
         }
 
         holder.binding.productCard.setOnClickListener {

@@ -60,7 +60,7 @@ class CategoryHomeAdapter :
                     listener.addToCartClick(product,view)
                 }
 
-                override fun onAddToWishlistClick(product: Product, view: View) {
+                override fun onAddToWishlistClick(product: Product, view: View, position: Int) {
                     listener.addToWishlistClick(product,view)
                 }
             })

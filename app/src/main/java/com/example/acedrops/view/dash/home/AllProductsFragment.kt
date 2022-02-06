@@ -71,7 +71,7 @@ class AllProductsFragment : Fragment() {
                 addToCart(product, view)
             }
 
-            override fun onAddToWishlistClick(product: Product, view: View) {
+            override fun onAddToWishlistClick(product: Product, view: View, position: Int) {
                 addToWishlist(product, view)
             }
         })

@@ -19,7 +19,6 @@ import com.example.acedrops.databinding.FragmentDescriptionBinding
 import com.example.acedrops.model.allproducts.OneCategoryResult
 import com.example.acedrops.model.home.Product
 import com.example.acedrops.utill.ApiResponse
-import com.example.acedrops.viewmodel.CartViewModel
 import com.example.acedrops.viewmodel.ProductViewModel
 import com.google.android.material.snackbar.Snackbar
 
@@ -58,7 +57,7 @@ class DescriptionFragment : Fragment() {
                 addToCart(product, view)
             }
 
-            override fun onAddToWishlistClick(product: Product, view: View) {
+            override fun onAddToWishlistClick(product: Product, view: View, position: Int) {
                 addToWishlist(product, view)
             }
         })
