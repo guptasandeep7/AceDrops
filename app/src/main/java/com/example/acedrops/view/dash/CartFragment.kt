@@ -19,6 +19,7 @@ import com.example.acedrops.adapter.SwipeGesture
 import com.example.acedrops.databinding.FragmentCartBinding
 import com.example.acedrops.model.cart.Cart
 import com.example.acedrops.model.cart.CartData
+import com.example.acedrops.model.home.Product
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewmodel.CartViewModel
 import java.util.*
@@ -112,7 +113,25 @@ class CartFragment : Fragment() {
             }
 
             override fun onItemClick(position: Int) {
-                val bundle = bundleOf("Product" to cartAdapter.cartList[position])
+                val product:Product
+                cartAdapter.cartList[position].also {
+                    product = Product(
+                        it.basePrice,
+                        it.createdAt,
+                        it.shortDescription,
+                        it.discountedPrice,
+                        it.id,
+                        it.imgUrls,
+                        it.offers,
+                        null,
+                        it.shopId,
+                        it.stock,
+                        it.title,
+                        it.updatedAt,
+                        it.wishlistStatus
+                    )
+                }
+                val bundle = bundleOf("Product" to product)
                 findNavController().navigate(R.id.action_cartFragment_to_productFragment, bundle)
             }
         })

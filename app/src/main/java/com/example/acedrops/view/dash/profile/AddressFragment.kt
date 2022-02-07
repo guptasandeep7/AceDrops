@@ -38,6 +38,24 @@ class AddressFragment : Fragment() {
         addressViewModel =
             ViewModelProvider((context as FragmentActivity?)!!)[AddressViewModel::class.java]
 
+        getAddress()
+
+        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
+            View.GONE
+
+        binding.backBtn.setOnClickListener { findNavController().popBackStack() }
+
+        binding.addAddressBtn.setOnClickListener { findNavController().navigate(R.id.action_addressFragment_to_addAddressFragment) }
+
+        addressAdapter.setOnItemClickListener(object : AddressAdapter.onItemClickListener {
+            override fun onItemClick(position: Int) {
+                //on click on address
+            }
+        })
+
+    }
+
+    private fun getAddress() {
         addressViewModel.getAddress(requireContext()).observe(viewLifecycleOwner, {
             when (it) {
                 is ApiResponse.Success -> {
@@ -55,27 +73,16 @@ class AddressFragment : Fragment() {
                     binding.progressBar.visibility = View.VISIBLE
                 }
 
-                is ApiResponse.Error -> Toast.makeText(
-                    requireContext(),
-                    it.errorMessage ?: "Something went wrong!!!",
-                    Toast.LENGTH_SHORT
-                ).show()
+                is ApiResponse.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(
+                        requireContext(),
+                        it.errorMessage ?: "Something went wrong!!!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         })
-
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
-
-        binding.backBtn.setOnClickListener { findNavController().popBackStack() }
-
-        binding.addAddressBtn.setOnClickListener { findNavController().navigate(R.id.action_addressFragment_to_addAddressFragment) }
-
-        addressAdapter.setOnItemClickListener(object : AddressAdapter.onItemClickListener {
-            override fun onItemClick(position: Int) {
-                //on click on address
-            }
-        })
-
     }
 
     override fun onResume() {

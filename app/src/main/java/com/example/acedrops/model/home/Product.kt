@@ -10,7 +10,7 @@ data class Product(
     val id: Int,
     val imgUrls: List<ImgUrl>,
     val offers: String,
-    val product_category: ProductCategory,
+    val product_category: ProductCategory?=null,
     val shopId: Int,
     val stock: Int,
     val title: String,

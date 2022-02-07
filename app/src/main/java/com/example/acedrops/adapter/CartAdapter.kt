@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.acedrops.R
 import com.example.acedrops.databinding.CartItemBinding
 import com.example.acedrops.model.cart.Cart
-import com.example.acedrops.model.home.Product
 import com.example.acedrops.model.home.ProductId
 
 class CartAdapter : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
@@ -74,10 +73,10 @@ class CartAdapter : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
         holder.binding.addToWishlistBtn.setOnClickListener {
             mlistner?.addWishlist(position)
         }
+
         holder.binding.productCard.setOnClickListener{
             mlistner?.onItemClick(position)
         }
-        holder.binding.root.isClickable = false
     }
 
     override fun getItemCount(): Int {

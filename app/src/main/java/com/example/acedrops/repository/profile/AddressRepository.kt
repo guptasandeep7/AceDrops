@@ -1,6 +1,7 @@
 package com.example.acedrops.repository.profile
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.acedrops.model.AddressResponse
 import com.example.acedrops.network.ServiceBuilder
@@ -20,7 +21,7 @@ class AddressRepository {
 
         val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
 
-        val call = ServiceBuilder.buildService().getAddress()
+        val call = ServiceBuilder.buildService(token).getAddress()
         data.postValue(ApiResponse.Loading())
         try {
             call.enqueue(object : Callback<List<AddressResponse>?> {
