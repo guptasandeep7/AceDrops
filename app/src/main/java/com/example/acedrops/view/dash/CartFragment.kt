@@ -51,6 +51,11 @@ class CartFragment : Fragment() {
         binding.progressBar.visibility = View.GONE
         binding.cardView2.visibility = View.GONE
 
+        binding.proceedBtn.setOnClickListener{
+            val bundle = bundleOf("Cart" to "Cart")
+            findNavController().navigate(R.id.action_cartFragment_to_addressFragment,bundle)
+        }
+
         swipeGesture = object : SwipeGesture(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 when (direction) {

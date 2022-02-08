@@ -10,6 +10,7 @@ import com.example.acedrops.model.home.Product
 import com.example.acedrops.model.home.ShopResult
 import com.example.acedrops.model.productDetails.ProductDetails
 import com.example.acedrops.model.search.SearchResult
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -94,8 +95,15 @@ interface ApiInterface {
 
     @FormUrlEncoded
     @POST("/user/search")
-    fun postSearch(@Field("toSearch")toSearch:String):Call<SearchResult>
+    fun postSearch(@Field("toSearch") toSearch: String): Call<SearchResult>
 
+    @GET("/user/getOrders")
+    fun getOrders(): Call<List<MyOrders>>
 
+    @POST("/user/cancelOrder/{orderId}")
+    fun cancelOrder(@Path("orderId") orderId: Int): Call<ResponseBody>
 
+    @FormUrlEncoded
+    @POST("/user/orderCart")
+    fun orderCart(@Field("addressId") addressId:String):Call<ResponseBody>
 }

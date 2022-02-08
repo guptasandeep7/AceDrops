@@ -14,14 +14,17 @@ import com.example.acedrops.adapter.AddressAdapter
 import com.example.acedrops.databinding.FragmentAddressBinding
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewmodel.AddressViewModel
-import com.example.acedrops.viewmodel.SearchViewModel
+import com.example.acedrops.viewmodel.OrderViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.internal.ViewOverlayImpl
 
 class AddressFragment : Fragment() {
     private var _binding: FragmentAddressBinding? = null
     private val binding get() = _binding!!
     private lateinit var addressViewModel: AddressViewModel
     private val addressAdapter = AddressAdapter()
+    private val orderViewModel = OrderViewModel()
+    private var lastFragment: String?=null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,10 +52,32 @@ class AddressFragment : Fragment() {
 
         addressAdapter.setOnItemClickListener(object : AddressAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                //on click on address
+                if (lastFragment == "Cart")
+                    orderCart(position)
             }
         })
 
+    }
+
+    private fun orderCart(position: Int) {
+        orderViewModel.orderCart(addressAdapter.addressList[position].id!!, requireContext())
+            .observe(viewLifecycleOwner, {
+            when(it){
+                is ApiResponse.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(requireContext(), "Order has been successfully placed", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
+
+                is ApiResponse.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+            })
     }
 
     private fun getAddress() {
@@ -101,6 +126,9 @@ class AddressFragment : Fragment() {
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
             View.GONE
 
+        arguments?.let {
+            lastFragment = it.getString("Cart") ?: it.getString("Product").toString()
+        }
     }
 
     override fun onDestroyView() {

@@ -15,5 +15,6 @@ data class Product(
     val stock: Int,
     val title: String,
     val updatedAt: String,
-    var wishlistStatus: Int = 0
+    var wishlistStatus: Int = 0,
+    val order_item:OrderItem?=null
 ) : Serializable

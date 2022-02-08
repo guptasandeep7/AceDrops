@@ -49,6 +49,9 @@
         <action
             android:id="@+id/action_cartFragment_to_productFragment"
             app:destination="@id/productFragment" />
+        <action
+            android:id="@+id/action_cartFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -70,6 +73,9 @@
         <action
             android:id="@+id/action_profileFragment_to_wishlistFragment"
             app:destination="@id/wishlistFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_myOrdersFragment"
+            app:destination="@id/myOrdersFragment" />
     </fragment>
     <activity
         android:id="@+id/authActivity"
@@ -191,4 +197,9 @@
             android:id="@+id/action_wishlistFragment_to_productFragment"
             app:destination="@id/productFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/myOrdersFragment"
+        android:name="com.example.acedrops.view.dash.profile.MyOrdersFragment"
+        android:label="fragment_my_orders"
+        tools:layout="@layout/fragment_my_orders" />
 </navigation>

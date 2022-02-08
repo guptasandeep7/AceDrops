@@ -54,6 +54,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         binding.wishlistBtn.setOnClickListener(this)
         binding.changePassBtn.setOnClickListener(this)
         binding.manageAddrBtn.setOnClickListener(this)
+        binding.orderBtn.setOnClickListener(this)
 
         lifecycleScope.launch {
             binding.userName.text = datastore.getUserDetails(Datastore.NAME_KEY)?.lowercase()
@@ -161,6 +162,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             }
             R.id.change_pass_btn -> findNavController().navigate(R.id.action_profileFragment_to_changePasswordFragment)
             R.id.manage_addr_btn -> findNavController().navigate(R.id.action_profileFragment_to_addressFragment)
+            R.id.order_btn -> findNavController().navigate(R.id.action_profileFragment_to_myOrdersFragment)
         }
     }
 }
