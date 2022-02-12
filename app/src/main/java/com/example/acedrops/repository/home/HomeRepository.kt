@@ -1,6 +1,7 @@
 package com.example.acedrops.repository.home
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.acedrops.model.home.HomeFragmentData
 import com.example.acedrops.network.ServiceBuilder
@@ -22,7 +23,7 @@ class HomeRepository {
     suspend fun getData(context: Context): MutableLiveData<ApiResponse<HomeFragmentData>> {
 
         val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
-
+        Log.w("HOME REPO", "getData: $token", )
         val call = ServiceBuilder.buildService(token).getHome()
         data.postValue(ApiResponse.Loading())
         try {

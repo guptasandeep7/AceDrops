@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -22,15 +23,18 @@ import com.example.acedrops.model.cart.CartData
 import com.example.acedrops.model.home.Product
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewmodel.CartViewModel
+import com.example.acedrops.viewmodel.OrderViewModel
+import com.example.acedrops.viewmodel.ProductViewModel
 import java.util.*
 
 class CartFragment : Fragment() {
 
     lateinit var binding: FragmentCartBinding
-    lateinit var cartViewModel: CartViewModel
+    val cartViewModel: CartViewModel by activityViewModels()
     private var cartAdapter = CartAdapter()
+    private val orderViewModel: OrderViewModel by activityViewModels()
     lateinit var swipeGesture: SwipeGesture
-
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,15 +48,14 @@ class CartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        cartViewModel =
-            ViewModelProvider((context as FragmentActivity?)!!)[CartViewModel::class.java]
-
+        
         binding.progressBar.visibility = View.GONE
         binding.cardView2.visibility = View.GONE
 
         binding.proceedBtn.setOnClickListener{
-            val bundle = bundleOf("Cart" to "Cart")
+
+            orderViewModel.totalAmount = cartViewModel.totalAmount.value!!
+            val bundle = bundleOf("LastFragment" to "Cart")
             findNavController().navigate(R.id.action_cartFragment_to_addressFragment,bundle)
         }
 
@@ -110,7 +113,10 @@ class CartFragment : Fragment() {
             }
 
             override fun increaseQuantity(position: Int) {
-                observerAdd(cartAdapter.cartList[position].id.toString())
+                if(cartAdapter.cartList[position].cart_item.quantity>=cartAdapter.cartList[position].stock){
+                    Toast.makeText(requireContext(), "Out of stock", Toast.LENGTH_SHORT).show()
+                }
+                else observerAdd(cartAdapter.cartList[position].id.toString())
             }
 
             override fun addWishlist(position: Int) {

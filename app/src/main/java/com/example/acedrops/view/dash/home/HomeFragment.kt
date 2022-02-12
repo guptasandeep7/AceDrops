@@ -183,12 +183,12 @@ class HomeFragment : Fragment() {
 
                 is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
                 is ApiResponse.Error -> {
-                    binding.progressBar.visibility = View.GONE
                     Toast.makeText(
                         requireContext(),
                         it.errorMessage,
                         Toast.LENGTH_SHORT
                     ).show()
+                    homeViewModel.getHomeData(requireContext())
                 }
 
             }

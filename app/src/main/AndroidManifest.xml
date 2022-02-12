@@ -12,17 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AceDrops">
         <activity
-            android:name=".view.dash.DashboardActivity"
+            android:name=".view.dash.PaymentActivity"
             android:exported="false"
-            />
+            android:label="@string/title_activity_payment"
+            android:theme="@style/Theme.AceDrops.NoActionBar" />
+        <activity
+            android:name=".view.dash.DashboardActivity"
+            android:exported="false" />
         <activity
             android:name=".view.auth.AuthActivity"
-            android:exported="true"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false" />
         <activity
             android:name=".view.SplashScreenActivity"
-            android:theme="@style/SplashTheme"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

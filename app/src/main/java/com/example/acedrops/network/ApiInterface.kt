@@ -105,5 +105,13 @@ interface ApiInterface {
 
     @FormUrlEncoded
     @POST("/user/orderCart")
-    fun orderCart(@Field("addressId") addressId:String):Call<ResponseBody>
+    fun orderCart(@Field("addressId") addressId: String): Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("/user/orderProd")
+    fun orderProduct(
+        @Field("addressId") addressId: String,
+        @Field("prodId") prodId: String,
+        @Field("quantity") quantity: String
+    ): Call<ResponseBody>
 }

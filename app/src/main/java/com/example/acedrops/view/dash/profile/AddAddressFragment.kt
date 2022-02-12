@@ -50,6 +50,7 @@ class AddAddressFragment : Fragment(), View.OnClickListener {
                         "Address Successfully Added",
                         Toast.LENGTH_SHORT
                     ).show()
+                    findNavController().navigateUp()
                 }
                 is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
 

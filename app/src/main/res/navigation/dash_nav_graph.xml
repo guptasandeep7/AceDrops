@@ -125,6 +125,9 @@
         <action
             android:id="@+id/action_addressFragment_to_addAddressFragment"
             app:destination="@id/addAddressFragment" />
+        <action
+            android:id="@+id/action_addressFragment_to_paymentActivity"
+            app:destination="@id/paymentActivity" />
     </fragment>
     <fragment
         android:id="@+id/addAddressFragment"
@@ -175,6 +178,9 @@
         <action
             android:id="@+id/action_productFragment_self"
             app:destination="@id/productFragment" />
+        <action
+            android:id="@+id/action_productFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
     </fragment>
     <fragment
         android:id="@+id/descriptionFragment"
@@ -202,4 +208,9 @@
         android:name="com.example.acedrops.view.dash.profile.MyOrdersFragment"
         android:label="fragment_my_orders"
         tools:layout="@layout/fragment_my_orders" />
+    <activity
+        android:id="@+id/paymentActivity"
+        android:name="com.example.acedrops.view.dash.PaymentActivity"
+        android:label="activity_payment"
+        />
 </navigation>
