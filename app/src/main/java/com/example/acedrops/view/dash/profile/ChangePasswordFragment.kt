@@ -10,17 +10,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.databinding.FragmentChangePasswordBinding
+import com.example.acedrops.model.Message
+import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.repository.Datastore
-import com.example.acedrops.repository.auth.PasswordRepository
 import com.example.acedrops.utill.validPass
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ChangePasswordFragment : Fragment() {
     private var _binding: FragmentChangePasswordBinding? = null
     private val binding get() = _binding!!
-    private lateinit var passwordRepository: PasswordRepository
-    lateinit var userEmail: String
     private lateinit var bottomNavigation: BottomNavigationView
 
     override fun onCreateView(
@@ -57,34 +59,51 @@ class ChangePasswordFragment : Fragment() {
                     it.isEnabled = true
                 }
                 else -> {
-                    changePass(oldPass, newPass, userEmail)
+                    lifecycleScope.launch {
+                        changePass(oldPass, newPass)
+                    }
                 }
             }
         }
         return binding.root
     }
 
-    private fun changePass(oldPass: String, newPass: String, userEmail: String) {
+    private suspend fun changePass(oldPass: String, newPass: String) {
         binding.progressBar.visibility = View.VISIBLE
-        passwordRepository.changePass(oldPass, newPass, userEmail)
+        val userEmail = Datastore(requireContext()).getUserDetails(Datastore.EMAIL_KEY).toString()
+
+        val request = ServiceBuilder.buildService(null)
+        val call = request.changePass(email = userEmail, oldPass = oldPass, newPass = newPass)
+        call.enqueue(object : Callback<Message?> {
+            override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
+                when {
+                    response.isSuccessful -> {
+                        binding.progressBar.visibility = View.GONE
+                        binding.signBtn.isEnabled = true
+                        Toast.makeText(
+                            requireContext(),
+                            "Password changed successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        findNavController().navigate(R.id.action_changePasswordFragment_to_profileFragment)
+                    }
+                    response.code() == 422 -> errorMessage("Enter valid password")
+                    response.code() == 401 -> errorMessage("Session expired")
+                    response.code() == 400 -> errorMessage("Try again")
+                    else -> errorMessage("Something went wrong! Try again")
+                }
+            }
+
+            override fun onFailure(call: Call<Message?>, t: Throwable) {
+                errorMessage(t.message.toString())
+            }
+        })
     }
 
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        passwordRepository.message.observe(viewLifecycleOwner, {
-            binding.progressBar.visibility = View.GONE
-            binding.signBtn.isEnabled = true
-            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.action_changePasswordFragment_to_profileFragment)
-        })
-
-        passwordRepository.errorMessage.observe(viewLifecycleOwner, {
-            binding.progressBar.visibility = View.GONE
-            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-            binding.signBtn.isEnabled = true
-        })
+    private fun errorMessage(it: String) {
+        binding.progressBar.visibility = View.GONE
+        Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+        binding.signBtn.isEnabled = true
     }
 
     override fun onResume() {
@@ -98,11 +117,6 @@ class ChangePasswordFragment : Fragment() {
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
             View.GONE
 
-        passwordRepository = PasswordRepository()
-        val datastore = Datastore(requireContext())
-        lifecycleScope.launch {
-            userEmail = datastore.getUserDetails(Datastore.EMAIL_KEY).toString()
-        }
     }
 
     override fun onDestroyView() {

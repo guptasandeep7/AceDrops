@@ -6,22 +6,29 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/acedrop_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/acedrop_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.AceDrops">
         <activity
-            android:name=".view.dash.DashboardActivity"
+            android:name=".view.dash.PaymentActivity"
             android:exported="false"
-            android:windowSoftInputMode="stateVisible"/>
+            android:label="@string/title_activity_payment"
+            android:theme="@style/Theme.AceDrops.NoActionBar" />
+        <activity
+            android:name=".view.dash.DashboardActivity"
+            android:exported="false" />
         <activity
             android:name=".view.auth.AuthActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false" />
+        <activity
+            android:name=".view.SplashScreenActivity"
             android:exported="true"
-            android:configChanges="orientation|screenSize|keyboardHidden">
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

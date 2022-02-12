@@ -1,10 +1,13 @@
 package com.example.acedrops.model.cart
 
+import com.example.acedrops.model.home.ImgUrl
+
 data class Cart(
     val basePrice: Int,
     val cart_item: CartItem,
     val createdAt: String,
-    val description: String,
+    val categories: List<ProductCategory>,
+    val shortDescription: String,
     val discountedPrice: Int,
     val id: Int,
     val imgUrls: List<ImgUrl>,

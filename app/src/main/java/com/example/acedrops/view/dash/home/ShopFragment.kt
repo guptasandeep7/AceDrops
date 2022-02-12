@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -15,7 +16,7 @@ import com.example.acedrops.adapter.ShopProductsAdapter
 import com.example.acedrops.databinding.FragmentShopBinding
 import com.example.acedrops.model.home.ShopResult
 import com.example.acedrops.network.ServiceBuilder
-import com.example.acedrops.repository.dashboard.home.ShopRepository
+import com.example.acedrops.repository.home.ShopRepository
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewModelFactory.ShopViewModelFactory
 import com.example.acedrops.viewmodel.ShopViewModel
@@ -47,11 +48,8 @@ class ShopFragment : Fragment(), View.OnClickListener {
 
         shopProductAdapter.setOnItemClickListener(object : ShopProductsAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                Toast.makeText(
-                    requireContext(),
-                    shopProductAdapter.productsList[position].id.toString(),
-                    Toast.LENGTH_SHORT
-                ).show()
+                val bundle = bundleOf("Product" to shopProductAdapter.productsList[position])
+                findNavController().navigate(R.id.action_shopFragment_to_productFragment, bundle)
             }
         })
         return view

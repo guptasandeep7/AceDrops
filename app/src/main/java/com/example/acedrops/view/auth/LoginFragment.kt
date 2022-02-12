@@ -9,29 +9,29 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.databinding.FragmentLoginBinding
+import com.example.acedrops.model.Token
+import com.example.acedrops.model.UserData
+import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.repository.Datastore
-import com.example.acedrops.repository.auth.GoogleSignRepository
-import com.example.acedrops.repository.auth.LoginRepository
-import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
+import com.example.acedrops.view.dash.DashboardActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import kotlinx.coroutines.launch
-
+import kotlinx.coroutines.runBlocking
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginFragment : Fragment(), View.OnClickListener {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private lateinit var loginRepository: LoginRepository
-    private lateinit var googleSignRepository: GoogleSignRepository
     lateinit var datastore: Datastore
 
     //google sign in
@@ -56,6 +56,9 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        datastore = Datastore(requireContext())
+
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.server_client_id))
             .requestEmail()
@@ -81,10 +84,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+
         if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
         }
@@ -93,11 +94,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
-            // Signed in successfully, show authenticated UI.
             updateUI(account)
         } catch (e: ApiException) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=${e.statusCode}")
             updateUI(null)
         }
@@ -106,32 +104,54 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private fun updateUI(account: GoogleSignInAccount?) {
         if (account != null) {
             checkToken(account.idToken)
-        } else Toast.makeText(requireContext(), "Failed to sign with google", Toast.LENGTH_SHORT)
-            .show()
+        } else {
+            binding.progressBar.visibility = View.GONE
+            Toast.makeText(requireContext(), "Failed to sign with google", Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 
     private fun checkToken(idToken: String?) {
-        googleSignRepository = GoogleSignRepository()
         if (idToken != null) {
-            googleSignRepository.gSignUp(idToken)
+            gSignUp(idToken)
         }
+    }
 
-        googleSignRepository.errorMessage.observe(viewLifecycleOwner, {
-            binding.progressBar.visibility = View.GONE
-            binding.signinBtn.isEnabled = true
-            Toast.makeText(this.context, it, Toast.LENGTH_SHORT).show()
-        })
+    private fun gSignUp(idToken: String) {
+        val request = ServiceBuilder.buildService(null)
+        val call = request.gSignUp(Token(idToken))
+        call.enqueue(object : Callback<UserData?> {
+            override fun onResponse(call: Call<UserData?>, response: Response<UserData?>) {
+                when {
+                    response.isSuccessful -> {
+                        binding.progressBar.visibility = View.GONE
+                        runBlocking {
+                            response.body()
+                                ?.let { datastore.saveToDatastore(it, requireContext()) }
+                            binding.progressBar.visibility = View.GONE
+                            startActivity(Intent(activity, DashboardActivity::class.java))
+                            activity?.finish()
+                        }
+                    }
+                    response.code() == 503 -> errorMessage(response.message())
+                    else -> errorMessage(response.message())
+                }
+            }
 
-        googleSignRepository.userData.observe(viewLifecycleOwner, {
-            binding.progressBar.visibility = View.GONE
-            ACC_TOKEN = it.access_token
-            datastore = Datastore(requireContext())
-            lifecycleScope.launch {
-                datastore.saveToDatastore(it, requireContext())
-                activity?.finish()
-                findNavController().navigate(R.id.action_loginFragment_to_dashboardActivity)
+            override fun onFailure(call: Call<UserData?>, t: Throwable) {
+                errorMessage(t.message.toString())
             }
         })
+    }
+
+    private fun errorMessage(it: String) {
+        binding.progressBar.visibility = View.GONE
+        binding.signinBtn.isEnabled = true
+        Toast.makeText(
+            requireContext(),
+            it,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     //Check details are valid or not
@@ -158,32 +178,42 @@ class LoginFragment : Fragment(), View.OnClickListener {
     //Custom Login
     private fun login() {
         binding.signinBtn.isEnabled = false
+        val progressBar = binding.progressBar
         val email = binding.email.text.toString().trim()
         val pass = binding.pass.text.toString().trim()
-        val progressBar = binding.progressBar
         helper()
         if (isValid(email, pass)) {
-            loginRepository = LoginRepository()
             progressBar.visibility = View.VISIBLE
-            loginRepository.login(email = email, pass = pass)
-
-            loginRepository.userDetails.observe(this, {
-                progressBar.visibility = View.GONE
-                ACC_TOKEN = it.access_token
-                datastore = Datastore(requireContext())
-                lifecycleScope.launch {
-                    datastore.saveToDatastore(it, requireContext())
-                    activity?.finish()
-                    findNavController().navigate(R.id.action_loginFragment_to_dashboardActivity)
-                }
-            })
-
-            loginRepository.errorMessage.observe(this, {
-                progressBar.visibility = View.GONE
-                binding.signinBtn.isEnabled = true
-                Toast.makeText(this.context, it, Toast.LENGTH_SHORT).show()
-            })
+            loginApi(email = email, pass = pass)
         } else binding.signinBtn.isEnabled = true
+    }
+
+    private fun loginApi(email: String, pass: String) {
+        val request = ServiceBuilder.buildService(null)
+        val call = request.login(UserData(email = email, password = pass))
+        call.enqueue(object : Callback<UserData?> {
+            override fun onResponse(call: Call<UserData?>, response: Response<UserData?>) {
+                when {
+                    response.isSuccessful -> {
+                        val responseBody = response.body()!!
+                        runBlocking {
+                            datastore.saveToDatastore(responseBody, requireContext())
+                            binding.progressBar.visibility = View.GONE
+                            activity?.finish()
+                            startActivity(Intent(activity, DashboardActivity::class.java))
+                        }
+                    }
+                    response.code() == 401 -> errorMessage("Wrong password")
+                    response.code() == 422 -> errorMessage("Enter correct email and password")
+                    response.code() == 404 -> errorMessage("User does not exists please signup")
+                    else -> errorMessage("User not registered")
+                }
+            }
+
+            override fun onFailure(call: Call<UserData?>, t: Throwable) {
+                errorMessage(t.message.toString())
+            }
+        })
     }
 
 

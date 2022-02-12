@@ -1,9 +1,7 @@
 package com.example.acedrops.view.dash
 
 import android.app.AlertDialog.Builder
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -11,11 +9,12 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.acedrops.R
 import com.example.acedrops.databinding.ActivityDashboardBinding
-import com.example.acedrops.view.dash.home.AllProductsFragment
+import com.example.acedrops.repository.Datastore
 
 class DashboardActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDashboardBinding
+    lateinit var datastore: Datastore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,12 +22,14 @@ class DashboardActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        datastore = Datastore(this)
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.container2) as NavHostFragment
         val navController: NavController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
 
-        binding.searchBtn.setOnClickListener{
+        binding.searchBtn.setOnClickListener {
             navController.navigate(R.id.searchFragment)
         }
     }
@@ -50,5 +51,4 @@ class DashboardActivity : AppCompatActivity() {
         val exit = builder.create()
         exit.show()
     }
-
 }

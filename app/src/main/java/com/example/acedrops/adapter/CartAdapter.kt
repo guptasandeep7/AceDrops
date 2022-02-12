@@ -27,15 +27,11 @@ class CartAdapter : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
         fun decreaseQuantity(position: Int)
         fun increaseQuantity(position: Int)
         fun addWishlist(position: Int)
+        fun onItemClick(position: Int)
     }
 
     fun setOnItemClickListener(listener: onItemClickListener) {
         mlistner = listener
-    }
-
-    fun deleteItem(position: Int) {
-        cartList.removeAt(position)
-        notifyDataSetChanged()
     }
 
     class ViewHolder(val binding: CartItemBinding, listener: onItemClickListener) :
@@ -50,6 +46,7 @@ class CartAdapter : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
                 listener.decreaseQuantity(adapterPosition)
                 listener.increaseQuantity(adapterPosition)
                 listener.addWishlist(adapterPosition)
+                listener.onItemClick(adapterPosition)
             }
         }
     }
@@ -76,7 +73,10 @@ class CartAdapter : RecyclerView.Adapter<CartAdapter.ViewHolder>() {
         holder.binding.addToWishlistBtn.setOnClickListener {
             mlistner?.addWishlist(position)
         }
-        holder.binding.root.isClickable = false
+
+        holder.binding.productCard.setOnClickListener{
+            mlistner?.onItemClick(position)
+        }
     }
 
     override fun getItemCount(): Int {

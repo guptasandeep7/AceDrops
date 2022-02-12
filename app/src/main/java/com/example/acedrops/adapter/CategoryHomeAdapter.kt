@@ -1,20 +1,28 @@
 package com.example.acedrops.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.acedrops.R
 import com.example.acedrops.databinding.OneCategoryLayoutBinding
 import com.example.acedrops.model.home.Category
+import com.example.acedrops.model.home.Product
 import com.example.acedrops.model.home.ProductId
 
-class CategoryHomeAdapter() : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolder>() {
+class CategoryHomeAdapter :
+    RecyclerView.Adapter<CategoryHomeAdapter.ViewHolder>() {
 
     var categoryList = mutableListOf<Category>()
     var favList = mutableListOf<ProductId>()
-    fun updateCategoryList(category: List<Category>,favList: List<ProductId>) {
-        this.categoryList = category.toMutableList()
+    fun updateCategoryList(category: List<Category>, favList: List<ProductId>) {
+        this.favList.clear()
+        categoryList.clear()
+        category.forEach {
+            if (!it.products.isNullOrEmpty())
+                categoryList.add(it)
+        }
         this.favList = favList.toMutableList()
         notifyDataSetChanged()
     }
@@ -22,7 +30,10 @@ class CategoryHomeAdapter() : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolde
     private var mlistner: onItemClickListener? = null
 
     interface onItemClickListener {
-        fun onItemClick(position: Int)
+        fun showAll(position: Int)
+        fun addToCartClick(product:Product,view: View)
+        fun addToWishlistClick(product:Product,view: View)
+        fun onItemClick(product:Product)
     }
 
     fun setOnItemClickListener(listener: onItemClickListener) {
@@ -31,17 +42,28 @@ class CategoryHomeAdapter() : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolde
 
     class ViewHolder(val binding: OneCategoryLayoutBinding, listener: onItemClickListener) :
         RecyclerView.ViewHolder(binding.root) {
+
+        var productAdapter = ProductAdapter()
+
         fun bind(category: Category, favList: List<ProductId>) {
             binding.category = category
-            val productAdapter = ProductAdapter()
             binding.productsRecyclerView.adapter = productAdapter
-            productAdapter.updateProductList(category.products,favList)
+            productAdapter.updateProductList(category.products, favList)
         }
-
         init {
-            itemView.setOnClickListener {
-                listener.onItemClick(adapterPosition)
-            }
+            productAdapter.setOnItemClickListener(object : ProductAdapter.onItemClickListener {
+                override fun onItemClick(product: Product) {
+                    listener.onItemClick(product = product)
+                }
+
+                override fun onAddToCartClick(product: Product, view: View) {
+                    listener.addToCartClick(product,view)
+                }
+
+                override fun onAddToWishlistClick(product: Product, view: View, position: Int) {
+                    listener.addToWishlistClick(product,view)
+                }
+            })
         }
     }
 
@@ -54,10 +76,12 @@ class CategoryHomeAdapter() : RecyclerView.Adapter<CategoryHomeAdapter.ViewHolde
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(categoryList[position],favList)
+        holder.bind(categoryList[position], favList)
+
         holder.binding.showAllBtn.setOnClickListener {
-            mlistner?.onItemClick(position)
+            mlistner?.showAll(position)
         }
+
     }
 
     override fun getItemCount(): Int {

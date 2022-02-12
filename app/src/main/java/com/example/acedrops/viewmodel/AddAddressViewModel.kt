@@ -1,15 +1,15 @@
 package com.example.acedrops.viewmodel
 
-import androidx.lifecycle.LiveData
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.acedrops.model.AddressResponse
-import com.example.acedrops.repository.dashboard.AddAddressRepository
+import com.example.acedrops.repository.profile.AddAddressRepository
 import com.example.acedrops.utill.ApiResponse
 import kotlinx.coroutines.launch
 
-class AddAddressViewModel(val repository: AddAddressRepository) : ViewModel() {
+class AddAddressViewModel : ViewModel() {
 
     var houseNo: MutableLiveData<String> = MutableLiveData()
     var street: MutableLiveData<String> = MutableLiveData()
@@ -18,20 +18,22 @@ class AddAddressViewModel(val repository: AddAddressRepository) : ViewModel() {
     var state: MutableLiveData<String> = MutableLiveData()
 
     private var _result: MutableLiveData<ApiResponse<Boolean>> = MutableLiveData()
-    val result: LiveData<ApiResponse<Boolean>>
-        get() = _result
 
-    fun saveAddress() =
+    fun saveAddress(context: Context): MutableLiveData<ApiResponse<Boolean>> {
         viewModelScope.launch {
-            _result = repository.postAddress(
+            _result = AddAddressRepository().postAddress(
                 AddressResponse(
                     houseNo = houseNo.value.toString(),
                     streetOrPlotNo = street.value.toString(),
                     locality = locality.value.toString(),
                     city = city.value.toString(),
                     state = state.value.toString()
-                )
+                ),
+                context
             )
+
         }
+        return _result
+    }
 
 }

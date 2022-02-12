@@ -54,8 +54,10 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintVertical_bias="1.0">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -63,65 +65,30 @@
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/shop_image"
+                    imageFromUrl="@{shop.imgUrls[0].imageUrl}"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="20dp"
                     android:scaleType="centerCrop"
-                    imageFromUrl="@{shop.imgUrls[0].imageUrl}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
 
                 <TextView
-                    android:id="@+id/rating"
-                    style="@style/TextColor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="4.5"
-                    android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/shop_image"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/shop_image"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    style="@style/TextColor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:text="/5"
-                    app:layout_constraintBottom_toBottomOf="@+id/rating"
-                    app:layout_constraintStart_toEndOf="@+id/rating"
-                    app:layout_constraintTop_toTopOf="@+id/rating" />
-
-                <RatingBar
-                    android:id="@+id/rating_bar"
-                    style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:numStars="5"
-                    android:progressTint="@color/blue"
-                    android:rating="4.5"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/shop_image"
-                    app:layout_constraintTop_toBottomOf="@+id/rating" />
-
-                <TextView
                     android:id="@+id/shop_name"
                     style="@style/TextColor"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
                     android:fontFamily="@font/mulish"
                     android:text="@{shop.shopName}"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/shop_image" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/shop_image"
+                    app:layout_constraintTop_toTopOf="@+id/shop_image" />
 
                 <TextView
                     android:id="@+id/shop_desc"
@@ -134,40 +101,37 @@
                     android:text="@{shop.description}"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/shop_image"
                     app:layout_constraintTop_toBottomOf="@+id/shop_name" />
 
                 <TextView
                     android:id="@+id/shop_address"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginHorizontal="16dp"
                     android:fontFamily="@font/mulish_semi_bold"
                     android:text="@{`Owner `+shop.name}"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/shop_image"
                     app:layout_constraintTop_toBottomOf="@+id/shop_desc" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/shop_call_btn"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="120dp"
-                    android:layout_height="56dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="100dp"
+                    android:enabled="false"
                     android:fontFamily="@font/mulish"
                     android:text="@string/call"
-                    android:enabled="false"
                     android:textAllCaps="false"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:cornerRadius="50dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.4"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/shop_image"
                     app:layout_constraintTop_toBottomOf="@+id/shop_address"
                     app:strokeColor="@color/blue"
                     app:strokeWidth="1dp" />
@@ -175,20 +139,19 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/shop_email_btn"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="120dp"
-                    android:layout_height="56dp"
-                    android:layout_marginStart="100dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:enabled="false"
                     android:fontFamily="@font/mulish"
                     android:text="@string/email"
                     android:textAllCaps="false"
-                    android:enabled="false"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:cornerRadius="50dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.6"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/shop_call_btn"
                     app:layout_constraintTop_toBottomOf="@+id/shop_address"
                     app:strokeColor="@color/blue"
                     app:strokeWidth="1dp" />
@@ -198,7 +161,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="36dp"
                     android:background="@drawable/border"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -221,11 +184,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="3"
-                    tools:listitem="@layout/shop_product_item"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
+                    app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+                    app:spanCount="3"
+                    tools:listitem="@layout/shop_product_item" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>

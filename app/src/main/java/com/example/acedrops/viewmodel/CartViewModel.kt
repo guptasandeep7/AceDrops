@@ -1,63 +1,65 @@
 package com.example.acedrops.viewmodel
 
-import androidx.lifecycle.LiveData
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.acedrops.model.cart.CartData
 import com.example.acedrops.model.cart.CartResponse
 import com.example.acedrops.model.cart.WishlistResponse
-import com.example.acedrops.repository.dashboard.CartRepository
+import com.example.acedrops.repository.CartRepository
 import com.example.acedrops.utill.ApiResponse
 import kotlinx.coroutines.launch
 
-class CartViewModel(private val repository: CartRepository) : ViewModel() {
-
-    private var _cartData: MutableLiveData<ApiResponse<CartData>> = MutableLiveData()
-    val cartData: LiveData<ApiResponse<CartData>>
-        get() = _cartData
+class CartViewModel : ViewModel() {
 
     var totalAmount = MutableLiveData<Long>(0)
 
-    fun getCartData() = viewModelScope.launch {
-        _cartData = repository.getCartList()
+    private var cartData: MutableLiveData<ApiResponse<CartData>>? = null
+
+    fun getCartData(context: Context): MutableLiveData<ApiResponse<CartData>>? {
+        viewModelScope.launch {
+            cartData = CartRepository().getCartList(context)
+        }
+        return cartData
     }
 
-    private var _atcResult: MutableLiveData<ApiResponse<CartResponse>> = MutableLiveData()
-    val atcResult: LiveData<ApiResponse<CartResponse>>
-        get() = _atcResult
+    var atcResult: MutableLiveData<ApiResponse<CartResponse>> = MutableLiveData()
 
-    fun increaseQuantity(productId: String) = viewModelScope.launch {
-        _atcResult = repository.addToCart(productId)
+    fun increaseQuantity(productId: String, context: Context): MutableLiveData<ApiResponse<CartResponse>> {
+        viewModelScope.launch {
+            atcResult = CartRepository().addToCart(productId, context)
+        }
+        return atcResult
     }
 
-    private var _removeFromCartResult: MutableLiveData<ApiResponse<CartResponse>> =
+    private var removeFromCartResult: MutableLiveData<ApiResponse<CartResponse>> =
         MutableLiveData()
-    val removeFromCartResult: LiveData<ApiResponse<CartResponse>>
-        get() = _removeFromCartResult
 
-    fun decreaseQuantity(productId: String) = viewModelScope.launch {
-        _removeFromCartResult = repository.removeFromCart(productId)
+    fun decreaseQuantity(productId: String, context: Context): MutableLiveData<ApiResponse<CartResponse>> {
+        viewModelScope.launch {
+            removeFromCartResult = CartRepository().removeFromCart(productId, context)
+        }
+        return removeFromCartResult
     }
 
-    private var _deleteFromCartResult: MutableLiveData<ApiResponse<CartResponse>> =
+    var deleteFromCartResult: MutableLiveData<ApiResponse<CartResponse>> =
         MutableLiveData()
-    val deleteFromCartResult: LiveData<ApiResponse<CartResponse>>
-        get() = _deleteFromCartResult
 
-    fun deleteProduct(productId: String) = viewModelScope.launch {
-        _deleteFromCartResult = repository.deleteFromCart(productId)
+    fun deleteProduct(productId: String, context: Context): MutableLiveData<ApiResponse<CartResponse>> {
+        viewModelScope.launch {
+            deleteFromCartResult = CartRepository().deleteFromCart(productId, context)
+        }
+        return deleteFromCartResult
     }
 
-    private var _wishlistResult: MutableLiveData<ApiResponse<WishlistResponse>> = MutableLiveData()
-    val wishlistResult: LiveData<ApiResponse<WishlistResponse>>
-        get() = _wishlistResult
+    private var wishlistResult: MutableLiveData<ApiResponse<WishlistResponse>> = MutableLiveData()
 
-    fun addWishlist(productId: String) = viewModelScope.launch {
-        _wishlistResult = repository.addRemoveWishlist(productId)
+    fun addWishlist(productId: String, context: Context): MutableLiveData<ApiResponse<WishlistResponse>> {
+        viewModelScope.launch {
+            wishlistResult = CartRepository().addRemoveWishlist(productId, context)
+        }
+        return wishlistResult
     }
 
-    init {
-        getCartData()
-    }
 }

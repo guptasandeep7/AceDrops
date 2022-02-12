@@ -1,16 +1,17 @@
 package com.example.acedrops.view.dash
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.acedrops.R
@@ -19,23 +20,21 @@ import com.example.acedrops.adapter.SwipeGesture
 import com.example.acedrops.databinding.FragmentCartBinding
 import com.example.acedrops.model.cart.Cart
 import com.example.acedrops.model.cart.CartData
-import com.example.acedrops.network.ServiceBuilder
-import com.example.acedrops.repository.dashboard.CartRepository
+import com.example.acedrops.model.home.Product
 import com.example.acedrops.utill.ApiResponse
-import com.example.acedrops.utill.generateToken
-import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
-import com.example.acedrops.viewModelFactory.CartViewModelFactory
 import com.example.acedrops.viewmodel.CartViewModel
-import kotlinx.coroutines.launch
+import com.example.acedrops.viewmodel.OrderViewModel
+import com.example.acedrops.viewmodel.ProductViewModel
 import java.util.*
 
 class CartFragment : Fragment() {
 
     lateinit var binding: FragmentCartBinding
-    lateinit var cartViewModel: CartViewModel
+    val cartViewModel: CartViewModel by activityViewModels()
     private var cartAdapter = CartAdapter()
+    private val orderViewModel: OrderViewModel by activityViewModels()
     lateinit var swipeGesture: SwipeGesture
-
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,14 +43,30 @@ class CartFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_cart, container, false)
         val view = binding.root
 
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        
         binding.progressBar.visibility = View.GONE
         binding.cardView2.visibility = View.GONE
+
+        binding.proceedBtn.setOnClickListener{
+
+            orderViewModel.totalAmount = cartViewModel.totalAmount.value!!
+            val bundle = bundleOf("LastFragment" to "Cart")
+            findNavController().navigate(R.id.action_cartFragment_to_addressFragment,bundle)
+        }
 
         swipeGesture = object : SwipeGesture(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
-                        cartViewModel.deleteProduct(cartAdapter.cartList[viewHolder.adapterPosition].id.toString())
+                        cartViewModel.deleteProduct(
+                            cartAdapter.cartList[viewHolder.adapterPosition].id.toString(),
+                            requireContext()
+                        )
                         observerDelete()
                     }
                 }
@@ -60,14 +75,14 @@ class CartFragment : Fragment() {
 
         cartViewModel.totalAmount.observe(viewLifecycleOwner, {
             binding.viewmodel = cartViewModel
-            if(it==0L){
+            if (it == 0L) {
                 binding.emptyCart.visibility = View.VISIBLE
                 binding.progressBar.visibility = View.GONE
                 binding.cardView2.visibility = View.GONE
             }
         })
 
-        cartViewModel.cartData.observe(viewLifecycleOwner, {
+        cartViewModel.getCartData(requireContext())?.observe(viewLifecycleOwner, {
             when (it) {
                 is ApiResponse.Success -> {
                     if (it.data == null) {
@@ -80,62 +95,66 @@ class CartFragment : Fragment() {
                     binding.emptyCart.visibility = View.GONE
                     binding.progressBar.visibility = View.VISIBLE
                 }
-                is ApiResponse.TokenExpire -> {
-                    Toast.makeText(requireContext(), "generateToken expire", Toast.LENGTH_SHORT)
-                        .show()
-                    Log.w("access generateToken ", "ACC_TOKEN is $ACC_TOKEN")
-                    lifecycleScope.launch {
-                        generateToken(requireContext())
-                    }
+
+                is ApiResponse.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(
+                        requireContext(),
+                        it.errorMessage ?: "Something went wrong!!!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-                is ApiResponse.Error -> Toast.makeText(
-                    requireContext(),
-                    it.errorMessage ?: "Something went wrong!!!",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
         })
-
-        generateToken.observe(viewLifecycleOwner, {
-            if (it == null) {
-                view.findNavController().navigate(R.id.action_cartFragment_to_authActivity)
-                activity?.finish()
-            } else {
-                cartViewModel.getCartData()
-            }
-        })
-
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         cartAdapter.setOnItemClickListener(object : CartAdapter.onItemClickListener {
             override fun decreaseQuantity(position: Int) {
-                cartViewModel.decreaseQuantity(cartAdapter.cartList[position].id.toString())
-                observerRemove()
+                observerRemove(cartAdapter.cartList[position].id.toString())
             }
 
             override fun increaseQuantity(position: Int) {
-                cartViewModel.increaseQuantity(cartAdapter.cartList[position].id.toString())
-                observerAdd()
+                if(cartAdapter.cartList[position].cart_item.quantity>=cartAdapter.cartList[position].stock){
+                    Toast.makeText(requireContext(), "Out of stock", Toast.LENGTH_SHORT).show()
+                }
+                else observerAdd(cartAdapter.cartList[position].id.toString())
             }
 
             override fun addWishlist(position: Int) {
-                cartViewModel.addWishlist(cartAdapter.cartList[position].id.toString())
-                observerWishlistResult()
+                observerWishlistResult(cartAdapter.cartList[position].id.toString())
+            }
+
+            override fun onItemClick(position: Int) {
+                val product:Product
+                cartAdapter.cartList[position].also {
+                    product = Product(
+                        it.basePrice,
+                        it.createdAt,
+                        it.shortDescription,
+                        it.discountedPrice,
+                        it.id,
+                        it.imgUrls,
+                        it.offers,
+                        null,
+                        it.shopId,
+                        it.stock,
+                        it.title,
+                        it.updatedAt,
+                        it.wishlistStatus
+                    )
+                }
+                val bundle = bundleOf("Product" to product)
+                findNavController().navigate(R.id.action_cartFragment_to_productFragment, bundle)
             }
         })
     }
 
-    private fun observerWishlistResult() {
-        cartViewModel.wishlistResult.observe(viewLifecycleOwner, {
+    private fun observerWishlistResult(id: String) {
+        cartViewModel.addWishlist(id, requireContext()).observe(viewLifecycleOwner, {
             when (it) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    for (item in cartAdapter.cartList){
-                        if(item.id == it.data?.prodId){
+                    for (item in cartAdapter.cartList) {
+                        if (item.id == it.data?.prodId) {
                             item.wishlistStatus = it.data.status.toInt()
                             cartAdapter.notifyDataSetChanged()
                             break
@@ -155,39 +174,40 @@ class CartFragment : Fragment() {
         })
     }
 
-    private fun observerAdd() = cartViewModel.atcResult.observe(viewLifecycleOwner, {
-        when (it) {
-            is ApiResponse.Success -> {
-                for (item in cartAdapter.cartList){
-                    if(item.id == it.data?.prodId){
-                        item.cart_item.quantity = it.data.quantity!!
-                        cartAdapter.notifyDataSetChanged()
-                        break
+    private fun observerAdd(id: String) =
+        cartViewModel.increaseQuantity(id, requireContext()).observe(viewLifecycleOwner, {
+            when (it) {
+                is ApiResponse.Success -> {
+                    for (item in cartAdapter.cartList) {
+                        if (item.id == it.data?.prodId) {
+                            item.cart_item.quantity = it.data.quantity!!
+                            cartAdapter.notifyDataSetChanged()
+                            break
+                        }
                     }
-                }
                     cartViewModel.totalAmount.value =
                         calTotalAmount(cartAdapter.cartList as ArrayList<Cart>)
                     binding.progressBar.visibility = View.GONE
+                }
+                is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
+                is ApiResponse.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(
+                        requireContext(),
+                        it.errorMessage ?: "Try Again",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
-            is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
-            is ApiResponse.Error -> {
-                binding.progressBar.visibility = View.GONE
-                Toast.makeText(
-                    requireContext(),
-                    it.errorMessage ?: "Try Again",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    })
+        })
 
-    private fun observerRemove() {
-        cartViewModel.removeFromCartResult.observe(this, {
+    private fun observerRemove(id: String) {
+        cartViewModel.decreaseQuantity(id, requireContext()).observe(this, {
             when (it) {
                 is ApiResponse.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                    for (item in cartAdapter.cartList){
-                        if(item.id == it.data?.prodId){
+                    binding.progressBar.visibility = View.GONE
+                    for (item in cartAdapter.cartList) {
+                        if (item.id == it.data?.prodId) {
                             if (it.data.quantity!! > 0) {
                                 item.cart_item.quantity = it.data.quantity
                             } else {
@@ -197,8 +217,8 @@ class CartFragment : Fragment() {
                             break
                         }
                     }
-                        cartViewModel.totalAmount.value =
-                            calTotalAmount(cartAdapter.cartList as ArrayList<Cart>)
+                    cartViewModel.totalAmount.value =
+                        calTotalAmount(cartAdapter.cartList as ArrayList<Cart>)
                 }
                 is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
                 is ApiResponse.Error -> {
@@ -217,16 +237,16 @@ class CartFragment : Fragment() {
         cartViewModel.deleteFromCartResult.observe(this, {
             when (it) {
                 is ApiResponse.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                    for (item in cartAdapter.cartList){
-                        if(item.id == it.data?.prodId){
+                    binding.progressBar.visibility = View.GONE
+                    for (item in cartAdapter.cartList) {
+                        if (item.id == it.data?.prodId) {
                             cartAdapter.cartList.remove(item)
                             cartAdapter.notifyDataSetChanged()
                             break
                         }
                     }
-                        cartViewModel.totalAmount.value =
-                            calTotalAmount(cartAdapter.cartList as ArrayList<Cart>)
+                    cartViewModel.totalAmount.value =
+                        calTotalAmount(cartAdapter.cartList as ArrayList<Cart>)
                 }
                 is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
                 is ApiResponse.Error -> {
@@ -261,12 +281,4 @@ class CartFragment : Fragment() {
         return total
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.w("api call", "onCreate: $ACC_TOKEN")
-        cartViewModel = ViewModelProvider(
-            this,
-            CartViewModelFactory(CartRepository(ServiceBuilder.buildService(token = ACC_TOKEN)))
-        )[CartViewModel::class.java]
-    }
 }
