@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="8dp"
+        android:background="@drawable/gradient_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -18,13 +19,14 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/search_btn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_marginEnd="16dp"
             android:text="@string/search_for_shops_or_products"
             android:textColor="#4D000000"
             android:textAllCaps="false"
             android:fontFamily="@font/mulish_semi_bold"
             android:textSize="14sp"
+            android:clipToOutline="true"
             android:gravity="start|center"
             android:drawableEnd="@drawable/ic_search"
             android:backgroundTint="@color/white"

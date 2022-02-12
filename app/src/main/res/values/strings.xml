@@ -62,5 +62,34 @@
     <string name="products">Products</string>
     <string name="no_search_results_found">No search results found!</string>
     <string name="try_different_keyword">Try different keyword</string>
+    <string name="buy_now">Buy now</string>
+    <string name="_5">5</string>
+    <string name="write_a_review">Write a review....</string>
+    <string name="post">Post</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="rate_us">Rate us</string>
+    <string name="similar_products">Similar Products</string>
+    <string name="my_orders">My Orders</string>
+    <string name="cancel_order">Cancel Order</string>
+    <string name="thank_you">Thank you!</string>
+    <string name="for_your_order">for your order.</string>
+    <string name="your_order_will_be_dispatched_soon">Your order will be dispatched soon.</string>
+    <string name="choose_delivery_address">Choose delivery address</string>
+    <string name="title_activity_payment">PaymentActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="please_try_again">Please try again</string>
+    <string name="to_order">to order</string>
+    <string name="failed">Failed !!!</string>
+    <string name="order_summary">Order Summary</string>
+    <string name="proceed_to_pay">Proceed to pay</string>
+    <string name="quantity">Quantity</string>
+    <string name="product_name">Product Name</string>
+    <string name="total_amount">Total Amount</string>
 
 </resources>

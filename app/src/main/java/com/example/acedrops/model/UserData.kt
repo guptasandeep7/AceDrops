@@ -12,5 +12,5 @@ data class UserData(
     val newpass: String? = null,
     val status: String? = null,
     val id: String? = null,
-    val googleId:String? = null,
+    val googleId:String? = null
 )

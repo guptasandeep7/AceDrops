@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.acedrops.model.home.ShopResult
-import com.example.acedrops.repository.dashboard.home.ShopRepository
+import com.example.acedrops.repository.home.ShopRepository
 import com.example.acedrops.utill.ApiResponse
 import kotlinx.coroutines.launch
 

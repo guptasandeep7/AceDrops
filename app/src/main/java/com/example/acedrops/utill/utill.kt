@@ -1,13 +1,14 @@
 package com.example.acedrops.utill
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
 import com.example.acedrops.model.AccessTkn
 import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.repository.Datastore
-import com.example.acedrops.view.auth.AuthActivity.Companion.ACC_TOKEN
+import com.example.acedrops.view.auth.AuthActivity
+import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,19 +34,25 @@ fun validPass(password: String): String? {
     }
 }
 
-val generateToken: MutableLiveData<String?> = MutableLiveData()
-suspend fun generateToken(context: Context) {
-    val datastore = Datastore(context)
-    val refToken = datastore.getUserDetails(Datastore.REF_TOKEN_KEY)!!
-    var accessTkn: String? = null
-    ServiceBuilder.buildService().generateToken(refreshToken = refToken)
+
+suspend fun generateToken(
+    token: String,
+    refToken: String,
+    context: Context
+) {
+    ServiceBuilder.buildService(token).generateToken(refreshToken = refToken)
         .enqueue(object : Callback<AccessTkn?> {
             override fun onResponse(call: Call<AccessTkn?>, response: Response<AccessTkn?>) {
                 when {
                     response.isSuccessful -> {
-                        accessTkn = response.body()?.access_token.toString()
-                        ACC_TOKEN = accessTkn.toString()
-                        generateToken.postValue(accessTkn.toString())
+                        val newToken = response.body()?.access_token.toString()
+                        runBlocking {
+                            Datastore(context).saveUserDetails(
+                                Datastore.ACCESS_TOKEN_KEY,
+                                newToken
+                            )
+                            Log.w("GENERATE TOKEN", "NEW ACCESS TOKEN : $newToken")
+                        }
                     }
                     response.code() == 402 -> {
                         Toast.makeText(
@@ -53,22 +60,17 @@ suspend fun generateToken(context: Context) {
                             "Please login again",
                             Toast.LENGTH_SHORT
                         ).show()
-                        ACC_TOKEN = null
-                        generateToken.postValue(null)
+                        context.startActivity(Intent(context, AuthActivity::class.java))
                     }
                     else -> {
                         Log.w("generate generateToken", "Response: code is ${response.code()}")
                         Log.w("generate generateToken", "ref generateToken is $refToken")
-                        Log.w("generate generateToken", "access generateToken is $accessTkn")
-                        generateToken.postValue(null)
                     }
                 }
             }
 
             override fun onFailure(call: Call<AccessTkn?>, t: Throwable) {
-                generateToken.postValue(null)
                 Toast.makeText(context, " Failed: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
-    ACC_TOKEN?.let { datastore.saveUserDetails(Datastore.ACCESS_TOKEN_KEY, it) }
 }
