@@ -22,7 +22,7 @@ fun ImageView.imageFromUrlSearch(url: String?) {
         this.load(url) {
             placeholder(R.drawable.placeholder)
             crossfade(true)
-            scaleType = ImageView.ScaleType.CENTER_CROP
+            scaleType = ImageView.ScaleType.FIT_CENTER
         }
 }
 

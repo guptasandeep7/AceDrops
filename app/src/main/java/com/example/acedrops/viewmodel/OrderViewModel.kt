@@ -19,7 +19,7 @@ class OrderViewModel : ViewModel() {
     var totalAmount:Long = 0
     var lastFragment:String?= null
 
-    private var orders: MutableLiveData<ApiResponse<List<MyOrders>>> = MutableLiveData()
+    var orders: MutableLiveData<ApiResponse<List<MyOrders>>> = MutableLiveData()
     private var cancelOrder: MutableLiveData<ApiResponse<ResponseBody>> = MutableLiveData()
     private var orderCart: MutableLiveData<ApiResponse<ResponseBody>> = MutableLiveData()
     private var orderProduct: MutableLiveData<ApiResponse<ResponseBody>> = MutableLiveData()

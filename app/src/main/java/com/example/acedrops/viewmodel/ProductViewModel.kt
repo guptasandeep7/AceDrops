@@ -8,10 +8,10 @@ import com.example.acedrops.model.allproducts.OneCategoryResult
 import com.example.acedrops.model.cart.WishlistResponse
 import com.example.acedrops.model.home.Product
 import com.example.acedrops.model.productDetails.ProductDetails
-import com.example.acedrops.repository.CartRepository
 import com.example.acedrops.repository.ProductRepository
 import com.example.acedrops.utill.ApiResponse
 import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
 
 class ProductViewModel : ViewModel() {
 
@@ -22,6 +22,7 @@ class ProductViewModel : ViewModel() {
     var wishlist: MutableLiveData<ApiResponse<List<Product>>> = MutableLiveData()
     var atcResult: MutableLiveData<ApiResponse<Boolean>> = MutableLiveData()
     var wishlistResult: MutableLiveData<ApiResponse<WishlistResponse>> = MutableLiveData()
+    var result: MutableLiveData<ApiResponse<ResponseBody>> = MutableLiveData()
 
     fun addToCart(productId: Int, context: Context): MutableLiveData<ApiResponse<Boolean>> {
         viewModelScope.launch {
@@ -50,7 +51,10 @@ class ProductViewModel : ViewModel() {
         return productList
     }
 
-    fun addWishlist(productId: String, context: Context): MutableLiveData<ApiResponse<WishlistResponse>> {
+    fun addWishlist(
+        productId: String,
+        context: Context
+    ): MutableLiveData<ApiResponse<WishlistResponse>> {
         viewModelScope.launch {
             wishlistResult = ProductRepository().addRemoveWishlist(productId, context)
         }
@@ -64,4 +68,15 @@ class ProductViewModel : ViewModel() {
         return wishlist
     }
 
+    fun postReviewAndRating(
+        prodId: Int,
+        review: String,
+        rating: String,
+        context: Context
+    ): MutableLiveData<ApiResponse<ResponseBody>> {
+        viewModelScope.launch {
+            result = ProductRepository().postReviewAndRating(prodId, review, rating, context)
+        }
+        return result
+    }
 }

@@ -120,5 +120,13 @@ interface ApiInterface {
 
     @FormUrlEncoded
     @POST("/user/addPhno")
-    fun addPhoneNumber(@Field("phno") phnNo:String):Call<ResponseBody>
+    fun addPhoneNumber(@Field("phno") phnNo: String): Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("/user/reviews/{prodId}")
+    fun postReviewAndRating(
+        @Path("prodId") prodId: Int,
+        @Field("review") review: String,
+        @Field("rating") rating: String
+    ): Call<ResponseBody>
 }

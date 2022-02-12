@@ -6,17 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.adapter.MyOrdersAdapter
 import com.example.acedrops.databinding.FragmentMyOrdersBinding
+import com.example.acedrops.model.home.Product
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewmodel.OrderViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.Snackbar
 
 class MyOrdersFragment : Fragment() {
     private var _binding: FragmentMyOrdersBinding? = null
@@ -50,8 +50,12 @@ class MyOrdersFragment : Fragment() {
                 alertBox(position)
             }
 
-            override fun onItemClick(position: Int) {
-
+            override fun onItemClick(product: Product) {
+                val bundle = bundleOf("Product" to product)
+                findNavController().navigate(
+                    R.id.action_myOrdersFragment_to_productFragment,
+                    bundle
+                )
             }
         })
 
@@ -62,10 +66,7 @@ class MyOrdersFragment : Fragment() {
             when (it) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    myOrdersAdapter.productList.clear()
-                    it.data?.forEach {
-                        myOrdersAdapter.updateOrderList(it.products)
-                    }
+                    it.data?.let { it1 -> myOrdersAdapter.updateOrderList(it1) }
                     binding.productsRecyclerView.adapter = myOrdersAdapter
                 }
 
@@ -83,7 +84,7 @@ class MyOrdersFragment : Fragment() {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Confirm")
             .setMessage("Are you sure you want to cancel this order")
-            .setPositiveButton("Cancel") { dialog, id ->
+            .setPositiveButton("Cancel Order") { dialog, id ->
                 cancelOrder(position)
             }
             .setNeutralButton("Back") { dialog, id -> }
@@ -93,13 +94,13 @@ class MyOrdersFragment : Fragment() {
 
     private fun cancelOrder(position: Int) {
         orderViewModel.cancelOrder(
-            myOrdersAdapter.productList[position].order_item!!.orderId,
+            myOrdersAdapter.orderList[position].id,
             requireContext()
         ).observe(viewLifecycleOwner, {
             when (it) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    myOrdersAdapter.productList.removeAt(position)
+                    myOrdersAdapter.orderList.removeAt(position)
                     myOrdersAdapter.notifyDataSetChanged()
                 }
 
@@ -111,24 +112,6 @@ class MyOrdersFragment : Fragment() {
                 }
             }
         })
-    }
-
-    private fun snackbar(
-        text: String
-    ) {
-        view?.let {
-            Snackbar.make(
-                it,
-                text,
-                Snackbar.LENGTH_SHORT
-            ).setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.blue))
-                .setAction("View Cart") {
-                    findNavController()
-                        .navigate(R.id.action_wishlistFragment_to_cartFragment)
-                }.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-                .setAnchorView(R.id.bottomNavigationView)
-                .show()
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
