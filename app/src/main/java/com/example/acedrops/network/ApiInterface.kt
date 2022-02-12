@@ -114,4 +114,11 @@ interface ApiInterface {
         @Field("prodId") prodId: String,
         @Field("quantity") quantity: String
     ): Call<ResponseBody>
+
+    @GET("/user/getPhno")
+    fun getPhoneNumber(): Call<String>
+
+    @FormUrlEncoded
+    @POST("/user/addPhno")
+    fun addPhoneNumber(@Field("phno") phnNo:String):Call<ResponseBody>
 }

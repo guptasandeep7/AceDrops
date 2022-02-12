@@ -2,11 +2,13 @@ package com.example.acedrops.view.dash.profile
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
@@ -14,9 +16,16 @@ import com.example.acedrops.databinding.FragmentProfileBinding
 import com.example.acedrops.model.Message
 import com.example.acedrops.network.ServiceBuilder
 import com.example.acedrops.repository.Datastore
+import com.example.acedrops.repository.Datastore.Companion.PHN_NUMBER
+import com.example.acedrops.utill.ApiResponse
+import com.example.acedrops.viewmodel.ProfileViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,6 +38,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var gso: GoogleSignInOptions
     private var googleId: String? = null
+    private val profileViewModel: ProfileViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,23 +59,25 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             } else binding.changePassBtn.visibility = View.GONE
         }
 
-        binding.userPhnNo.visibility = View.GONE
+        lifecycleScope.launch {
+            binding.userName.text = datastore.getUserDetails(Datastore.NAME_KEY)?.lowercase()
+            binding.userEmail.text = datastore.getUserDetails(Datastore.EMAIL_KEY)?.lowercase()
+            binding.userPhnNo.text = datastore.getUserDetails(Datastore.PHN_NUMBER)
+        }
+
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.wishlistBtn.setOnClickListener(this)
         binding.changePassBtn.setOnClickListener(this)
         binding.manageAddrBtn.setOnClickListener(this)
         binding.orderBtn.setOnClickListener(this)
+        binding.phnBtn.setOnClickListener(this)
+        binding.signOutBtn.setOnClickListener(this)
 
-        lifecycleScope.launch {
-            binding.userName.text = datastore.getUserDetails(Datastore.NAME_KEY)?.lowercase()
-            binding.userEmail.text = datastore.getUserDetails(Datastore.EMAIL_KEY)?.lowercase()
-        }
-
-        binding.signOutBtn.setOnClickListener {
-            alertBox()
-        }
-
-        return view
     }
 
     private fun alertBox() {
@@ -163,6 +175,60 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             R.id.change_pass_btn -> findNavController().navigate(R.id.action_profileFragment_to_changePasswordFragment)
             R.id.manage_addr_btn -> findNavController().navigate(R.id.action_profileFragment_to_addressFragment)
             R.id.order_btn -> findNavController().navigate(R.id.action_profileFragment_to_myOrdersFragment)
+            R.id.sign_out_btn -> alertBox()
+            R.id.phn_btn -> bottomSheet()
         }
     }
+
+    private fun bottomSheet() {
+        val dialog = BottomSheetDialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.phn_no_dialog, null)
+        dialog.setContentView(view)
+        dialog.setCancelable(false)
+        dialog.show()
+        val cancelBtn = view.findViewById<MaterialButton>(R.id.cancel_btn)
+        val addBtn = view.findViewById<MaterialButton>(R.id.add_btn)
+        val phnNumber = view.findViewById<TextInputEditText?>(R.id.phn_no).text
+        val phnNumberLayout = view.findViewById<TextInputLayout>(R.id.phn_no_layout)
+        cancelBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        addBtn.setOnClickListener {
+            if (!phnNumber.isNullOrBlank() && phnNumber.length == 10) {
+                addPhnNumber(phnNumber, dialog)
+            } else phnNumberLayout.helperText = "Phone number should be 10 digit only"
+        }
+    }
+
+    private fun addPhnNumber(
+        phnNumber: Editable,
+        dialog: BottomSheetDialog
+    ) {
+        profileViewModel.addPhoneNumber(
+            phnNumber.trim().toString().toLong(),
+            requireContext()
+        )?.observe(viewLifecycleOwner, {
+            when (it) {
+                is ApiResponse.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.userPhnNo.text = phnNumber.trim().toString()
+                    lifecycleScope.launch {
+                        Datastore(requireContext()).saveUserDetails(
+                            PHN_NUMBER,
+                            phnNumber.trim().toString()
+                        )
+                    }
+                    dialog.dismiss()
+                }
+                is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
+                is ApiResponse.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_SHORT)
+                        .show()
+                    dialog.dismiss()
+                }
+            }
+        })
+    }
+
 }

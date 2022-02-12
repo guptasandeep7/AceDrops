@@ -61,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/user_email" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/wishlist_btn"
+        android:id="@+id/phn_btn"
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:layout_marginTop="24dp"
@@ -70,6 +70,38 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_phn_no">
+
+        <TextView
+            style="@style/TextColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center"
+            android:layout_marginStart="16dp"
+            android:text="@string/add_phone_number"
+            android:textSize="16sp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center"
+            android:layout_marginEnd="25dp"
+            android:background="#00FFFFFF"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:src="@drawable/ic_vector__9_" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/wishlist_btn"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_marginTop="1dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phn_btn">
 
         <TextView
             style="@style/TextColor"
