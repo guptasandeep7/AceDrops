@@ -8,8 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.adapter.MyOrdersAdapter
@@ -21,7 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class MyOrdersFragment : Fragment() {
     private var _binding: FragmentMyOrdersBinding? = null
-    private var orderViewModel = OrderViewModel()
+    private val orderViewModel: OrderViewModel by activityViewModels()
     private val binding get() = _binding!!
     private val myOrdersAdapter = MyOrdersAdapter()
 
@@ -138,10 +137,6 @@ class MyOrdersFragment : Fragment() {
             View.GONE
         activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
             View.GONE
-
-        orderViewModel =
-            ViewModelProvider((context as FragmentActivity?)!!)[OrderViewModel::class.java]
-
     }
 
     override fun onResume() {
