@@ -1,6 +1,7 @@
 package com.example.acedrops.view.dash
 
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,8 @@ class CategoryFragment : Fragment() {
     private var _binding: FragmentCategoryBinding? = null
     private val binding get() = _binding!!
     private var categoryAdapter = CategoryAdapter()
+    private var mLastClickTime: Long = 0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,16 +40,20 @@ class CategoryFragment : Fragment() {
         categoryList.add(CategoryList("Makeup and accessories", R.drawable.ic_women_fashion))
         categoryList.add(CategoryList("Others", R.drawable.ic_women_fashion))
 
-
         binding.categoryRv.adapter = categoryAdapter
         categoryAdapter.updateCategoryList(categoryList)
 
         categoryAdapter.setOnItemClickListener(object : CategoryAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                val bundle =
-                    bundleOf("CategoryName" to categoryAdapter.categoryList[position].categoryName)
-                view.findNavController()
-                    .navigate(R.id.action_categoryFragment_to_allProductsFragment, bundle)
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                } else {
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    val bundle =
+                        bundleOf("CategoryName" to categoryAdapter.categoryList[position].categoryName)
+                    view.findNavController()
+                        .navigate(R.id.action_categoryFragment_to_allProductsFragment, bundle)
+                }
             }
         })
         return view

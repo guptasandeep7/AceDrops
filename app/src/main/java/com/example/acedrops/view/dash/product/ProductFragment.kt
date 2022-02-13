@@ -53,7 +53,11 @@ class ProductFragment : Fragment() {
 
         getProductDetails()
 
-        if (productViewModel.product.value!!.stock == 0) binding.buyNowBtn.isEnabled = false
+        if (productViewModel.product.value!!.stock == 0){
+            binding.outOfStock.visibility = View.VISIBLE
+            binding.buyNowBtn.visibility = View.GONE
+            binding.addToCartBtn.visibility = View.GONE
+        }
 
         binding.product = productViewModel.product.value
 

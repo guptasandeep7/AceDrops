@@ -8,12 +8,15 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.acedrops.R
 import com.example.acedrops.adapter.ReviewAdapter
 import com.example.acedrops.databinding.FragmentReviewBinding
 import com.example.acedrops.model.productDetails.ReviewsAndRating
+import com.example.acedrops.repository.Datastore
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewmodel.ProductViewModel
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 class ReviewFragment : Fragment(), View.OnClickListener {
@@ -21,6 +24,7 @@ class ReviewFragment : Fragment(), View.OnClickListener {
     private val binding get() = _binding!!
     private lateinit var productViewModel: ProductViewModel
     private var reviewAdapter = ReviewAdapter()
+    lateinit var name:String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,6 +34,9 @@ class ReviewFragment : Fragment(), View.OnClickListener {
 
         getRatingAndReview()
 
+        lifecycleScope.launch {
+            name = Datastore(requireContext()).getUserDetails(Datastore.NAME_KEY).toString()
+        }
         binding.postBtn.setOnClickListener(this)
     }
 
@@ -77,7 +84,8 @@ class ReviewFragment : Fragment(), View.OnClickListener {
                         listOf(
                             ReviewsAndRating(
                                 rating = rating.toInt(),
-                                review = review
+                                review = review,
+                                userId = name
                             )
                         )
                     )

@@ -62,11 +62,11 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
             options.put("send_sms_hash", true)
 
 
-            val prefill = JSONObject()
-            prefill.put("email", "guptasg300@gmail.com")
-            prefill.put("contact", "7897468764")
-
-            options.put("prefill", prefill)
+//            val prefill = JSONObject()
+//            prefill.put("email", "guptasg300@gmail.com")
+//            prefill.put("contact", "7897468764")
+//
+//            options.put("prefill", prefill)
             co.open(this, options)
 
         } catch (e: Exception) {

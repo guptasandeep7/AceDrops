@@ -43,6 +43,10 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
         fun bind(product: Product) {
             binding.product = product
             binding.productBasePrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+            if(product.stock==0){
+                binding.addToCartBtn.visibility = View.GONE
+                binding.outOfStock.visibility = View.VISIBLE
+            }
         }
     }
 
