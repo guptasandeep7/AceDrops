@@ -13,7 +13,6 @@ import com.example.acedrops.R
 import com.example.acedrops.databinding.FragmentAddAddressBinding
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewmodel.AddAddressViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class AddAddressFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentAddAddressBinding? = null
@@ -25,9 +24,6 @@ class AddAddressFragment : Fragment(), View.OnClickListener {
 
         addAddressViewModel =
             ViewModelProvider((context as FragmentActivity?)!!)[AddAddressViewModel::class.java]
-
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
 
         binding.viewmodel = addAddressViewModel
         binding.backBtn.setOnClickListener(this)
@@ -98,40 +94,17 @@ class AddAddressFragment : Fragment(), View.OnClickListener {
         return false
     }
 
-    override fun onResume() {
-        super.onResume()
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentAddAddressBinding.inflate(inflater, container, false)
-
         return binding.root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
-
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.VISIBLE
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.VISIBLE
     }
 
 }

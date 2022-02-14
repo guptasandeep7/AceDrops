@@ -2,6 +2,7 @@ package com.example.acedrops.view.dash
 
 import android.content.Context
 import android.os.Bundle
+import android.os.SystemClock
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -21,9 +22,9 @@ import com.example.acedrops.model.search.SearchItem
 import com.example.acedrops.model.search.SearchResult
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewmodel.SearchViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class SearchFragment : Fragment() {
+    private var  mLastClickTime:Long = 0
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private lateinit var searchViewModel: SearchViewModel
@@ -36,9 +37,6 @@ class SearchFragment : Fragment() {
         searchViewModel =
             ViewModelProvider((context as FragmentActivity?)!!)[SearchViewModel::class.java]
 
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
-
         binding.backBtn.setOnClickListener { findNavController().popBackStack() }
         binding.searchRecyclerView.adapter = searchAdapter
 
@@ -47,27 +45,28 @@ class SearchFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (!s.isNullOrBlank())
-                    searchViewModel.getSearch(s.toString(),requireContext()).observe(viewLifecycleOwner, {
-                        when (it) {
-                            is ApiResponse.Success -> {
-                                binding.progressBar.visibility = View.GONE
-                                val data = it.data!!
-                                if (data.products.isNullOrEmpty() && data.shops.isNullOrEmpty() && data.categoryProds.isNullOrEmpty()) {
-                                    binding.empty.visibility = View.VISIBLE
-                                    binding.searchRecyclerView.visibility = View.GONE
-                                } else updateUI(it.data)
+                    searchViewModel.getSearch(s.toString(), requireContext())
+                        .observe(viewLifecycleOwner, {
+                            when (it) {
+                                is ApiResponse.Success -> {
+                                    binding.progressBar.visibility = View.GONE
+                                    val data = it.data!!
+                                    if (data.products.isNullOrEmpty() && data.shops.isNullOrEmpty() && data.categoryProds.isNullOrEmpty()) {
+                                        binding.empty.visibility = View.VISIBLE
+                                        binding.searchRecyclerView.visibility = View.GONE
+                                    } else updateUI(it.data)
+                                }
+                                is ApiResponse.Loading -> {
+                                    binding.empty.visibility = View.GONE
+                                    binding.progressBar.visibility = View.VISIBLE
+                                }
+                                is ApiResponse.Error -> Toast.makeText(
+                                    requireContext(),
+                                    it.errorMessage ?: "Something went wrong!!!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
-                            is ApiResponse.Loading -> {
-                                binding.empty.visibility = View.GONE
-                                binding.progressBar.visibility = View.VISIBLE
-                            }
-                            is ApiResponse.Error -> Toast.makeText(
-                                requireContext(),
-                                it.errorMessage ?: "Something went wrong!!!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    })
+                        })
             }
 
             override fun afterTextChanged(p0: Editable?) {}
@@ -75,25 +74,29 @@ class SearchFragment : Fragment() {
 
         searchAdapter.setOnItemClickListener(object : SearchAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                when (searchAdapter.searchList[position].type) {
-                    0 -> {
-                        val bundle =
-                            bundleOf("Product" to searchAdapter.searchList[position].product)
-                        findNavController()
-                            .navigate(R.id.action_searchFragment_to_productFragment, bundle)
-                    }
-                    1 -> {
-                        val bundle =
-                            bundleOf("CategoryName" to searchAdapter.searchList[position].title)
-                        findNavController()
-                            .navigate(R.id.action_searchFragment_to_allProductsFragment, bundle)
-                    }
-                    2 -> {
-                        val bundle = bundleOf("ShopId" to searchAdapter.searchList[position].id)
-                        findNavController().navigate(
-                            R.id.action_searchFragment_to_shopFragment,
-                            bundle
-                        )
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 500) {
+                    return
+                } else {
+                    when (searchAdapter.searchList[position].type) {
+                        0 -> {
+                            val bundle =
+                                bundleOf("Product" to searchAdapter.searchList[position].product)
+                            findNavController()
+                                .navigate(R.id.action_searchFragment_to_productFragment, bundle)
+                        }
+                        1 -> {
+                            val bundle =
+                                bundleOf("CategoryName" to searchAdapter.searchList[position].title)
+                            findNavController()
+                                .navigate(R.id.action_searchFragment_to_allProductsFragment, bundle)
+                        }
+                        2 -> {
+                            val bundle = bundleOf("ShopId" to searchAdapter.searchList[position].id)
+                            findNavController().navigate(
+                                R.id.action_searchFragment_to_shopFragment,
+                                bundle
+                            )
+                        }
                     }
                 }
             }
@@ -143,20 +146,6 @@ class SearchFragment : Fragment() {
         super.onResume()
         binding.searchEditText.requestFocus()
         binding.searchEditText.showKeyboard()
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-
     }
 
     override fun onCreateView(
@@ -164,17 +153,12 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.VISIBLE
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.VISIBLE
     }
 
 

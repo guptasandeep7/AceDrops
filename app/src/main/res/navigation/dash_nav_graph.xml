@@ -12,22 +12,38 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_cartFragment"
-            app:destination="@id/cartFragment" />
+            app:destination="@id/cartFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
         <action
             android:id="@+id/action_homeFragment_to_allShopsFragment"
-            app:destination="@id/allShopsFragment" />
+            app:destination="@id/allShopsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_homeFragment_to_allProductsFragment"
-            app:destination="@id/allProductsFragment" />
+            app:destination="@id/allProductsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_homeFragment_to_authActivity"
-            app:destination="@id/authActivity" />
+            app:destination="@id/authActivity"
+            app:enterAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_homeFragment_to_shopFragment"
-            app:destination="@id/shopFragment" />
+            app:destination="@id/shopFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
         <action
             android:id="@+id/action_homeFragment_to_productFragment"
-            app:destination="@id/productFragment" />
+            app:destination="@id/productFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
@@ -36,7 +52,12 @@
         tools:layout="@layout/fragment_category" >
         <action
             android:id="@+id/action_categoryFragment_to_allProductsFragment"
-            app:destination="@id/allProductsFragment" />
+            app:destination="@id/allProductsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_categoryFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/cartFragment"
@@ -45,13 +66,21 @@
         tools:layout="@layout/fragment_cart" >
         <action
             android:id="@+id/action_cartFragment_to_authActivity"
-            app:destination="@id/authActivity"/>
+            app:destination="@id/authActivity"
+            app:enterAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_cartFragment_to_productFragment"
-            app:destination="@id/productFragment" />
+            app:destination="@id/productFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_cartFragment_to_addressFragment"
-            app:destination="@id/addressFragment" />
+            app:destination="@id/addressFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_cartFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -60,22 +89,33 @@
         tools:layout="@layout/fragment_profile" >
         <action
             android:id="@+id/action_profileFragment_to_authActivity"
-            app:destination="@id/authActivity" />
+            app:destination="@id/authActivity"
+            app:enterAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_profileFragment_to_allProductsFragment"
-            app:destination="@id/allProductsFragment" />
+            app:destination="@id/allProductsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_profileFragment_to_changePasswordFragment"
-            app:destination="@id/changePasswordFragment" />
+            app:destination="@id/changePasswordFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_profileFragment_to_addressFragment"
-            app:destination="@id/addressFragment" />
+            app:destination="@id/addressFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_profileFragment_to_wishlistFragment"
-            app:destination="@id/wishlistFragment" />
+            app:destination="@id/wishlistFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_profileFragment_to_myOrdersFragment"
-            app:destination="@id/myOrdersFragment" />
+            app:destination="@id/myOrdersFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
     <activity
         android:id="@+id/authActivity"
@@ -89,7 +129,9 @@
         tools:layout="@layout/fragment_all_shops" >
         <action
             android:id="@+id/action_allShopsFragment_to_shopFragment"
-            app:destination="@id/shopFragment" />
+            app:destination="@id/shopFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/allProductsFragment"
@@ -98,10 +140,14 @@
         tools:layout="@layout/fragment_all_products" >
         <action
             android:id="@+id/action_allProductsFragment_to_productFragment"
-            app:destination="@id/productFragment" />
+            app:destination="@id/productFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_allProductsFragment_to_cartFragment"
-            app:destination="@id/cartFragment" />
+            app:destination="@id/cartFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/changePasswordFragment"
@@ -112,7 +158,9 @@
             android:id="@+id/action_changePasswordFragment_to_profileFragment"
             app:destination="@id/profileFragment"
             app:popUpTo="@id/profileFragment"
-            app:popUpToInclusive="false"/>
+            app:popUpToInclusive="false"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/addressFragment"
@@ -121,13 +169,18 @@
         tools:layout="@layout/fragment_address" >
         <action
             android:id="@+id/action_addressFragment_to_authActivity"
-            app:destination="@id/authActivity" />
+            app:destination="@id/authActivity"
+            app:enterAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_addressFragment_to_addAddressFragment"
-            app:destination="@id/addAddressFragment" />
+            app:destination="@id/addAddressFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_addressFragment_to_paymentActivity"
-            app:destination="@id/paymentActivity" />
+            app:destination="@id/paymentActivity"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/addAddressFragment"
@@ -141,7 +194,9 @@
         tools:layout="@layout/fragment_shop" >
         <action
             android:id="@+id/action_shopFragment_to_productFragment"
-            app:destination="@id/productFragment" />
+            app:destination="@id/productFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -150,16 +205,24 @@
         tools:layout="@layout/fragment_search" >
         <action
             android:id="@+id/action_searchFragment_to_shopFragment"
-            app:destination="@id/shopFragment" />
+            app:destination="@id/shopFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_searchFragment_to_allProductsFragment"
-            app:destination="@id/allProductsFragment" />
+            app:destination="@id/allProductsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_searchFragment_to_productFragment"
-            app:destination="@id/productFragment" />
+            app:destination="@id/productFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_searchFragment_to_productFragment3"
-            app:destination="@id/productFragment" />
+            app:destination="@id/productFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/productFragment"
@@ -168,19 +231,29 @@
         tools:layout="@layout/fragment_product">
         <action
             android:id="@+id/action_productFragment_to_cartFragment"
-            app:destination="@id/cartFragment" />
+            app:destination="@id/cartFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_productFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_productFragment_to_shopFragment"
-            app:destination="@id/shopFragment" />
+            app:destination="@id/shopFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_productFragment_self"
-            app:destination="@id/productFragment" />
+            app:destination="@id/productFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_productFragment_to_addressFragment"
-            app:destination="@id/addressFragment" />
+            app:destination="@id/addressFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/descriptionFragment"
@@ -189,7 +262,9 @@
         tools:layout="@layout/fragment_description">
         <action
             android:id="@+id/action_descriptionFragment_to_shopFragment"
-            app:destination="@id/shopFragment" />
+            app:destination="@id/shopFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/wishlistFragment"
@@ -198,16 +273,26 @@
         tools:layout="@layout/fragment_wishlist" >
         <action
             android:id="@+id/action_wishlistFragment_to_cartFragment"
-            app:destination="@id/cartFragment" />
+            app:destination="@id/cartFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_wishlistFragment_to_productFragment"
-            app:destination="@id/productFragment" />
+            app:destination="@id/productFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/myOrdersFragment"
         android:name="com.example.acedrops.view.dash.profile.MyOrdersFragment"
         android:label="fragment_my_orders"
-        tools:layout="@layout/fragment_my_orders" />
+        tools:layout="@layout/fragment_my_orders" >
+        <action
+            android:id="@+id/action_myOrdersFragment_to_productFragment"
+            app:destination="@id/productFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
+    </fragment>
     <activity
         android:id="@+id/paymentActivity"
         android:name="com.example.acedrops.view.dash.PaymentActivity"

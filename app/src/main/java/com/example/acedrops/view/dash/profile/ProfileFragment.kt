@@ -2,6 +2,7 @@ package com.example.acedrops.view.dash.profile
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.os.SystemClock
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +33,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ProfileFragment : Fragment(), View.OnClickListener {
+    private var mLastClickTime: Long = 0
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     lateinit var datastore: Datastore
@@ -152,31 +154,27 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         return result
     }
 
-    override fun onResume() {
-        super.onResume()
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.VISIBLE
     }
 
     override fun onClick(v: View?) {
-        when (v?.id) {
-            R.id.wishlist_btn -> {
-                findNavController().navigate(
-                    R.id.action_profileFragment_to_wishlistFragment
-                )
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 500) {
+            return
+        } else {
+            when (v?.id) {
+                R.id.wishlist_btn -> {
+                    findNavController().navigate(
+                        R.id.action_profileFragment_to_wishlistFragment
+                    )
+                }
+                R.id.change_pass_btn -> findNavController().navigate(R.id.action_profileFragment_to_changePasswordFragment)
+                R.id.manage_addr_btn -> findNavController().navigate(R.id.action_profileFragment_to_addressFragment)
+                R.id.order_btn -> findNavController().navigate(R.id.action_profileFragment_to_myOrdersFragment)
+                R.id.sign_out_btn -> alertBox()
+                R.id.phn_btn -> bottomSheet()
             }
-            R.id.change_pass_btn -> findNavController().navigate(R.id.action_profileFragment_to_changePasswordFragment)
-            R.id.manage_addr_btn -> findNavController().navigate(R.id.action_profileFragment_to_addressFragment)
-            R.id.order_btn -> findNavController().navigate(R.id.action_profileFragment_to_myOrdersFragment)
-            R.id.sign_out_btn -> alertBox()
-            R.id.phn_btn -> bottomSheet()
         }
     }
 

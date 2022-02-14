@@ -2,7 +2,6 @@ package com.example.acedrops.repository
 
 import android.content.Context
 import android.util.Log
-import androidx.core.util.LogWriter
 import androidx.lifecycle.MutableLiveData
 import com.example.acedrops.model.allproducts.OneCategoryResult
 import com.example.acedrops.model.cart.CartResponse
@@ -14,6 +13,7 @@ import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.utill.generateToken
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,11 +25,12 @@ class ProductRepository {
     private val productsList = MutableLiveData<ApiResponse<OneCategoryResult>>()
     private val wishlist = MutableLiveData<ApiResponse<List<Product>>>()
     private val addToWishlist = MutableLiveData<ApiResponse<WishlistResponse>>()
+    private val result = MutableLiveData<ApiResponse<ResponseBody>>()
 
     suspend fun addToCart(productId: Int, context: Context): MutableLiveData<ApiResponse<Boolean>> {
 
         val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
-        Log.w("PRODUCT REPO", "addToCart: $token", )
+        Log.w("PRODUCT REPO", "addToCart: $token")
         val call = ServiceBuilder.buildService(token).addToCart(productId.toString())
         addToCartResult.postValue(ApiResponse.Loading())
         try {
@@ -65,7 +66,10 @@ class ProductRepository {
         return addToCartResult
     }
 
-    suspend fun addRemoveWishlist(productId: String,context: Context): MutableLiveData<ApiResponse<WishlistResponse>> {
+    suspend fun addRemoveWishlist(
+        productId: String,
+        context: Context
+    ): MutableLiveData<ApiResponse<WishlistResponse>> {
 
         val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
 
@@ -78,7 +82,11 @@ class ProductRepository {
                     response: Response<WishlistResponse?>
                 ) {
                     when {
-                        response.isSuccessful -> addToWishlist.postValue(ApiResponse.Success(response.body()))
+                        response.isSuccessful -> addToWishlist.postValue(
+                            ApiResponse.Success(
+                                response.body()
+                            )
+                        )
                         response.code() == 403 || response.code() == 402 -> {
                             GlobalScope.launch {
                                 generateToken(
@@ -212,5 +220,41 @@ class ProductRepository {
             wishlist.postValue(ApiResponse.Error(e.message))
         }
         return wishlist
+    }
+
+    suspend fun postReviewAndRating(
+        prodId: Int,
+        review: String,
+        rating: String,
+        context: Context
+    ): MutableLiveData<ApiResponse<ResponseBody>> {
+        Log.w("Product REPO", "postReviewAndRating: $prodId,$review,$rating", )
+
+        val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
+
+        val call = ServiceBuilder.buildService(token).postReviewAndRating(prodId, review, rating)
+        result.postValue(ApiResponse.Loading())
+        try {
+            call.enqueue(object : Callback<ResponseBody?> {
+                override fun onResponse(
+                    call: Call<ResponseBody?>,
+                    response: Response<ResponseBody?>
+                ) {
+                    when {
+                        response.isSuccessful ->
+                            result.postValue(ApiResponse.Success(response.body()))
+                        else ->
+                            result.postValue(ApiResponse.Error(response.code().toString()))
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody?>, t: Throwable) {
+                    result.postValue(ApiResponse.Error("Something went wrong!! ${t.message}"))
+                }
+            })
+        } catch (e: Exception) {
+            result.postValue(ApiResponse.Error(e.message))
+        }
+        return result
     }
 }

@@ -31,10 +31,6 @@ class ChangePasswordFragment : Fragment() {
     ): View? {
         _binding = FragmentChangePasswordBinding.inflate(inflater, container, false)
 
-        bottomNavigation =
-            activity?.findViewById(R.id.bottomNavigationView)!!
-        bottomNavigation.visibility = View.GONE
-
         binding.backBtn.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -106,24 +102,8 @@ class ChangePasswordFragment : Fragment() {
         binding.signBtn.isEnabled = true
     }
 
-    override fun onResume() {
-        super.onResume()
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        bottomNavigation.visibility = View.VISIBLE
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.VISIBLE
     }
 }

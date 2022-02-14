@@ -1,6 +1,7 @@
 package com.example.acedrops.view.dash.product
 
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,7 @@ import com.example.acedrops.viewmodel.ProductViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class DescriptionFragment : Fragment() {
+    private var mLastClickTime: Long = 0
     private var _binding: FragmentDescriptionBinding? = null
     private val binding get() = _binding!!
     private lateinit var productViewModel: ProductViewModel
@@ -49,8 +51,12 @@ class DescriptionFragment : Fragment() {
 
         productAdapter.setOnItemClickListener(object : ProductAdapter.onItemClickListener {
             override fun onItemClick(product: Product) {
-                val bundle = bundleOf("Product" to product)
-                findNavController().navigate(R.id.action_productFragment_self, bundle)
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 500) {
+                    return
+                } else {
+                    val bundle = bundleOf("Product" to product)
+                    findNavController().navigate(R.id.action_productFragment_self, bundle)
+                }
             }
 
             override fun onAddToCartClick(product: Product, view: View) {
@@ -61,9 +67,7 @@ class DescriptionFragment : Fragment() {
                 addToWishlist(product, view)
             }
         })
-
     }
-
 
     private fun addToCart(product: Product, view: View) {
         productViewModel.addToCart(productId = product.id, requireContext())

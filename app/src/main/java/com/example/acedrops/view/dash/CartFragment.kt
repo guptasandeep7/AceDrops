@@ -1,6 +1,7 @@
 package com.example.acedrops.view.dash
 
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,9 +9,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -24,17 +23,16 @@ import com.example.acedrops.model.home.Product
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewmodel.CartViewModel
 import com.example.acedrops.viewmodel.OrderViewModel
-import com.example.acedrops.viewmodel.ProductViewModel
 import java.util.*
 
 class CartFragment : Fragment() {
-
+    private var mLastClickTime: Long = 0
     lateinit var binding: FragmentCartBinding
     val cartViewModel: CartViewModel by activityViewModels()
     private var cartAdapter = CartAdapter()
     private val orderViewModel: OrderViewModel by activityViewModels()
     lateinit var swipeGesture: SwipeGesture
-    
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,15 +46,19 @@ class CartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         binding.progressBar.visibility = View.GONE
         binding.cardView2.visibility = View.GONE
 
-        binding.proceedBtn.setOnClickListener{
+        binding.searchBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_cartFragment_to_searchFragment)
+        }
+
+        binding.proceedBtn.setOnClickListener {
 
             orderViewModel.totalAmount = cartViewModel.totalAmount.value!!
             val bundle = bundleOf("LastFragment" to "Cart")
-            findNavController().navigate(R.id.action_cartFragment_to_addressFragment,bundle)
+            findNavController().navigate(R.id.action_cartFragment_to_addressFragment, bundle)
         }
 
         swipeGesture = object : SwipeGesture(requireContext()) {
@@ -113,10 +115,9 @@ class CartFragment : Fragment() {
             }
 
             override fun increaseQuantity(position: Int) {
-                if(cartAdapter.cartList[position].cart_item.quantity>=cartAdapter.cartList[position].stock){
+                if (cartAdapter.cartList[position].cart_item.quantity >= cartAdapter.cartList[position].stock) {
                     Toast.makeText(requireContext(), "Out of stock", Toast.LENGTH_SHORT).show()
-                }
-                else observerAdd(cartAdapter.cartList[position].id.toString())
+                } else observerAdd(cartAdapter.cartList[position].id.toString())
             }
 
             override fun addWishlist(position: Int) {
@@ -124,26 +125,34 @@ class CartFragment : Fragment() {
             }
 
             override fun onItemClick(position: Int) {
-                val product:Product
-                cartAdapter.cartList[position].also {
-                    product = Product(
-                        it.basePrice,
-                        it.createdAt,
-                        it.shortDescription,
-                        it.discountedPrice,
-                        it.id,
-                        it.imgUrls,
-                        it.offers,
-                        null,
-                        it.shopId,
-                        it.stock,
-                        it.title,
-                        it.updatedAt,
-                        it.wishlistStatus
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return
+                } else {
+                    mLastClickTime = SystemClock.elapsedRealtime()
+                    val product: Product
+                    cartAdapter.cartList[position].also {
+                        product = Product(
+                            it.basePrice,
+                            it.createdAt,
+                            it.shortDescription,
+                            it.discountedPrice,
+                            it.id,
+                            it.imgUrls,
+                            it.offers,
+                            null,
+                            it.shopId,
+                            it.stock,
+                            it.title,
+                            it.updatedAt,
+                            it.wishlistStatus
+                        )
+                    }
+                    val bundle = bundleOf("Product" to product)
+                    findNavController().navigate(
+                        R.id.action_cartFragment_to_productFragment,
+                        bundle
                     )
                 }
-                val bundle = bundleOf("Product" to product)
-                findNavController().navigate(R.id.action_cartFragment_to_productFragment, bundle)
             }
         })
     }

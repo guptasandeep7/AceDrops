@@ -1,71 +1,70 @@
 package com.example.acedrops.adapter
 
-import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.acedrops.R
-import com.example.acedrops.databinding.CartItemBinding
-import com.example.acedrops.databinding.MyorderItemBinding
-import com.example.acedrops.model.cart.Cart
+import com.example.acedrops.databinding.OrderProductItemBinding
+import com.example.acedrops.model.MyOrders
 import com.example.acedrops.model.home.Product
 
 class MyOrdersAdapter : RecyclerView.Adapter<MyOrdersAdapter.ViewHolder>() {
 
-    var productList = mutableListOf<Product>()
-    fun updateOrderList(product: List<Product>) {
-        this.productList = product.toMutableList()
+    var orderList = mutableListOf<MyOrders>()
+    fun updateOrderList(product: List<MyOrders>) {
+        this.orderList = product.toMutableList()
         notifyDataSetChanged()
     }
 
-    private var mlistner: onItemClickListener? = null
+    private lateinit var mlistner: onItemClickListener
 
     interface onItemClickListener {
         fun cancelOrder(position: Int)
-        fun onItemClick(position: Int)
+        fun onItemClick(product: Product)
     }
 
     fun setOnItemClickListener(listener: onItemClickListener) {
         mlistner = listener
     }
 
-    class ViewHolder(val binding: MyorderItemBinding, listener: onItemClickListener) :
+    class ViewHolder(val binding: OrderProductItemBinding, listener: onItemClickListener) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(product: Product) {
-            binding.product = product
-            binding.productBasePrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+        private val orderProductAdapter = OrderProductsAdapter()
+        fun bind(myOrder: MyOrders) {
+            binding.order = myOrder
+            orderProductAdapter.updateOrderList(myOrder.products)
+            binding.productsRecyclerView.adapter = orderProductAdapter
         }
 
         init {
-            itemView.setOnClickListener {
-                listener.cancelOrder(adapterPosition)
-                listener.onItemClick(adapterPosition)
-            }
+            orderProductAdapter.setOnItemClickListener(object :
+                OrderProductsAdapter.onItemClickListener {
+                override fun onItemClick(product: Product) {
+                    listener.onItemClick(product)
+                }
+            })
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding: MyorderItemBinding = DataBindingUtil.inflate(
+        val binding: OrderProductItemBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.myorder_item, parent, false
+            R.layout.order_product_item, parent, false
         )
-        return ViewHolder(binding, mlistner!!)
+        return ViewHolder(binding, mlistner)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(productList[position])
+        holder.bind(orderList[position])
 
-        holder.binding.cancelOrderBtn.setOnClickListener {
-            mlistner?.cancelOrder(position)
+        holder.binding.cancelBtn.setOnClickListener {
+            mlistner.cancelOrder(position)
         }
 
-        holder.binding.productCard.setOnClickListener{
-            mlistner?.onItemClick(position)
-        }
     }
 
     override fun getItemCount(): Int {
-        return productList.size
+        return orderList.size
     }
 }

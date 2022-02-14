@@ -60,6 +60,7 @@ suspend fun generateToken(
                             "Please login again",
                             Toast.LENGTH_SHORT
                         ).show()
+                        Log.w("GENERATE TOKEN", "ref token: $refToken", )
                         context.startActivity(Intent(context, AuthActivity::class.java))
                     }
                     else -> {

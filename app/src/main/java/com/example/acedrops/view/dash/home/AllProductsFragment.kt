@@ -1,6 +1,7 @@
 package com.example.acedrops.view.dash.home
 
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,10 +22,10 @@ import com.example.acedrops.model.home.Product
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewmodel.CartViewModel
 import com.example.acedrops.viewmodel.ProductViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 
 class AllProductsFragment : Fragment() {
+    private var mLastClickTime: Long = 0
     private var _binding: FragmentAllProductsBinding? = null
     private var productViewModel = ProductViewModel()
     private val binding get() = _binding!!
@@ -39,12 +40,8 @@ class AllProductsFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
 
         binding.backBtn.setOnClickListener {
             findNavController().popBackStack()
@@ -63,8 +60,15 @@ class AllProductsFragment : Fragment() {
 
         productAdapter.setOnItemClickListener(object : ProductAdapter.onItemClickListener {
             override fun onItemClick(product: Product) {
-                val bundle = bundleOf("Product" to product)
-                findNavController().navigate(R.id.action_allProductsFragment_to_productFragment, bundle)
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 500) {
+                    return
+                } else {
+                    val bundle = bundleOf("Product" to product)
+                    findNavController().navigate(
+                        R.id.action_allProductsFragment_to_productFragment,
+                        bundle
+                    )
+                }
             }
 
             override fun onAddToCartClick(product: Product, view: View) {
@@ -188,38 +192,23 @@ class AllProductsFragment : Fragment() {
                 .show()
         }
     }
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
 
         productViewModel =
             ViewModelProvider((context as FragmentActivity?)!!)[ProductViewModel::class.java]
 
         try {
-            productViewModel.oneCategoryData.value = arguments?.getSerializable("OneCategory") as OneCategoryResult?
+            productViewModel.oneCategoryData.value =
+                arguments?.getSerializable("OneCategory") as OneCategoryResult?
         } catch (e: Exception) {
 
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.VISIBLE
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.VISIBLE
     }
 }
