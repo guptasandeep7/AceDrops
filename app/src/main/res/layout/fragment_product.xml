@@ -189,6 +189,19 @@
                         android:textSize="10sp" />
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/out_of_stock"
+                    style="@style/TextColor"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/out_of_stock"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/linearLayout"
+                    app:layout_constraintTop_toBottomOf="@id/add_to_cart_btn" />
+
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/buy_now_btn"
                     android:layout_width="0dp"
@@ -198,6 +211,7 @@
                     android:layout_marginEnd="22dp"
                     android:fontFamily="@font/mulish_semi_bold"
                     android:text="@string/buy_now"
+                    android:visibility="visible"
                     android:textAllCaps="false"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -217,6 +231,7 @@
                     android:fontFamily="@font/mulish_semi_bold"
                     android:shadowColor="@color/blue"
                     android:text="@string/add_to_cart"
+                    android:visibility="visible"
                     android:textAllCaps="false"
                     android:textColor="@color/blue"
                     android:textSize="16sp"
@@ -237,12 +252,11 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/add_to_cart_btn"
+                    app:layout_constraintTop_toBottomOf="@+id/out_of_stock"
                     app:tabGravity="fill"
                     app:tabIndicatorFullWidth="false"
                     app:tabIndicatorGravity="bottom"
-                    app:tabMode="fixed"
-                    />
+                    app:tabMode="fixed" />
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewpager_product"
@@ -254,8 +268,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tab_product"
-                    app:layout_constraintVertical_bias="0.0" >
-                </androidx.viewpager2.widget.ViewPager2>
+                    app:layout_constraintVertical_bias="0.47000003"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

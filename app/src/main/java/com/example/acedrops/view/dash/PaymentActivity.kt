@@ -26,7 +26,7 @@ import org.json.JSONObject
 class PaymentActivity : AppCompatActivity(), PaymentResultListener {
 
     private val orderViewModel: OrderViewModel by viewModels()
-    private lateinit var progressDialog:Dialog
+    private lateinit var progressDialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,23 +50,23 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
             options.put("description", "Payment")
             //You can omit the image option to fetch the image from dashboard
 //            options.put("image","https://s3.amazonaws.com/rzp-mobile/images/rzp.png")
-            options.put("theme.color", "#1983FF");
-            options.put("currency", "INR");
+            options.put("theme.color", "#1983FF")
+            options.put("currency", "INR")
             //    options.put("order_id", "order_DBJOWzybf0sJbb");
             options.put("amount", totalAmount * 100)//pass amount in currency subunits
 
-            val retryObj = JSONObject();
-            retryObj.put("enabled", true);
-            retryObj.put("max_count", 4);
-            options.put("retry", retryObj);
+            val retryObj = JSONObject()
+            retryObj.put("enabled", true)
+            retryObj.put("max_count", 4)
+            options.put("retry", retryObj)
             options.put("send_sms_hash", true)
 
 
-            val prefill = JSONObject()
-            prefill.put("email", "guptasg300@gmail.com")
-            prefill.put("contact", "7897468764")
-
-            options.put("prefill", prefill)
+//            val prefill = JSONObject()
+//            prefill.put("email", "guptasg300@gmail.com")
+//            prefill.put("contact", "7897468764")
+//
+//            options.put("prefill", prefill)
             co.open(this, options)
 
         } catch (e: Exception) {

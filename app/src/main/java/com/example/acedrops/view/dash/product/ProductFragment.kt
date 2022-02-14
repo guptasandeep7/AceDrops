@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -27,7 +26,6 @@ import com.example.acedrops.model.home.Product
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewmodel.OrderViewModel
 import com.example.acedrops.viewmodel.ProductViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -53,7 +51,11 @@ class ProductFragment : Fragment() {
 
         getProductDetails()
 
-        if (productViewModel.product.value!!.stock == 0) binding.buyNowBtn.isEnabled = false
+        if (productViewModel.product.value!!.stock == 0) {
+            binding.outOfStock.visibility = View.VISIBLE
+            binding.buyNowBtn.visibility = View.GONE
+            binding.addToCartBtn.visibility = View.GONE
+        }
 
         binding.product = productViewModel.product.value
 
@@ -111,7 +113,8 @@ class ProductFragment : Fragment() {
                     else -> {
                         orderViewModel.quantity = input.text.toString()
                         orderViewModel.product = productViewModel.product.value
-                        orderViewModel.totalAmount = productViewModel.product.value!!.discountedPrice*quantity
+                        orderViewModel.totalAmount =
+                            productViewModel.product.value!!.discountedPrice * quantity
                         val bundle = bundleOf("LastFragment" to "Product")
                         findNavController().navigate(
                             R.id.action_productFragment_to_addressFragment,
@@ -121,8 +124,6 @@ class ProductFragment : Fragment() {
                 }
             } catch (e: Exception) {
             }
-
-
         }
         builder.setNegativeButton("Cancel") { dialog, _ ->
             dialog.cancel()
@@ -242,23 +243,11 @@ class ProductFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentProductBinding.inflate(inflater, container, false)
-        val view = binding.root
-
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
-        activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-
-        return view
+        return binding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
-        activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
 
         productViewModel =
             ViewModelProvider((context as FragmentActivity?)!!)[ProductViewModel::class.java]
@@ -274,22 +263,9 @@ class ProductFragment : Fragment() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
-        activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.VISIBLE
-        activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility =
-            View.VISIBLE
     }
 
 }

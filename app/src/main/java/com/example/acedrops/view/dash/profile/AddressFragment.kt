@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,10 +21,10 @@ import com.example.acedrops.model.home.Product
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewmodel.AddressViewModel
 import com.example.acedrops.viewmodel.OrderViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 
 class AddressFragment : Fragment() {
+    private var mLastClickTime: Long = 0
     private var _binding: FragmentAddressBinding? = null
     private val binding get() = _binding!!
     private lateinit var addressViewModel: AddressViewModel
@@ -44,7 +45,6 @@ class AddressFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentAddressBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -57,18 +57,19 @@ class AddressFragment : Fragment() {
 
         getAddress()
 
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
-
         binding.backBtn.setOnClickListener { findNavController().popBackStack() }
 
         binding.addAddressBtn.setOnClickListener { findNavController().navigate(R.id.action_addressFragment_to_addAddressFragment) }
 
         addressAdapter.setOnItemClickListener(object : AddressAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                if (orderViewModel.lastFragment != null) {
-                    orderViewModel.addressId = addressAdapter.addressList[position].id!!
-                    orderSummary()
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return
+                } else {
+                    if (orderViewModel.lastFragment != null) {
+                        orderViewModel.addressId = addressAdapter.addressList[position].id!!
+                        orderSummary()
+                    }
                 }
             }
         })
@@ -86,9 +87,8 @@ class AddressFragment : Fragment() {
         if (orderViewModel.lastFragment == "Product") {
             productName.text = orderViewModel.product?.title
             productQuantity.append(orderViewModel.quantity)
-                productPrice.append(orderViewModel.product!!.discountedPrice.toString())
-        }
-        else{
+            productPrice.append(orderViewModel.product!!.discountedPrice.toString())
+        } else {
             productName.visibility = View.GONE
             productQuantity.visibility = View.GONE
             productPrice.visibility = View.GONE
@@ -142,22 +142,8 @@ class AddressFragment : Fragment() {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-
 
         addressViewModel =
             ViewModelProvider((context as FragmentActivity?)!!)[AddressViewModel::class.java]
@@ -174,9 +160,5 @@ class AddressFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.VISIBLE
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.VISIBLE
     }
 }

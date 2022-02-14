@@ -28,7 +28,7 @@
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout-v23/fragment_home.xml" value="0.13802083333333334" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout-v23/progress_dialog.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/activity_auth.xml" value="0.23229166666666667" />
-        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/activity_dashboard.xml" value="0.4" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/activity_dashboard.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/activity_main.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/activity_payment.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/activity_product.xml" value="0.23229166666666667" />
@@ -61,13 +61,14 @@
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_shop.xml" value="0.4" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_signup.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/fragment_wishlist.xml" value="0.23229166666666667" />
-        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/myorder_item.xml" value="0.4" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/myorder_item.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/one_category_layout.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/order_failed.xml" value="0.23229166666666667" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/order_product_item.xml" value="0.536" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/order_successful.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/order_summary.xml" value="0.176" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/phn_no_dialog.xml" value="0.23229166666666667" />
-        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/products_layout.xml" value="0.18795180722891566" />
+        <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/products_layout.xml" value="0.264" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/review_item.xml" value="0.2" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/search_item.xml" value="0.34842105263157896" />
         <entry key="..\:/Users/Sandeep/AndroidStudioProjects/AceDrops/app/src/main/res/layout/shop_layout.xml" value="0.264" />

@@ -9,9 +9,7 @@ import com.example.acedrops.repository.Datastore
 import com.example.acedrops.repository.Datastore.Companion.REF_TOKEN_KEY
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.utill.generateToken
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 
@@ -23,7 +21,7 @@ class HomeRepository {
     suspend fun getData(context: Context): MutableLiveData<ApiResponse<HomeFragmentData>> {
 
         val token = Datastore(context).getUserDetails(Datastore.ACCESS_TOKEN_KEY)
-        Log.w("HOME REPO", "getData: $token", )
+        Log.w("HOME REPO", "getData: $token")
         val call = ServiceBuilder.buildService(token).getHome()
         data.postValue(ApiResponse.Loading())
         try {

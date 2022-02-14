@@ -38,12 +38,13 @@
                 imageFromUrl="@{product.imgUrls.get(0).imageUrl}"
                 tools:srcCompat="@tools:sample/avatars" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/add_to_wishlist_btn"
                 status="@{product.wishlistStatus}"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:padding="5dp"
+                android:background="?attr/selectableItemBackground"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="2dp"
                 android:scaleType="centerInside"
@@ -111,6 +112,20 @@
                 app:layout_constraintBottom_toBottomOf="@+id/product_price"
                 app:layout_constraintStart_toEndOf="@id/product_price"
                 app:layout_constraintTop_toBottomOf="@+id/product_desc" />
+
+            <TextView
+                android:id="@+id/out_of_stock"
+                style="@style/TextColor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Out of stock"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/product_desc"
+                app:layout_constraintStart_toStartOf="@+id/product_desc"
+                app:layout_constraintTop_toBottomOf="@+id/product_price" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/add_to_cart_btn"

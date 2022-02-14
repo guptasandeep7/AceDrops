@@ -10,12 +10,14 @@ import com.example.acedrops.repository.Datastore.Companion.PHN_NUMBER
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.view.auth.AuthActivity
 import com.example.acedrops.view.dash.DashboardActivity
+import com.example.acedrops.viewmodel.HomeViewModel
 import com.example.acedrops.viewmodel.ProfileViewModel
 import kotlinx.coroutines.launch
 
 class SplashScreenActivity : AppCompatActivity() {
 
     private val profileViewModel: ProfileViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
     lateinit var datastore: Datastore
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +28,7 @@ class SplashScreenActivity : AppCompatActivity() {
         lifecycleScope.launch {
             if (datastore.isLogin()) {
                 getPhnNumber()
+                homeViewModel.getHomeData(this@SplashScreenActivity)
                 startActivity(Intent(this@SplashScreenActivity, DashboardActivity::class.java))
                 finish()
             } else {
