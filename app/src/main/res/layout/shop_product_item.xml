@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:scaleType="centerCrop"
+        android:elevation="4dp"
         imageFromUrl="@{product.imgUrls[0].imageUrl}"
         android:layout_margin="2dp"
         android:src="@drawable/placeholder" />

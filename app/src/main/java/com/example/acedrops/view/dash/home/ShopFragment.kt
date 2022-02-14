@@ -3,6 +3,7 @@ package com.example.acedrops.view.dash.home
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ import com.example.acedrops.viewModelFactory.ShopViewModelFactory
 import com.example.acedrops.viewmodel.ShopViewModel
 
 class ShopFragment : Fragment(), View.OnClickListener {
+    private var mLastClickTime:Long = 0
     private var _binding: FragmentShopBinding? = null
     private lateinit var shopViewModel: ShopViewModel
     private val binding get() = _binding!!
@@ -44,8 +46,15 @@ class ShopFragment : Fragment(), View.OnClickListener {
 
         shopProductAdapter.setOnItemClickListener(object : ShopProductsAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                val bundle = bundleOf("Product" to shopProductAdapter.productsList[position])
-                findNavController().navigate(R.id.action_shopFragment_to_productFragment, bundle)
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return
+                } else {
+                    val bundle = bundleOf("Product" to shopProductAdapter.productsList[position])
+                    findNavController().navigate(
+                        R.id.action_shopFragment_to_productFragment,
+                        bundle
+                    )
+                }
             }
         })
         return view

@@ -2,6 +2,7 @@ package com.example.acedrops.view.dash
 
 import android.content.Context
 import android.os.Bundle
+import android.os.SystemClock
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -23,6 +24,7 @@ import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewmodel.SearchViewModel
 
 class SearchFragment : Fragment() {
+    private var  mLastClickTime:Long = 0
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private lateinit var searchViewModel: SearchViewModel
@@ -72,25 +74,29 @@ class SearchFragment : Fragment() {
 
         searchAdapter.setOnItemClickListener(object : SearchAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                when (searchAdapter.searchList[position].type) {
-                    0 -> {
-                        val bundle =
-                            bundleOf("Product" to searchAdapter.searchList[position].product)
-                        findNavController()
-                            .navigate(R.id.action_searchFragment_to_productFragment, bundle)
-                    }
-                    1 -> {
-                        val bundle =
-                            bundleOf("CategoryName" to searchAdapter.searchList[position].title)
-                        findNavController()
-                            .navigate(R.id.action_searchFragment_to_allProductsFragment, bundle)
-                    }
-                    2 -> {
-                        val bundle = bundleOf("ShopId" to searchAdapter.searchList[position].id)
-                        findNavController().navigate(
-                            R.id.action_searchFragment_to_shopFragment,
-                            bundle
-                        )
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 500) {
+                    return
+                } else {
+                    when (searchAdapter.searchList[position].type) {
+                        0 -> {
+                            val bundle =
+                                bundleOf("Product" to searchAdapter.searchList[position].product)
+                            findNavController()
+                                .navigate(R.id.action_searchFragment_to_productFragment, bundle)
+                        }
+                        1 -> {
+                            val bundle =
+                                bundleOf("CategoryName" to searchAdapter.searchList[position].title)
+                            findNavController()
+                                .navigate(R.id.action_searchFragment_to_allProductsFragment, bundle)
+                        }
+                        2 -> {
+                            val bundle = bundleOf("ShopId" to searchAdapter.searchList[position].id)
+                            findNavController().navigate(
+                                R.id.action_searchFragment_to_shopFragment,
+                                bundle
+                            )
+                        }
                     }
                 }
             }

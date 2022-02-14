@@ -38,10 +38,18 @@ class DashboardActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.homeFragment -> showBottomNav()
-                R.id.categoryFragment -> showBottomNav()
-                R.id.cartFragment -> showBottomNav()
-                R.id.profileFragment -> showBottomNav()
+                R.id.homeFragment -> {
+                    showBottomNav()
+                }
+                R.id.categoryFragment -> {
+                    showBottomNav()
+                }
+                R.id.cartFragment -> {
+                    showBottomNav()
+                }
+                R.id.profileFragment -> {
+                    showBottomNav()
+                }
                 else -> hideBottomNav()
             }
         }
@@ -65,6 +73,10 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         binding.bottomNavigationView.setOnItemReselectedListener { }
+    }
+
+    private fun selectItem(id: Int) {
+        binding.bottomNavigationView.selectedItemId = id
     }
 
     private fun hideBottomNav() {

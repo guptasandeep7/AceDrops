@@ -1,6 +1,7 @@
 package com.example.acedrops.view.dash.home
 
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import com.example.acedrops.databinding.FragmentAllShopsBinding
 import com.example.acedrops.model.home.Shop
 
 class AllShopsFragment : Fragment() {
+    private var mLastClickTime:Long = 0
     private var _binding: FragmentAllShopsBinding? = null
     private val binding get() = _binding!!
     private var shopAdapter = ShopAdapter()
@@ -32,8 +34,15 @@ class AllShopsFragment : Fragment() {
 
         shopAdapter.setOnItemClickListener(object : ShopAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                val bundle = bundleOf("ShopId" to shopAdapter.shopsList[position].id)
-                findNavController().navigate(R.id.action_allShopsFragment_to_shopFragment, bundle)
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return
+                } else {
+                    val bundle = bundleOf("ShopId" to shopAdapter.shopsList[position].id)
+                    findNavController().navigate(
+                        R.id.action_allShopsFragment_to_shopFragment,
+                        bundle
+                    )
+                }
             }
         })
 

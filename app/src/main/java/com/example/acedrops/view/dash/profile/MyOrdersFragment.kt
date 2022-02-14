@@ -2,6 +2,7 @@ package com.example.acedrops.view.dash.profile
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewmodel.OrderViewModel
 
 class MyOrdersFragment : Fragment() {
+    private var mLastClickTime: Long = 0
     private var _binding: FragmentMyOrdersBinding? = null
     private val orderViewModel: OrderViewModel by activityViewModels()
     private val binding get() = _binding!!
@@ -43,15 +45,23 @@ class MyOrdersFragment : Fragment() {
 
         myOrdersAdapter.setOnItemClickListener(object : MyOrdersAdapter.onItemClickListener {
             override fun cancelOrder(position: Int) {
-                alertBox(position)
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 500) {
+                    return
+                } else {
+                    alertBox(position)
+                }
             }
 
             override fun onItemClick(product: Product) {
-                val bundle = bundleOf("Product" to product)
-                findNavController().navigate(
-                    R.id.action_myOrdersFragment_to_productFragment,
-                    bundle
-                )
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 500) {
+                    return
+                } else {
+                    val bundle = bundleOf("Product" to product)
+                    findNavController().navigate(
+                        R.id.action_myOrdersFragment_to_productFragment,
+                        bundle
+                    )
+                }
             }
         })
 

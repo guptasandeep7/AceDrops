@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,7 @@ import com.example.acedrops.viewmodel.OrderViewModel
 import com.google.android.material.button.MaterialButton
 
 class AddressFragment : Fragment() {
+    private var mLastClickTime: Long = 0
     private var _binding: FragmentAddressBinding? = null
     private val binding get() = _binding!!
     private lateinit var addressViewModel: AddressViewModel
@@ -61,9 +63,13 @@ class AddressFragment : Fragment() {
 
         addressAdapter.setOnItemClickListener(object : AddressAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
-                if (orderViewModel.lastFragment != null) {
-                    orderViewModel.addressId = addressAdapter.addressList[position].id!!
-                    orderSummary()
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return
+                } else {
+                    if (orderViewModel.lastFragment != null) {
+                        orderViewModel.addressId = addressAdapter.addressList[position].id!!
+                        orderSummary()
+                    }
                 }
             }
         })

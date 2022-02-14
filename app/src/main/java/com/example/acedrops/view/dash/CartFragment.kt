@@ -1,6 +1,7 @@
 package com.example.acedrops.view.dash
 
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +26,7 @@ import com.example.acedrops.viewmodel.OrderViewModel
 import java.util.*
 
 class CartFragment : Fragment() {
-
+    private var mLastClickTime: Long = 0
     lateinit var binding: FragmentCartBinding
     val cartViewModel: CartViewModel by activityViewModels()
     private var cartAdapter = CartAdapter()
@@ -124,26 +125,34 @@ class CartFragment : Fragment() {
             }
 
             override fun onItemClick(position: Int) {
-                val product: Product
-                cartAdapter.cartList[position].also {
-                    product = Product(
-                        it.basePrice,
-                        it.createdAt,
-                        it.shortDescription,
-                        it.discountedPrice,
-                        it.id,
-                        it.imgUrls,
-                        it.offers,
-                        null,
-                        it.shopId,
-                        it.stock,
-                        it.title,
-                        it.updatedAt,
-                        it.wishlistStatus
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return
+                } else {
+                    mLastClickTime = SystemClock.elapsedRealtime()
+                    val product: Product
+                    cartAdapter.cartList[position].also {
+                        product = Product(
+                            it.basePrice,
+                            it.createdAt,
+                            it.shortDescription,
+                            it.discountedPrice,
+                            it.id,
+                            it.imgUrls,
+                            it.offers,
+                            null,
+                            it.shopId,
+                            it.stock,
+                            it.title,
+                            it.updatedAt,
+                            it.wishlistStatus
+                        )
+                    }
+                    val bundle = bundleOf("Product" to product)
+                    findNavController().navigate(
+                        R.id.action_cartFragment_to_productFragment,
+                        bundle
                     )
                 }
-                val bundle = bundleOf("Product" to product)
-                findNavController().navigate(R.id.action_cartFragment_to_productFragment, bundle)
             }
         })
     }
