@@ -152,17 +152,9 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         return result
     }
 
-    override fun onResume() {
-        super.onResume()
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.VISIBLE
     }
 
     override fun onClick(v: View?) {

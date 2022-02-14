@@ -98,5 +98,6 @@
     <string name="order">Order</string>
     <string name="status">Status</string>
     <string name="out_of_stock">Out of stock</string>
+    <string name="shops">Shops</string>
 
 </resources>

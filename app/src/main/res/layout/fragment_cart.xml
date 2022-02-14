@@ -14,6 +14,38 @@
         android:layout_height="match_parent"
         tools:context=".view.dash.CartFragment">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_color"
+            android:paddingVertical="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/search_btn"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="@color/white"
+                android:clipToOutline="true"
+                android:drawableEnd="@drawable/ic_search"
+                android:fontFamily="@font/mulish_semi_bold"
+                android:gravity="start|center"
+                android:text="@string/search_for_shops_or_products"
+                android:textAllCaps="false"
+                android:textColor="#4D000000"
+                android:textSize="14sp"
+                app:cornerRadius="36dp"
+                app:layout_constraintBottom_toTopOf="@+id/container2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.appcompat.widget.Toolbar>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/empty_cart"
             android:visibility="visible"
@@ -42,7 +74,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.29000002"
+                app:layout_constraintVertical_bias="0.47000003"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/empty_cart" />
@@ -129,7 +161,7 @@
             app:layout_constraintBottom_toTopOf="@+id/cardView2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
             tools:listitem="@layout/cart_item" />
 
         <ProgressBar

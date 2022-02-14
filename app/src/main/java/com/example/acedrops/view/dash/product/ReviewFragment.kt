@@ -24,7 +24,7 @@ class ReviewFragment : Fragment(), View.OnClickListener {
     private val binding get() = _binding!!
     private lateinit var productViewModel: ProductViewModel
     private var reviewAdapter = ReviewAdapter()
-    lateinit var name:String
+    lateinit var name: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

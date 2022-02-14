@@ -20,7 +20,6 @@ import com.example.acedrops.repository.home.ShopRepository
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewModelFactory.ShopViewModelFactory
 import com.example.acedrops.viewmodel.ShopViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ShopFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentShopBinding? = null
@@ -36,9 +35,6 @@ class ShopFragment : Fragment(), View.OnClickListener {
     ): View? {
         _binding = FragmentShopBinding.inflate(inflater, container, false)
         val view = binding.root
-
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
 
         binding.backBtn.setOnClickListener(this)
         binding.shopCallBtn.setOnClickListener(this)
@@ -83,10 +79,6 @@ class ShopFragment : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
 
         shopId = arguments?.getInt("ShopId") as Int
         shopViewModel = ViewModelProvider(
@@ -95,21 +87,9 @@ class ShopFragment : Fragment(), View.OnClickListener {
         )[ShopViewModel::class.java]
     }
 
-    override fun onResume() {
-        super.onResume()
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.VISIBLE
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.VISIBLE
     }
 
     override fun onClick(v: View?) {

@@ -20,7 +20,6 @@ import com.example.acedrops.model.home.Product
 import com.example.acedrops.utill.ApiResponse
 import com.example.acedrops.viewmodel.AddressViewModel
 import com.example.acedrops.viewmodel.OrderViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 
 class AddressFragment : Fragment() {
@@ -44,7 +43,6 @@ class AddressFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentAddressBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -56,9 +54,6 @@ class AddressFragment : Fragment() {
         }
 
         getAddress()
-
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
 
         binding.backBtn.setOnClickListener { findNavController().popBackStack() }
 
@@ -86,9 +81,8 @@ class AddressFragment : Fragment() {
         if (orderViewModel.lastFragment == "Product") {
             productName.text = orderViewModel.product?.title
             productQuantity.append(orderViewModel.quantity)
-                productPrice.append(orderViewModel.product!!.discountedPrice.toString())
-        }
-        else{
+            productPrice.append(orderViewModel.product!!.discountedPrice.toString())
+        } else {
             productName.visibility = View.GONE
             productQuantity.visibility = View.GONE
             productPrice.visibility = View.GONE
@@ -142,22 +136,8 @@ class AddressFragment : Fragment() {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.GONE
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.GONE
-
 
         addressViewModel =
             ViewModelProvider((context as FragmentActivity?)!!)[AddressViewModel::class.java]
@@ -174,9 +154,5 @@ class AddressFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility =
-            View.VISIBLE
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)?.visibility =
-            View.VISIBLE
     }
 }

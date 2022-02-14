@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.acedrops.R
 import com.example.acedrops.adapter.CategoryAdapter
 import com.example.acedrops.databinding.FragmentCategoryBinding
@@ -25,6 +26,10 @@ class CategoryFragment : Fragment() {
     ): View {
         _binding = FragmentCategoryBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        binding.searchBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_categoryFragment_to_searchFragment)
+        }
 
         val categoryList = mutableListOf<CategoryList>()
         categoryList.add(CategoryList("Jewellery", R.drawable.ic_jwellery))
@@ -46,9 +51,9 @@ class CategoryFragment : Fragment() {
         categoryAdapter.setOnItemClickListener(object : CategoryAdapter.onItemClickListener {
             override fun onItemClick(position: Int) {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                    return;
+                    return
                 } else {
-                    mLastClickTime = SystemClock.elapsedRealtime();
+                    mLastClickTime = SystemClock.elapsedRealtime()
                     val bundle =
                         bundleOf("CategoryName" to categoryAdapter.categoryList[position].categoryName)
                     view.findNavController()
