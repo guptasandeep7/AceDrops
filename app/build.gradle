@@ -74,5 +74,5 @@ dependencies {
     //Image Slider
     implementation 'com.github.denzcoskun:ImageSlideshow:0.1.0'
     //Razorpay
-    implementation 'com.razorpay:checkout:1.6.15'
+    implementation 'com.razorpay:checkout:1.6.18'
 }

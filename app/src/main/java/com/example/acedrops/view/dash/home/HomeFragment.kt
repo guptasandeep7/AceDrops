@@ -123,7 +123,7 @@ class HomeFragment : Fragment() {
 
                     private fun addToWishlist(product: Product, view: View) {
                 cartViewModel.addWishlist(productId = product.id.toString(), requireContext())
-                    .observe(viewLifecycleOwner, {
+                    .observe(viewLifecycleOwner) {
                         when (it) {
                             is ApiResponse.Success -> {
                                 binding.progressBar.visibility = View.GONE
@@ -154,12 +154,12 @@ class HomeFragment : Fragment() {
                             ).show()
 
                         }
-                    })
-            }
+                    }
+                    }
 
                     private fun addToCart(product: Product, view: View) {
                 cartViewModel.increaseQuantity(productId = product.id.toString(), requireContext())
-                    .observe(viewLifecycleOwner, {
+                    .observe(viewLifecycleOwner) {
                         when (it) {
                             is ApiResponse.Success -> {
                                 view.isEnabled = true
@@ -182,11 +182,11 @@ class HomeFragment : Fragment() {
 //                        binding.progressBar.visibility = View.VISIBLE
                             }
                         }
-                    })
-            }
+                    }
+                    }
 
                     private fun getHomeData() {
-                homeViewModel.getHomeData(requireContext()).observe(viewLifecycleOwner, {
+                homeViewModel.getHomeData(requireContext()).observe(viewLifecycleOwner) {
                     when (it) {
                         is ApiResponse.Success -> {
                             binding.allShopBtn.visibility = View.VISIBLE
@@ -215,14 +215,18 @@ class HomeFragment : Fragment() {
                         }
 
                     }
-                })
-            }
+                }
+                    }
 
 
                     private fun showNewArrivals(newArrival: List<NewArrival>) {
                 val imageList = ArrayList<SlideModel>()
-                for (item in newArrival) {
-                    imageList.add(SlideModel(item.imgUrls[0].imageUrl, ScaleTypes.CENTER_CROP))
+                newArrival.forEach{
+                    try {
+                        imageList.add(SlideModel(it.imgUrls[0].imageUrl, ScaleTypes.CENTER_CROP))
+                    }catch (e:Exception){
+                        imageList.add(SlideModel(getString(R.string.default_image), ScaleTypes.CENTER_CROP))
+                    }
                 }
                 binding.imageSlider.setImageList(imageList)
             }

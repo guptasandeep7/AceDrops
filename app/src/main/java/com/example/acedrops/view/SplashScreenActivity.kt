@@ -40,11 +40,11 @@ class SplashScreenActivity : AppCompatActivity() {
     }
 
     private fun getPhnNumber() {
-        profileViewModel.getPhoneNo(this).observe(this, {
+        profileViewModel.getPhoneNo(this).observe(this) {
             lifecycleScope.launch {
                 if (it is ApiResponse.Success) datastore.saveUserDetails(PHN_NUMBER, it.data)
             }
-        })
+        }
     }
 
 }

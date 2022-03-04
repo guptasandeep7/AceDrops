@@ -42,12 +42,12 @@ class DescriptionFragment : Fragment() {
             findNavController().navigate(R.id.action_productFragment_to_shopFragment, bundle)
         }
 
-        productViewModel.productDetails.observe(viewLifecycleOwner, {
+        productViewModel.productDetails.observe(viewLifecycleOwner) {
             if (it is ApiResponse.Success) {
                 binding.viewmodel = productViewModel
                 getSimilarList()
             }
-        })
+        }
 
         productAdapter.setOnItemClickListener(object : ProductAdapter.onItemClickListener {
             override fun onItemClick(product: Product) {
@@ -71,7 +71,7 @@ class DescriptionFragment : Fragment() {
 
     private fun addToCart(product: Product, view: View) {
         productViewModel.addToCart(productId = product.id, requireContext())
-            .observe(viewLifecycleOwner, {
+            .observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiResponse.Success -> {
                         view.isEnabled = true
@@ -94,12 +94,12 @@ class DescriptionFragment : Fragment() {
 //                        binding.progressBar.visibility = View.VISIBLE
                     }
                 }
-            })
+            }
     }
 
     private fun addToWishlist(product: Product, view: View) {
         productViewModel.addWishlist(productId = product.id.toString(), requireContext())
-            .observe(viewLifecycleOwner, {
+            .observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiResponse.Success -> {
                         binding.progressBar.visibility = View.GONE
@@ -130,7 +130,7 @@ class DescriptionFragment : Fragment() {
                     ).show()
 
                 }
-            })
+            }
     }
 
 
@@ -158,10 +158,10 @@ class DescriptionFragment : Fragment() {
             productViewModel.getProductList(
                 it,
                 requireContext()
-            ).observe(viewLifecycleOwner, {
+            ).observe(viewLifecycleOwner) {
 
                 if (it is ApiResponse.Success) it.data?.let { it1 -> initRecyclerView(it1) }
-            })
+            }
         }
     }
 

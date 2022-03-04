@@ -63,7 +63,7 @@ class ShopFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        shopViewModel.shopDetails.observe(viewLifecycleOwner, {
+        shopViewModel.shopDetails.observe(viewLifecycleOwner) {
             when (it) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
@@ -78,7 +78,7 @@ class ShopFragment : Fragment(), View.OnClickListener {
                     shopViewModel.getShopDetails(shopId)
                 }
             }
-        })
+        }
     }
 
     private fun updateUi(shop: ShopResult?) {

@@ -66,7 +66,6 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             binding.userEmail.text = datastore.getUserDetails(Datastore.EMAIL_KEY)?.lowercase()
             binding.userPhnNo.text = datastore.getUserDetails(Datastore.PHN_NUMBER)
         }
-
         return view
     }
 
@@ -205,7 +204,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         profileViewModel.addPhoneNumber(
             phnNumber.trim().toString().toLong(),
             requireContext()
-        )?.observe(viewLifecycleOwner, {
+        )?.observe(viewLifecycleOwner) {
             when (it) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
@@ -226,7 +225,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                     dialog.dismiss()
                 }
             }
-        })
+        }
     }
 
 }

@@ -81,7 +81,7 @@ class AddressFragment : Fragment() {
         val layout = layoutInflater.inflate(R.layout.order_summary, null)
         dialog.setContentView(layout)
         val productName = layout.findViewById<TextView>(R.id.product_name)
-        var productQuantity = layout.findViewById<TextView>(R.id.product_quantity)
+        val productQuantity = layout.findViewById<TextView>(R.id.product_quantity)
         val productPrice = layout.findViewById<TextView>(R.id.product_price)
 
         if (orderViewModel.lastFragment == "Product") {
@@ -113,7 +113,7 @@ class AddressFragment : Fragment() {
 
 
     private fun getAddress() {
-        addressViewModel.getAddress(requireContext()).observe(viewLifecycleOwner, {
+        addressViewModel.getAddress(requireContext()).observe(viewLifecycleOwner) {
             when (it) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
@@ -139,7 +139,7 @@ class AddressFragment : Fragment() {
                     ).show()
                 }
             }
-        })
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

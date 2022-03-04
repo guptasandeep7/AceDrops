@@ -4,8 +4,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import coil.load
-import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.example.acedrops.R
+import com.example.acedrops.model.home.ImgUrl
 import com.google.android.material.button.MaterialButton
 
 @BindingAdapter("imageFromUrl")
@@ -16,6 +16,21 @@ fun ImageView.imageFromUrl(url: String?) {
             crossfade(true)
         }
 }
+
+@BindingAdapter("imageCheck")
+fun ImageView.imageCheck(imgUrl: List<ImgUrl>) {
+    try {
+        this.load(imgUrl[0].imageUrl) {
+            placeholder(R.drawable.placeholder)
+            crossfade(true)
+        }
+    } catch (e: Exception) {
+        this.load(resources.getString(R.string.default_image)) {
+            placeholder(R.drawable.placeholder)
+            crossfade(true)
+        }    }
+}
+
 @BindingAdapter("imageFromUrlSearch")
 fun ImageView.imageFromUrlSearch(url: String?) {
     if (url != null)
@@ -33,7 +48,7 @@ fun ImageView.setImage(rId: Int) {
 
 @BindingAdapter("status")
 fun ImageView.status(status: Int) {
-    if(status==1) this.setImageResource(R.drawable.ic_like_red)
+    if (status == 1) this.setImageResource(R.drawable.ic_like_red)
     else this.setImageResource(R.drawable.ic_like)
 }
 
