@@ -8,19 +8,19 @@ import com.example.acedrops.R
 import com.example.acedrops.model.home.ImgUrl
 import com.google.android.material.button.MaterialButton
 
-@BindingAdapter("imageFromUrl")
-fun ImageView.imageFromUrl(url: String?) {
-    if (url != null)
-        this.load(url) {
-            placeholder(R.drawable.placeholder)
-            crossfade(true)
-        }
-}
+//@BindingAdapter("imageFromUrl")
+//fun ImageView.imageFromUrl(url: String?) {
+//    if (url != null)
+//        this.load(url) {
+//            placeholder(R.drawable.placeholder)
+//            crossfade(true)
+//        }
+//}
 
 @BindingAdapter("imageCheck")
-fun ImageView.imageCheck(imgUrl: List<ImgUrl>) {
+fun ImageView.imageCheck(imgUrl: List<ImgUrl>?) {
     try {
-        this.load(imgUrl[0].imageUrl) {
+        this.load(imgUrl?.get(0)?.imageUrl) {
             placeholder(R.drawable.placeholder)
             crossfade(true)
         }
@@ -28,7 +28,8 @@ fun ImageView.imageCheck(imgUrl: List<ImgUrl>) {
         this.load(resources.getString(R.string.default_image)) {
             placeholder(R.drawable.placeholder)
             crossfade(true)
-        }    }
+        }
+    }
 }
 
 @BindingAdapter("imageFromUrlSearch")
