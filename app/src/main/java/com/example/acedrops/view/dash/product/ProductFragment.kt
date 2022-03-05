@@ -135,7 +135,7 @@ class ProductFragment : Fragment() {
 
     private fun addToWishlist(id: Int) {
         productViewModel.addWishlist(productId = id.toString(), requireContext())
-            .observe(viewLifecycleOwner, {
+            .observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiResponse.Success -> {
                         binding.progressBar.visibility = View.GONE
@@ -163,12 +163,12 @@ class ProductFragment : Fragment() {
 
                     is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
                 }
-            })
+            }
     }
 
     private fun getProductDetails() {
         productViewModel.getProductDetails(productViewModel.product.value!!.id, requireContext())
-            .observe(viewLifecycleOwner, {
+            .observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiResponse.Success -> {
                         binding.rating.text = (it.data?.rating ?: 0).toString()
@@ -185,12 +185,12 @@ class ProductFragment : Fragment() {
                     )
                         .show()
                 }
-            })
+            }
     }
 
     private fun addToCart(id: Int) {
         productViewModel.addToCart(id, requireContext())
-            .observe(viewLifecycleOwner, {
+            .observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiResponse.Success -> if (it.data == true) {
                         binding.progressBar.visibility = View.GONE
@@ -227,13 +227,18 @@ class ProductFragment : Fragment() {
 
                     is ApiResponse.Loading -> binding.progressBar.visibility = View.VISIBLE
                 }
-            })
+            }
     }
 
     private fun showImages(imgUrls: List<ImgUrl>) {
         val imageList = mutableListOf<SlideModel>()
-        imgUrls.forEach {
-            imageList.add(SlideModel(it.imageUrl, ScaleTypes.CENTER_CROP))
+        if (imgUrls.isEmpty()){
+            imageList.add(SlideModel(getString(R.string.default_image), ScaleTypes.CENTER_CROP))
+        }
+        else {
+            imgUrls.forEach {
+                imageList.add(SlideModel(it.imageUrl, ScaleTypes.CENTER_CROP))
+            }
         }
         binding.productImages.setImageList(imageList)
     }

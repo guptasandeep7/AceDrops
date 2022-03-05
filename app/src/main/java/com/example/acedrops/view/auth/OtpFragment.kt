@@ -62,15 +62,43 @@ class OtpFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(view: View?) {
         when (view?.id) {
-            R.id.next_btn -> {
-                next()
-            }
+            R.id.next_btn -> next()
             R.id.resend_otp -> {
                 binding.resendOtp.isEnabled = false
                 binding.progressBar.visibility = View.VISIBLE
-                resendOtp(email = Email, name = Name)
+                if (forgot) resendForgotOtp(Email)
+                else resendOtp(email = Email, name = Name)
             }
         }
+    }
+
+    private fun resendForgotOtp(email: String) {
+        val request = ServiceBuilder.buildService(null)
+        val call = request.forgotPass(UserData(email = email))
+        call.enqueue(object : Callback<Message?> {
+            override fun onResponse(call: Call<Message?>, response: Response<Message?>) {
+                when {
+                    response.isSuccessful -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "OTP resend successfully",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        binding.resendOtp.isEnabled = true
+                        binding.progressBar.visibility = View.GONE
+                        timerCountDown.start()
+                    }
+                    response.code() == 422 -> errorMessage("Enter correct email id")
+                    response.code() == 404 -> errorMessage("Email id is not registered")
+                    else -> errorMessage("Incorrect Email Id")
+                }
+            }
+
+            override fun onFailure(call: Call<Message?>, t: Throwable) {
+                errorMessage(t.message.toString())
+            }
+        })
     }
 
     private fun next() {
