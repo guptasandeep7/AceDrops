@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.denzcoskun.imageslider.constants.ScaleTypes
+import com.denzcoskun.imageslider.models.SlideModel
 import com.example.acedrops.R
 import com.example.acedrops.adapter.SearchAdapter
 import com.example.acedrops.databinding.FragmentSearchBinding
@@ -46,7 +48,7 @@ class SearchFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (!s.isNullOrBlank())
                     searchViewModel.getSearch(s.toString(), requireContext())
-                        .observe(viewLifecycleOwner, {
+                        .observe(viewLifecycleOwner) {
                             when (it) {
                                 is ApiResponse.Success -> {
                                     binding.progressBar.visibility = View.GONE
@@ -66,7 +68,11 @@ class SearchFragment : Fragment() {
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
-                        })
+                        }
+                else {
+                    binding.empty.visibility = View.GONE
+                    binding.searchRecyclerView.visibility = View.GONE
+                }
             }
 
             override fun afterTextChanged(p0: Editable?) {}
@@ -111,7 +117,11 @@ class SearchFragment : Fragment() {
                     id = item.id,
                     title = item.title,
                     type = 0,
-                    imageUrl = item.imgUrls[0].imageUrl,
+                    try {
+                        item.imgUrls[0].imageUrl
+                    }catch (e:Exception){
+                        getString(R.string.default_image)
+                    },
                     product = item
                 )
             )
