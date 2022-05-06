@@ -116,6 +116,15 @@
             app:destination="@id/myOrdersFragment"
             app:enterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_profileFragment_to_helpFragment"
+            app:destination="@id/helpFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_termsAndConditionsFragment"
+            app:destination="@id/termsAndConditionsFragment" />
     </fragment>
     <activity
         android:id="@+id/authActivity"
@@ -298,4 +307,19 @@
         android:name="com.example.acedrops.view.dash.PaymentActivity"
         android:label="activity_payment"
         />
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.example.acedrops.view.dash.profile.HelpFragment"
+        android:label="fragment_help_and_support"
+        tools:layout="@layout/fragment_help_and_support" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.acedrops.view.dash.profile.AboutFragment"
+        android:label="AboutFragment"
+        tools:layout="@layout/fragment_about_acedrops"/>
+    <fragment
+        android:id="@+id/termsAndConditionsFragment"
+        android:name="com.example.acedrops.view.dash.profile.TermsAndConditionsFragment"
+        android:label="TermsAndConditionsFragment"
+        tools:layout="@layout/fragment_terms_and_conditions"/>
 </navigation>

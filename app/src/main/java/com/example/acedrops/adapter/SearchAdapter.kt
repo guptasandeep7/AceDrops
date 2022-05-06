@@ -12,6 +12,7 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
     var searchList = mutableListOf<SearchItem>()
     fun updateSearchList(category: List<SearchItem>) {
+        searchList.clear()
         this.searchList = category.toMutableList()
         notifyDataSetChanged()
     }

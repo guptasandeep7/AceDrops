@@ -39,8 +39,8 @@ class ShopFragment : Fragment(), View.OnClickListener {
         val view = binding.root
 
         binding.backBtn.setOnClickListener(this)
-        binding.shopCallBtn.setOnClickListener(this)
-        binding.shopEmailBtn.setOnClickListener(this)
+//        binding.shopCallBtn.setOnClickListener(this)
+//        binding.shopEmailBtn.setOnClickListener(this)
 
         binding.productsRecyclerView.adapter = shopProductAdapter
 
@@ -67,8 +67,10 @@ class ShopFragment : Fragment(), View.OnClickListener {
             when (it) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    binding.shopCallBtn.isEnabled = true
-                    binding.shopEmailBtn.isEnabled = true
+//                    binding.shopCallBtn.isEnabled = true
+//                    binding.shopEmailBtn.isEnabled = true
+                    binding.ownerName.visibility = View.VISIBLE
+                    binding.frameLayout.visibility = View.VISIBLE
                     shopDetails = it.data!!
                     updateUi(shopDetails)
                 }
@@ -104,8 +106,8 @@ class ShopFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.back_btn -> findNavController().popBackStack()
-            R.id.shop_call_btn -> callShop()
-            R.id.shop_email_btn -> emailShop()
+//            R.id.shop_call_btn -> callShop()
+//            R.id.shop_email_btn -> emailShop()
         }
     }
 

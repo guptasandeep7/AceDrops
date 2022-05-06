@@ -59,125 +59,125 @@ class WishlistFragment : Fragment() {
                 }
             }
 
-                override fun onAddToCartClick(product: Product, view: View) {
-                    addToCart(product, view)
+            override fun onAddToCartClick(product: Product, view: View) {
+                addToCart(product, view)
+            }
+
+            override fun onAddToWishlistClick(product: Product, view: View, position: Int) {
+                addToWishlist(product, position)
+            }
+        })
+
+    }
+
+    private fun getWishlist() {
+        productViewModel.getWishlist(requireContext()).observe(viewLifecycleOwner) {
+            when (it) {
+                is ApiResponse.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.productsRecyclerView.adapter = productAdapter
+                    it.data?.forEach {
+                        it.wishlistStatus = 1
+                    }
+                    it.data?.let { it1 ->
+                        productAdapter.updateProductList(
+                            it1,
+                            null
+                        )
+                    }
                 }
 
-                override fun onAddToWishlistClick(product: Product, view: View, position: Int) {
-                    addToWishlist(product, position)
+                is ApiResponse.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_SHORT).show()
                 }
-            })
 
+                is ApiResponse.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+            }
         }
+    }
 
-                private fun getWishlist() {
-            productViewModel.getWishlist(requireContext()).observe(viewLifecycleOwner, {
+    private fun addToCart(product: Product, view: View) {
+        productViewModel.addToCart(productId = product.id, requireContext())
+            .observe(viewLifecycleOwner) {
                 when (it) {
                     is ApiResponse.Success -> {
+                        view.isEnabled = true
                         binding.progressBar.visibility = View.GONE
-                        binding.productsRecyclerView.adapter = productAdapter
-                        it.data?.forEach {
-                            it.wishlistStatus = 1
-                        }
-                        it.data?.let { it1 ->
-                            productAdapter.updateProductList(
-                                it1,
-                                null
-                            )
-                        }
+                        snackbar(
+                            "\u20B9${product.discountedPrice} plus taxes\n1 ITEM"
+                        )
                     }
 
                     is ApiResponse.Error -> {
                         binding.progressBar.visibility = View.GONE
-                        Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_SHORT).show()
+                        view.isEnabled = true
+                        snackbar(
+                            it.errorMessage ?: "Failed to add to cart : Try Again"
+                        )
+                    }
+
+                    is ApiResponse.Loading -> {
+                        view.isEnabled = false
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                }
+            }
+    }
+
+    private fun addToWishlist(product: Product, position: Int) {
+        productViewModel.addWishlist(productId = product.id.toString(), requireContext())
+            .observe(viewLifecycleOwner) {
+                when (it) {
+                    is ApiResponse.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        productAdapter.productList.removeAt(position)
+                        productAdapter.notifyDataSetChanged()
                     }
 
                     is ApiResponse.Loading -> {
                         binding.progressBar.visibility = View.VISIBLE
                     }
+
+                    is ApiResponse.Error -> Toast.makeText(
+                        requireContext(),
+                        it.errorMessage,
+                        Toast.LENGTH_SHORT
+                    ).show()
+
                 }
-            })
-        }
-
-                private fun addToCart(product: Product, view: View) {
-            productViewModel.addToCart(productId = product.id, requireContext())
-                .observe(viewLifecycleOwner, {
-                    when (it) {
-                        is ApiResponse.Success -> {
-                            view.isEnabled = true
-                            binding.progressBar.visibility = View.GONE
-                            snackbar(
-                                "\u20B9${product.discountedPrice} plus taxes\n1 ITEM"
-                            )
-                        }
-
-                        is ApiResponse.Error -> {
-                            binding.progressBar.visibility = View.GONE
-                            view.isEnabled = true
-                            snackbar(
-                                it.errorMessage ?: "Failed to add to cart : Try Again"
-                            )
-                        }
-
-                        is ApiResponse.Loading -> {
-                            view.isEnabled = false
-                            binding.progressBar.visibility = View.VISIBLE
-                        }
-                    }
-                })
-        }
-
-                private fun addToWishlist(product: Product, position: Int) {
-            productViewModel.addWishlist(productId = product.id.toString(), requireContext())
-                .observe(viewLifecycleOwner, {
-                    when (it) {
-                        is ApiResponse.Success -> {
-                            binding.progressBar.visibility = View.GONE
-                            productAdapter.productList.removeAt(position)
-                            productAdapter.notifyDataSetChanged()
-                        }
-
-                        is ApiResponse.Loading -> {
-                            binding.progressBar.visibility = View.VISIBLE
-                        }
-
-                        is ApiResponse.Error -> Toast.makeText(
-                            requireContext(),
-                            it.errorMessage,
-                            Toast.LENGTH_SHORT
-                        ).show()
-
-                    }
-                })
-        }
-
-
-                private fun snackbar(
-            text: String
-        ) {
-            view?.let {
-                Snackbar.make(
-                    it,
-                    text,
-                    Snackbar.LENGTH_SHORT
-                ).setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.blue))
-                    .setAction("View Cart") {
-                        findNavController()
-                            .navigate(R.id.action_wishlistFragment_to_cartFragment)
-                    }.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-                    .setAnchorView(R.id.bottomNavigationView)
-                    .show()
             }
-        }
+    }
 
-                override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            productViewModel =
-                ViewModelProvider((context as FragmentActivity?)!!)[ProductViewModel::class.java]
-        }
 
-                override fun onDestroyView() {
-            super.onDestroyView()
-            _binding = null
+    private fun snackbar(
+        text: String
+    ) {
+        view?.let {
+            Snackbar.make(
+                it,
+                text,
+                Snackbar.LENGTH_SHORT
+            ).setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.blue))
+                .setAction("View Cart") {
+                    findNavController()
+                        .navigate(R.id.action_wishlistFragment_to_cartFragment)
+                }.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                .setAnchorView(R.id.bottomNavigationView)
+                .show()
         }
     }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        productViewModel =
+            ViewModelProvider((context as FragmentActivity?)!!)[ProductViewModel::class.java]
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}

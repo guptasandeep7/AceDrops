@@ -90,7 +90,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
 
     private fun orderCart() {
         orderViewModel.orderCart(addressId, this)
-            .observe(this, {
+            .observe(this) {
                 when (it) {
                     is ApiResponse.Success -> {
                         progressDialog.cancel()
@@ -104,11 +104,11 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
                         dialog(R.layout.order_failed)
                     }
                 }
-            })
+            }
     }
 
     private fun orderProduct() {
-        orderViewModel.orderProduct(addressId, product!!.id, quantity, this).observe(this, {
+        orderViewModel.orderProduct(addressId, product!!.id, quantity, this).observe(this) {
             when (it) {
                 is ApiResponse.Success -> {
                     progressDialog.cancel()
@@ -124,7 +124,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
                         .show()
                 }
             }
-        })
+        }
     }
 
     private fun dialog(layout: Int) {

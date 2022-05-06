@@ -8,6 +8,7 @@ data class ShopResult(
     val name: String,
     val phno: String,
     val shopName: String,
-    val products: List<Product>
+    val products: List<Product>,
+    val address:String
 
 )

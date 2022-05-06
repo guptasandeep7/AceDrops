@@ -52,6 +52,7 @@ class SearchFragment : Fragment() {
                             when (it) {
                                 is ApiResponse.Success -> {
                                     binding.progressBar.visibility = View.GONE
+                                    binding.empty.visibility = View.GONE
                                     val data = it.data!!
                                     if (data.products.isNullOrEmpty() && data.shops.isNullOrEmpty() && data.categoryProds.isNullOrEmpty()) {
                                         binding.empty.visibility = View.VISIBLE

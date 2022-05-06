@@ -68,7 +68,7 @@ class MyOrdersFragment : Fragment() {
     }
 
     private fun getOrders() {
-        orderViewModel.getOrders(requireContext()).observe(viewLifecycleOwner, {
+        orderViewModel.getOrders(requireContext()).observe(viewLifecycleOwner) {
             when (it) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
@@ -83,7 +83,7 @@ class MyOrdersFragment : Fragment() {
                     Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_SHORT).show()
                 }
             }
-        })
+        }
     }
 
     private fun alertBox(position: Int) {
@@ -102,7 +102,7 @@ class MyOrdersFragment : Fragment() {
         orderViewModel.cancelOrder(
             myOrdersAdapter.orderList[position].id,
             requireContext()
-        ).observe(viewLifecycleOwner, {
+        ).observe(viewLifecycleOwner) {
             when (it) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
@@ -117,7 +117,7 @@ class MyOrdersFragment : Fragment() {
                     Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_SHORT).show()
                 }
             }
-        })
+        }
     }
 
     override fun onDestroyView() {

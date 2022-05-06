@@ -78,6 +78,9 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         binding.orderBtn.setOnClickListener(this)
         binding.phnBtn.setOnClickListener(this)
         binding.signOutBtn.setOnClickListener(this)
+        binding.helpBtn.setOnClickListener(this)
+        binding.aboutBtn.setOnClickListener(this)
+        binding.tncBtn.setOnClickListener(this)
 
     }
 
@@ -171,6 +174,9 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                 R.id.change_pass_btn -> findNavController().navigate(R.id.action_profileFragment_to_changePasswordFragment)
                 R.id.manage_addr_btn -> findNavController().navigate(R.id.action_profileFragment_to_addressFragment)
                 R.id.order_btn -> findNavController().navigate(R.id.action_profileFragment_to_myOrdersFragment)
+                R.id.help_btn -> findNavController().navigate(R.id.action_profileFragment_to_helpFragment)
+                R.id.about_btn -> findNavController().navigate(R.id.action_profileFragment_to_aboutFragment)
+                R.id.tnc_btn -> findNavController().navigate(R.id.action_profileFragment_to_termsAndConditionsFragment)
                 R.id.sign_out_btn -> alertBox()
                 R.id.phn_btn -> bottomSheet()
             }
