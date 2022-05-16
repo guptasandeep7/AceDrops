@@ -6,12 +6,18 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.text.TextUtils
 import android.util.Log
+import android.view.View
+import android.webkit.WebView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.acedrops.R
+import com.example.acedrops.repository.Datastore
 import com.example.acedrops.utill.ApiResponse
+import com.example.acedrops.utill.HashGenerationUtils
 import com.example.acedrops.utill.ProgressDialog
 import com.example.acedrops.view.dash.profile.AddressFragment.Companion.addressId
 import com.example.acedrops.view.dash.profile.AddressFragment.Companion.orderFrom
@@ -19,74 +25,154 @@ import com.example.acedrops.view.dash.profile.AddressFragment.Companion.product
 import com.example.acedrops.view.dash.profile.AddressFragment.Companion.quantity
 import com.example.acedrops.view.dash.profile.AddressFragment.Companion.totalAmount
 import com.example.acedrops.viewmodel.OrderViewModel
+import com.payu.base.models.ErrorResponse
+import com.payu.base.models.PayUPaymentParams
+import com.payu.checkoutpro.PayUCheckoutPro
+import com.payu.checkoutpro.utils.PayUCheckoutProConstants
+import com.payu.checkoutpro.utils.PayUCheckoutProConstants.CP_HASH_NAME
+import com.payu.checkoutpro.utils.PayUCheckoutProConstants.CP_HASH_STRING
+import com.payu.ui.model.listeners.PayUCheckoutProListener
+import com.payu.ui.model.listeners.PayUHashGenerationListener
 import com.razorpay.Checkout
-import com.razorpay.PaymentResultListener
-import org.json.JSONObject
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
-class PaymentActivity : AppCompatActivity(), PaymentResultListener {
+class PaymentActivity : AppCompatActivity() {
 
     private val orderViewModel: OrderViewModel by viewModels()
     private lateinit var progressDialog: Dialog
+    private lateinit var email: String
+    private lateinit var phone: String
+    private lateinit var name: String
+    private val merchantName = "Acedrops"
+    private val sUrl = "https://www.acedrops.in"
+    private val fUrl = "https://www.acedrops.in"
+    private lateinit var datastore: Datastore
+
+    //Test Key and Salt
+    private val testKey = "gtKFFx"
+    private val testSalt = "wia56q6O"
+
+    //Prod Key and Salt
+    private val prodKey = "3TnMpV"
+    private val prodSalt = "g0nGFe03"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         Checkout.preload(applicationContext)
+        datastore = Datastore(this)
 
         progressDialog = ProgressDialog.progressDialog(this)
 
-        makePayment()
+        runBlocking {
+            email = datastore.getUserDetails(Datastore.EMAIL_KEY).toString()
+            phone = datastore.getUserDetails(Datastore.PHN_NUMBER).toString()
+            name = datastore.getUserDetails(Datastore.NAME_KEY).toString()
 
+        }
+        makePayment()
     }
+
 
     private fun makePayment() {
         try {
-            val co = Checkout()
-            Checkout.preload(this)
-            co.setKeyID("rzp_test_dwzZGLl7hFzDwt")
-            co.setImage(R.drawable.acedrop_logo)
-            val options = JSONObject()
-            options.put("name", "Acedrop")
-            options.put("description", "Payment")
-            //You can omit the image option to fetch the image from dashboard
-//            options.put("image","https://s3.amazonaws.com/rzp-mobile/images/rzp.png")
-            options.put("theme.color", "#1983FF")
-            options.put("currency", "INR")
-            //    options.put("order_id", "order_DBJOWzybf0sJbb");
-            options.put("amount", totalAmount * 100)//pass amount in currency subunits
-
-            val retryObj = JSONObject()
-            retryObj.put("enabled", true)
-            retryObj.put("max_count", 4)
-            options.put("retry", retryObj)
-            options.put("send_sms_hash", true)
+            val payUPaymentParams = PayUPaymentParams.Builder()
+                .setAmount(totalAmount.toString())
+                .setIsProduction(true)
+                .setKey(testKey)
+                .setProductInfo("Test")
+                .setPhone("9876543216")
+                .setTransactionId(System.currentTimeMillis().toString())
+                .setFirstName("John")
+                .setEmail("john@gmail.com")
+                .setSurl(sUrl)
+                .setFurl(fUrl)
+                .build()
 
 
-//            val prefill = JSONObject()
-//            prefill.put("email", "guptasg300@gmail.com")
-//            prefill.put("contact", "7897468764")
-//
-//            options.put("prefill", prefill)
-            co.open(this, options)
+            PayUCheckoutPro.open(
+                this, payUPaymentParams,
+                object : PayUCheckoutProListener {
 
+                    override fun onPaymentSuccess(response: Any) {
+                        response as HashMap<*, *>
+                        val payUResponse = response[PayUCheckoutProConstants.CP_PAYU_RESPONSE]
+                        val merchantResponse =
+                            response[PayUCheckoutProConstants.CP_MERCHANT_RESPONSE]
+                        Toast.makeText(
+                            this@PaymentActivity,
+                            "Payment is successful",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        when (orderFrom) {
+                            "Cart" -> orderCart()
+                            "Product" -> orderProduct()
+                        }
+                    }
+
+                    override fun onPaymentFailure(response: Any) {
+                        response as HashMap<*, *>
+                        val payUResponse = response[PayUCheckoutProConstants.CP_PAYU_RESPONSE]
+                        val merchantResponse =
+                            response[PayUCheckoutProConstants.CP_MERCHANT_RESPONSE]
+                        Toast.makeText(this@PaymentActivity, "onPaymentFailure: $payUResponse", Toast.LENGTH_SHORT).show()
+                        dialog(R.layout.order_failed)
+                    }
+
+                    override fun onPaymentCancel(isTxnInitiated: Boolean) {
+                        Toast.makeText(this@PaymentActivity, "onPaymentCancel: $isTxnInitiated", Toast.LENGTH_SHORT).show()
+                        dialog(R.layout.order_failed)
+                    }
+
+                    override fun onError(errorResponse: ErrorResponse) {
+                        val errorMessage: String =
+                            if (errorResponse.errorMessage != null && errorResponse.errorMessage!!.isNotEmpty())
+                                errorResponse.errorMessage!!
+                            else
+                                "Payment failed !!!"
+
+                        Toast.makeText(this@PaymentActivity, errorMessage, Toast.LENGTH_SHORT).show()
+                        Log.w("PAYMENT ACTIVITY ", "onError: $errorMessage")
+                        dialog(R.layout.order_failed)
+                    }
+
+                    override fun setWebViewProperties(webView: WebView?, bank: Any?) {
+                        //For setting webview properties, if any. Check Customized Integration section for more details on this
+                    }
+
+                    override fun generateHash(
+                        valueMap: HashMap<String, String?>,
+                        hashGenerationListener: PayUHashGenerationListener
+                    ) {
+                        if (valueMap.containsKey(CP_HASH_STRING)
+                            && valueMap.containsKey(CP_HASH_STRING) != null
+                            && valueMap.containsKey(CP_HASH_NAME)
+                            && valueMap.containsKey(CP_HASH_NAME) != null
+                        ) {
+
+                            val hashData = valueMap[CP_HASH_STRING]
+                            val hashName = valueMap[CP_HASH_NAME]
+
+                            //Do not generate hash from local, it needs to be calculated from server side only. Here, hashString contains hash created from your server side.
+                            val hash: String? = HashGenerationUtils.generateHashFromSDK(hashData!!)
+                            if (!TextUtils.isEmpty(hash)) {
+                                val dataMap: HashMap<String, String?> = HashMap()
+                                dataMap[hashName!!] = hash!!
+                                hashGenerationListener.onHashGenerated(dataMap)
+                            }
+                        }
+                    }
+                })
         } catch (e: Exception) {
             Toast.makeText(this, "Error in payment: " + e.message, Toast.LENGTH_LONG).show()
             e.printStackTrace()
         }
     }
 
-    override fun onPaymentSuccess(p0: String?) {
-        Toast.makeText(this, "Payment is successful", Toast.LENGTH_SHORT).show()
-        when (orderFrom) {
-            "Cart" -> orderCart()
-            "Product" -> orderProduct()
-        }
-    }
 
-    override fun onPaymentError(p0: Int, p1: String?) {
-        Log.w("PAYMENT ACTIVITY", "onPaymentError: " + p1.toString())
-        dialog(R.layout.order_failed)
-    }
+    //Razorpay methods
 
     private fun orderCart() {
         orderViewModel.orderCart(addressId, this)
