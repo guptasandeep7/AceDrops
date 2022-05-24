@@ -5,7 +5,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ServiceBuilder {
-    private const val BASEURL = "https://acedrops-hq.herokuapp.com"
+    private const val BASEURL = "https://acedrops.in"
     fun buildService(token: String? = null): ApiInterface {
         return Retrofit.Builder()
             .baseUrl(BASEURL)

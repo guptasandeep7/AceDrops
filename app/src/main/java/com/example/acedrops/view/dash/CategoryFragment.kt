@@ -36,7 +36,7 @@ class CategoryFragment : Fragment() {
         categoryList.add(CategoryList("Paintings and portraits", R.drawable.paintings_and_portraits))
         categoryList.add(CategoryList("Bakery and chocolates", R.drawable.chocolates_and_bakery))
         categoryList.add(CategoryList("Crystal And resin art", R.drawable.crystal_and_resin_art))
-        categoryList.add(CategoryList("Under garments", R.drawable.closet_and_wearablse))
+        categoryList.add(CategoryList("Under garments", R.drawable.under_garments))
         categoryList.add(CategoryList("Thrift Shops", R.drawable.thrift_shops))
         categoryList.add(CategoryList("Decorative items", R.drawable.decoratives))
         categoryList.add(CategoryList("Closet and wearable", R.drawable.closet_and_wearablse))

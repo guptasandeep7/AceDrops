@@ -75,16 +75,16 @@ class CartFragment : Fragment() {
             }
         }
 
-        cartViewModel.totalAmount.observe(viewLifecycleOwner, {
+        cartViewModel.totalAmount.observe(viewLifecycleOwner) {
             binding.viewmodel = cartViewModel
             if (it == 0L) {
                 binding.emptyCart.visibility = View.VISIBLE
                 binding.progressBar.visibility = View.GONE
                 binding.cardView2.visibility = View.GONE
             }
-        })
+        }
 
-        cartViewModel.getCartData(requireContext())?.observe(viewLifecycleOwner, {
+        cartViewModel.getCartData(requireContext())?.observe(viewLifecycleOwner) {
             when (it) {
                 is ApiResponse.Success -> {
                     if (it.data == null) {
@@ -107,7 +107,7 @@ class CartFragment : Fragment() {
                     ).show()
                 }
             }
-        })
+        }
 
         cartAdapter.setOnItemClickListener(object : CartAdapter.onItemClickListener {
             override fun decreaseQuantity(position: Int) {
@@ -158,7 +158,7 @@ class CartFragment : Fragment() {
     }
 
     private fun observerWishlistResult(id: String) {
-        cartViewModel.addWishlist(id, requireContext()).observe(viewLifecycleOwner, {
+        cartViewModel.addWishlist(id, requireContext()).observe(viewLifecycleOwner) {
             when (it) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
@@ -180,11 +180,11 @@ class CartFragment : Fragment() {
                     ).show()
                 }
             }
-        })
+        }
     }
 
     private fun observerAdd(id: String) =
-        cartViewModel.increaseQuantity(id, requireContext()).observe(viewLifecycleOwner, {
+        cartViewModel.increaseQuantity(id, requireContext()).observe(viewLifecycleOwner) {
             when (it) {
                 is ApiResponse.Success -> {
                     for (item in cartAdapter.cartList) {
@@ -208,10 +208,10 @@ class CartFragment : Fragment() {
                     ).show()
                 }
             }
-        })
+        }
 
     private fun observerRemove(id: String) {
-        cartViewModel.decreaseQuantity(id, requireContext()).observe(this, {
+        cartViewModel.decreaseQuantity(id, requireContext()).observe(this) {
             when (it) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
@@ -239,11 +239,11 @@ class CartFragment : Fragment() {
                     ).show()
                 }
             }
-        })
+        }
     }
 
     private fun observerDelete() {
-        cartViewModel.deleteFromCartResult.observe(this, {
+        cartViewModel.deleteFromCartResult.observe(this) {
             when (it) {
                 is ApiResponse.Success -> {
                     binding.progressBar.visibility = View.GONE
@@ -267,7 +267,7 @@ class CartFragment : Fragment() {
                     ).show()
                 }
             }
-        })
+        }
     }
 
     private fun updateUI(cartList: CartData) {

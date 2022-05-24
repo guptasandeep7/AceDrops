@@ -1,15 +1,15 @@
 <resources>
-    <string name="app_name">AceDrops</string>
+    <string name="app_name">Acedrops</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="password">Password</string>
-    <string name="terms_and_conditions">By continuing you agree to the AceDrop’s\n<font color="#1983FF">Terms and Conditions</font></string>
+    <string name="terms_and_conditions">By continuing you agree to the Acedrops\n<font color="#1983FF">Terms and Conditions</font></string>
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
     <string name="full_name">Full Name</string>
     <string name="new_here_sign_up">New here? <font color="#1983FF">Sign up</font></string>
     <string name="password_assistance">Password Assistance</string>
-    <string name="enter_acedrop_account">Enter your phone number or email account associated with you AceDrop account</string>
+    <string name="enter_acedrop_account">Enter your phone number or email account associated with you acedrops account</string>
     <string name="next">Next</string>
     <string name="create_your_account">Create your account</string>
     <string name="phone_number">Phone Number</string>
@@ -24,7 +24,7 @@
     <string name="create_password">Create Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="confirmation_code">Confirmation Code</string>
-    <string name="didn_t_recieve_the_code_resend_now">Didn’t recieve the code? <font color="#1983FF">Resend Now</font></string>
+    <string name="didn_t_recieve_the_code_resend_now">Didn’t receive the code? <font color="#1983FF">Resend Now</font></string>
     <string name="_00_30">00:30</string>
     <string name="home">Home</string>
     <string name="category">Category</string>
@@ -32,7 +32,7 @@
     <string name="profile">Profile</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="acedrop">Acedrop</string>
+    <string name="acedrop">Acedrops</string>
     <string name="server_client_id">268564059113-4tes04r0sej5c1e1ukpmgv3o8em0n805.apps.googleusercontent.com</string>
     <string name="continue_shopping_to_add_items_to_cart">Continue shopping to add items to cart</string>
     <string name="add_to_cart">Add to cart</string>
@@ -44,7 +44,7 @@
     <string name="manage_address">Manage Address</string>
     <string name="logout">Logout</string>
     <string name="help_support"><![CDATA[Help & Support]]></string>
-    <string name="about_acedrop">About Acedrop</string>
+    <string name="about_acedrop">About Acedrops</string>
     <string name="faqs">FAQs</string>
     <string name="terms_conditions"><![CDATA[Terms & Conditions]]></string>
     <string name="change_password">Change password</string>
