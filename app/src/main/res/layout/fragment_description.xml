@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.acedrops.viewmodel.ProductViewModel" />
+            type="com.acedrops.acedrops.viewmodel.ProductViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

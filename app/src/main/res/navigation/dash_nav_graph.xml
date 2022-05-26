@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.acedrops.view.dash.home.HomeFragment"
+        android:name="com.acedrops.acedrops.view.dash.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -47,7 +47,7 @@
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
-        android:name="com.example.acedrops.view.dash.CategoryFragment"
+        android:name="com.acedrops.acedrops.view.dash.CategoryFragment"
         android:label="fragment_category"
         tools:layout="@layout/fragment_category" >
         <action
@@ -61,7 +61,7 @@
     </fragment>
     <fragment
         android:id="@+id/cartFragment"
-        android:name="com.example.acedrops.view.dash.CartFragment"
+        android:name="com.acedrops.acedrops.view.dash.CartFragment"
         android:label="fragment_cart"
         tools:layout="@layout/fragment_cart" >
         <action
@@ -84,7 +84,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.acedrops.view.dash.profile.ProfileFragment"
+        android:name="com.acedrops.acedrops.view.dash.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -116,15 +116,24 @@
             app:destination="@id/myOrdersFragment"
             app:enterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_profileFragment_to_helpFragment"
+            app:destination="@id/helpFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_termsAndConditionsFragment"
+            app:destination="@id/termsAndConditionsFragment" />
     </fragment>
     <activity
         android:id="@+id/authActivity"
-        android:name="com.example.acedrops.view.auth.AuthActivity"
+        android:name="com.acedrops.acedrops.view.auth.AuthActivity"
         android:label="activity_auth"
         tools:layout="@layout/activity_auth" />
     <fragment
         android:id="@+id/allShopsFragment"
-        android:name="com.example.acedrops.view.dash.home.AllShopsFragment"
+        android:name="com.acedrops.acedrops.view.dash.home.AllShopsFragment"
         android:label="fragment_all_shops"
         tools:layout="@layout/fragment_all_shops" >
         <action
@@ -135,7 +144,7 @@
     </fragment>
     <fragment
         android:id="@+id/allProductsFragment"
-        android:name="com.example.acedrops.view.dash.home.AllProductsFragment"
+        android:name="com.acedrops.acedrops.view.dash.home.AllProductsFragment"
         android:label="fragment_all_products"
         tools:layout="@layout/fragment_all_products" >
         <action
@@ -151,7 +160,7 @@
     </fragment>
     <fragment
         android:id="@+id/changePasswordFragment"
-        android:name="com.example.acedrops.view.dash.profile.ChangePasswordFragment"
+        android:name="com.acedrops.acedrops.view.dash.profile.ChangePasswordFragment"
         android:label="ChangePasswordFragment"
         tools:layout="@layout/fragment_change_password">
         <action
@@ -164,7 +173,7 @@
     </fragment>
     <fragment
         android:id="@+id/addressFragment"
-        android:name="com.example.acedrops.view.dash.profile.AddressFragment"
+        android:name="com.acedrops.acedrops.view.dash.profile.AddressFragment"
         android:label="fragment_address"
         tools:layout="@layout/fragment_address" >
         <action
@@ -184,12 +193,12 @@
     </fragment>
     <fragment
         android:id="@+id/addAddressFragment"
-        android:name="com.example.acedrops.view.dash.profile.AddAddressFragment"
+        android:name="com.acedrops.acedrops.view.dash.profile.AddAddressFragment"
         android:label="fragment_add_address"
         tools:layout="@layout/fragment_add_address" />
     <fragment
         android:id="@+id/shopFragment"
-        android:name="com.example.acedrops.view.dash.home.ShopFragment"
+        android:name="com.acedrops.acedrops.view.dash.home.ShopFragment"
         android:label="fragment_shop"
         tools:layout="@layout/fragment_shop" >
         <action
@@ -200,7 +209,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.acedrops.view.dash.SearchFragment"
+        android:name="com.acedrops.acedrops.view.dash.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
@@ -226,7 +235,7 @@
     </fragment>
     <fragment
         android:id="@+id/productFragment"
-        android:name="com.example.acedrops.view.dash.product.ProductFragment"
+        android:name="com.acedrops.acedrops.view.dash.product.ProductFragment"
         android:label="ProductFragment"
         tools:layout="@layout/fragment_product">
         <action
@@ -257,7 +266,7 @@
     </fragment>
     <fragment
         android:id="@+id/descriptionFragment"
-        android:name="com.example.acedrops.view.dash.product.DescriptionFragment"
+        android:name="com.acedrops.acedrops.view.dash.product.DescriptionFragment"
         android:label="DescriptionFragment"
         tools:layout="@layout/fragment_description">
         <action
@@ -268,7 +277,7 @@
     </fragment>
     <fragment
         android:id="@+id/wishlistFragment"
-        android:name="com.example.acedrops.view.dash.profile.WishlistFragment"
+        android:name="com.acedrops.acedrops.view.dash.profile.WishlistFragment"
         android:label="fragment_wishlist"
         tools:layout="@layout/fragment_wishlist" >
         <action
@@ -284,7 +293,7 @@
     </fragment>
     <fragment
         android:id="@+id/myOrdersFragment"
-        android:name="com.example.acedrops.view.dash.profile.MyOrdersFragment"
+        android:name="com.acedrops.acedrops.view.dash.profile.MyOrdersFragment"
         android:label="fragment_my_orders"
         tools:layout="@layout/fragment_my_orders" >
         <action
@@ -295,7 +304,22 @@
     </fragment>
     <activity
         android:id="@+id/paymentActivity"
-        android:name="com.example.acedrops.view.dash.PaymentActivity"
+        android:name="com.acedrops.acedrops.view.dash.PaymentActivity"
         android:label="activity_payment"
         />
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.acedrops.acedrops.view.dash.profile.HelpFragment"
+        android:label="fragment_help_and_support"
+        tools:layout="@layout/fragment_help_and_support" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.acedrops.acedrops.view.dash.profile.AboutFragment"
+        android:label="AboutFragment"
+        tools:layout="@layout/fragment_about_acedrops"/>
+    <fragment
+        android:id="@+id/termsAndConditionsFragment"
+        android:name="com.acedrops.acedrops.view.dash.profile.TermsAndConditionsFragment"
+        android:label="TermsAndConditionsFragment"
+        tools:layout="@layout/fragment_terms_and_conditions"/>
 </navigation>

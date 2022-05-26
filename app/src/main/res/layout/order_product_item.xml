@@ -6,7 +6,7 @@
     <data>
         <variable
             name="order"
-            type="com.example.acedrops.model.MyOrders" />
+            type="com.acedrops.acedrops.model.MyOrders" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

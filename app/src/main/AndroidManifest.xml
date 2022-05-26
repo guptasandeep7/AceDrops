@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.acedrops">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.acedrops.acedrops">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/acedrop_logo"
+        android:icon="@drawable/new_acedrop_logo"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/acedrop_logo"
+        tools:replace="android:theme"
+        android:roundIcon="@drawable/new_acedrop_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.AceDrops">
         <activity
