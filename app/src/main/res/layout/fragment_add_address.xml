@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.acedrops.viewmodel.AddAddressViewModel" />
+            type="com.acedrops.acedrops.viewmodel.AddAddressViewModel" />
     </data>
     <LinearLayout
         android:layout_width="match_parent"

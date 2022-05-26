@@ -6,7 +6,7 @@
     <data>
         <variable
             name="category"
-            type="com.example.acedrops.model.home.Category" />
+            type="com.acedrops.acedrops.model.home.Category" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

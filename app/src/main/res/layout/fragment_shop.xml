@@ -6,7 +6,7 @@
     <data>
         <variable
             name="shop"
-            type="com.example.acedrops.model.home.ShopResult" />
+            type="com.acedrops.acedrops.model.home.ShopResult" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -4,7 +4,7 @@
     <data>
         <variable
             name="product"
-            type="com.example.acedrops.model.home.Product" />
+            type="com.acedrops.acedrops.model.home.Product" />
     </data>
     <ImageView
         android:id="@+id/product_image"

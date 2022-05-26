@@ -6,7 +6,7 @@
     app:startDestination="@id/landingFragment">
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.acedrops.view.auth.LoginFragment"
+        android:name="com.acedrops.acedrops.view.auth.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
         <action
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
-        android:name="com.example.acedrops.view.auth.SignupFragment"
+        android:name="com.acedrops.acedrops.view.auth.SignupFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup">
         <action
@@ -59,7 +59,7 @@
     </fragment>
     <fragment
         android:id="@+id/otpFragment"
-        android:name="com.example.acedrops.view.auth.OtpFragment"
+        android:name="com.acedrops.acedrops.view.auth.OtpFragment"
         android:label="fragment_otp"
         tools:layout="@layout/fragment_otp">
         <action
@@ -83,7 +83,7 @@
     </fragment>
     <fragment
         android:id="@+id/forgotFragment"
-        android:name="com.example.acedrops.view.auth.ForgotFragment"
+        android:name="com.acedrops.acedrops.view.auth.ForgotFragment"
         android:label="fragment_forgot"
         tools:layout="@layout/fragment_forgot">
         <action
@@ -96,7 +96,7 @@
     </fragment>
     <activity
         android:id="@+id/dashboardActivity"
-        android:name="com.example.acedrops.view.dash.DashboardActivity"
+        android:name="com.acedrops.acedrops.view.dash.DashboardActivity"
         android:label="activity_dashboard"
         app:enterAnim="@android:anim/slide_in_left"
         app:exitAnim="@android:anim/slide_out_right"
@@ -105,7 +105,7 @@
         tools:layout="@layout/activity_dashboard" />
     <fragment
         android:id="@+id/passwordFragment"
-        android:name="com.example.acedrops.view.auth.PasswordFragment"
+        android:name="com.acedrops.acedrops.view.auth.PasswordFragment"
         android:label="PasswordFragment"
         tools:layout="@layout/fragment_password">
         <action
@@ -120,7 +120,7 @@
     </fragment>
     <fragment
         android:id="@+id/landingFragment"
-        android:name="com.example.acedrops.view.auth.LandingFragment"
+        android:name="com.acedrops.acedrops.view.auth.LandingFragment"
         android:label="fragment_landing"
         tools:layout="@layout/fragment_landing">
         <action
